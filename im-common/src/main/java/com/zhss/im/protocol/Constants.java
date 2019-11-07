@@ -22,10 +22,6 @@ public class Constants {
      */
     public static final int REQUEST_TYPE_AUTHENTICATE = 1;
     /**
-     * 消息顺序的默认值
-     */
-    public static final int SEQUENCE_DEFAULT = 1;
-    /**
      * 每条消息的分隔符
      */
     public static final byte[] DELIMITER = "$_".getBytes();
@@ -37,23 +33,6 @@ public class Constants {
      * 响应状态：异常
      */
     public static final int RESPONSE_STATUS_ERROR = 2;
-    /**
-     * 响应异常状态码：未知
-     */
-    public static final int RESPONSE_ERROR_CODE_UNKNOWN = -1;
-    /**
-     * 响应异常状态码：认证失败
-     */
-    public static final int RESPONSE_ERROR_CODE_AUTHENTICATE_FAILURE = 1;
-    /**
-     * 响应异常状态码：认证时异常
-     */
-    public static final int RESPONSE_ERROR_CODE_AUTHENTICATE_EXCEPTION = 2;
-    /**
-     * 响应异常信息
-     */
-    public static final String RESPONSE_ERROR_MESSAGE_EMPTY = "";
-
     /**
      * 消息头长度
      */

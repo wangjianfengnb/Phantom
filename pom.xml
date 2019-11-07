@@ -11,7 +11,7 @@
     <modules>
         <module>im-acceptor</module>
         <module>im-client</module>
-        <module>im-protocol</module>
+        <module>im-common</module>
         <module>im-dispatcher</module>
     </modules>
 
@@ -19,7 +19,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.zhss.im</groupId>
-                <artifactId>im-protocol</artifactId>
+                <artifactId>im-common</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -32,6 +32,21 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.25</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

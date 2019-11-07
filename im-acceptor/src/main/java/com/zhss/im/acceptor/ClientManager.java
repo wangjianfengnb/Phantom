@@ -1,6 +1,8 @@
-package com.zhss.im.gateway;
+package com.zhss.im.acceptor;
 
+import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,14 +13,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Jianfeng Wang
  * @since 2019/10/28 21:38
  */
+@Slf4j
 public class ClientManager {
 
     private static volatile ClientManager instance;
 
+
     /**
      * 用户对应通道
      */
-    private Map<String, SocketChannel> uid2Channel = new ConcurrentHashMap<String, SocketChannel>();
+    private Map<String, SocketChannel> clients = new ConcurrentHashMap<>();
 
     /**
      * 通道对应用户
@@ -40,25 +44,28 @@ public class ClientManager {
     }
 
     /**
-     * 增加一个用户连接
-     *
-     * @param uid     用户ID
-     * @param channel 通道
-     */
-    public void addClient(String uid, SocketChannel channel) {
-        uid2Channel.put(uid, channel);
-        channel2Uid.put(channel, uid);
-    }
-
-    /**
      * 移除用户连接
      *
      * @param channel 用户连接
      */
-    public void remove(SocketChannel channel) {
+    public void removeClient(SocketChannel channel) {
         String uid = channel2Uid.remove(channel);
-        uid2Channel.remove(uid);
+        clients.remove(uid);
     }
 
+    /**
+     * 添加未认证的连接
+     *
+     * @param uid     用户ID
+     * @param channel 渠道
+     */
+    public void addClient(String uid, SocketChannel channel) {
+        clients.put(uid, channel);
+        channel2Uid.put(channel, uid);
+    }
+
+    public SocketChannel getClient(String uid) {
+        return clients.get(uid);
+    }
 
 }

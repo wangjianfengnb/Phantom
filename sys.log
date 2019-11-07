@@ -1,0 +1,284 @@
+2019-11-07 14:20:42.914 [main] INFO  c.z.i.g.AcceptorServerBootstrap(42) - 接入服务初始化完毕...
+2019-11-07 14:20:51.732 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(24) - 客户端建立连接 : [id: 0x749c6d2e, L:/127.0.0.1:8080 - R:/127.0.0.1:54618]
+2019-11-07 14:20:52.319 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(33) - 收到认证请求: Message(appSdkVersion=1, messageType=1, requestType=1, sequence=0, bodyLength=37, body=[10, 12, 116, 101, 115, 116, 95, 117, 105, 100, 95, 48, 48, 49, 18, 14, 116, 101, 115, 116, 95, 116, 111, 107, 101, 110, 95, 48, 48, 49, 24, -47, -51, -108, -92, -28, 45])
+2019-11-07 14:22:44.659 [main] INFO  c.z.i.g.AcceptorServerBootstrap(42) - 接入服务初始化完毕...
+2019-11-07 14:22:50.286 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(24) - 客户端建立连接 : [id: 0x6efdbd01, L:/127.0.0.1:8080 - R:/127.0.0.1:54846]
+2019-11-07 14:22:51.003 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(33) - 收到认证请求: Message(appSdkVersion=1, messageType=1, requestType=1, sequence=0, bodyLength=37, body=[10, 12, 116, 101, 115, 116, 95, 117, 105, 100, 95, 48, 48, 49, 18, 14, 116, 101, 115, 116, 95, 116, 111, 107, 101, 110, 95, 48, 48, 49, 24, -25, -18, -99, -92, -28, 45])
+2019-11-07 14:23:57.111 [main] INFO  c.z.i.g.AcceptorServerBootstrap(42) - 接入服务初始化完毕...
+2019-11-07 14:24:01.560 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(24) - 客户端建立连接 : [id: 0xe24ff96e, L:/127.0.0.1:8080 - R:/127.0.0.1:50061]
+2019-11-07 14:24:02.289 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(33) - 收到认证请求: Message(appSdkVersion=1, messageType=1, requestType=1, sequence=0, bodyLength=37, body=[10, 12, 116, 101, 115, 116, 95, 117, 105, 100, 95, 48, 48, 49, 18, 14, 116, 101, 115, 116, 95, 116, 111, 107, 101, 110, 95, 48, 48, 49, 24, -46, -15, -94, -92, -28, 45])
+2019-11-07 14:25:50.923 [main] INFO  c.z.i.g.AcceptorServerBootstrap(42) - 接入服务初始化完毕...
+2019-11-07 14:27:23.115 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(24) - 客户端建立连接 : [id: 0xdb4e7e84, L:/127.0.0.1:8080 - R:/127.0.0.1:49923]
+2019-11-07 14:27:23.819 [nioEventLoopGroup-3-1] INFO  com.zhss.im.gateway.AcceptorHandler(33) - 收到认证请求: Message(appSdkVersion=1, messageType=1, requestType=1, sequence=0, bodyLength=37, body=[10, 12, 116, 101, 115, 116, 95, 117, 105, 100, 95, 48, 48, 49, 18, 14, 116, 101, 115, 116, 95, 116, 111, 107, 101, 110, 95, 48, 48, 49, 24, -110, -104, -81, -92, -28, 45])
+2019-11-07 16:24:06.841 [main] INFO  c.z.i.g.AcceptorServerBootstrap(47) - 接入服务初始化完毕...
+2019-11-07 16:26:54.252 [main] INFO  c.z.i.g.AcceptorServerBootstrap(45) - 接入服务初始化完毕...
+2019-11-07 17:24:49.497 [main] INFO  c.z.i.g.AcceptorServerBootstrap(45) - 接入服务初始化完毕...
+2019-11-07 17:26:14.631 [main] INFO  c.z.i.g.AcceptorServerBootstrap(45) - 接入服务初始化完毕...
+2019-11-07 17:28:35.439 [main] INFO  c.z.i.g.AcceptorServerBootstrap(45) - 接入服务初始化完毕...
+2019-11-07 17:29:02.473 [nioEventLoopGroup-2-1] INFO  c.z.i.g.dispatcher.DispatcherHandler(25) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:05:30.815 [nioEventLoopGroup-2-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:05:30.817 [nioEventLoopGroup-2-1] INFO  c.z.i.g.dispatcher.DispatcherHandler(32) - 接入系统和分发系统连接断开: /127.0.0.1:8090
+2019-11-07 18:05:30.846 [main] INFO  c.z.i.g.AcceptorServerBootstrap(45) - 接入服务初始化完毕...
+2019-11-07 18:05:53.816 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:07:21.232 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:08:11.539 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:09:28.445 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:09:28.493 [main] INFO  c.z.i.a.AcceptorServerBootstrap(45) - 接入服务初始化完毕...监听端口：8080
+2019-11-07 18:09:34.118 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0xdc355171, L:/127.0.0.1:8080 - R:/127.0.0.1:62069]
+2019-11-07 18:10:45.343 [nioEventLoopGroup-4-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:10:54.575 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x1d17aa6c, L:/127.0.0.1:8080 - R:/127.0.0.1:57079]
+2019-11-07 18:13:12.780 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:13:12.851 [main] INFO  c.z.i.a.AcceptorServerBootstrap(45) - 接入服务初始化完毕...监听端口：8080
+2019-11-07 18:13:13.717 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x511c80e8, L:/127.0.0.1:8080 - R:/127.0.0.1:57334]
+2019-11-07 18:13:18.108 [nioEventLoopGroup-4-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:13:18.111 [nioEventLoopGroup-4-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.NullPointerException: null
+	at java.util.concurrent.ConcurrentHashMap.replaceNode(ConcurrentHashMap.java:1106)
+	at java.util.concurrent.ConcurrentHashMap.remove(ConcurrentHashMap.java:1097)
+	at com.zhss.im.acceptor.ClientManager.removeClient(ClientManager.java:53)
+	at com.zhss.im.acceptor.AcceptorHandler.channelInactive(AcceptorHandler.java:48)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:236)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:393)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:358)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:236)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1417)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:913)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:819)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:510)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:518)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:13:26.505 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x6e9e763b, L:/127.0.0.1:8080 - R:/127.0.0.1:57371]
+2019-11-07 18:13:27.178 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:15:03.115 [nioEventLoopGroup-2-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:15:03.115 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(34) - 接入系统和分发系统连接断开: /127.0.0.1:8090
+2019-11-07 18:16:36.610 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:16:36.640 [main] INFO  c.z.i.a.AcceptorServerBootstrap(45) - 接入服务初始化完毕...监听端口：8080
+2019-11-07 18:17:07.477 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x9761c2b8, L:/127.0.0.1:8080 - R:/127.0.0.1:62727]
+2019-11-07 18:17:08.178 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:18:52.898 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:18:52.914 [main] INFO  c.z.i.a.AcceptorServerBootstrap(45) - 接入服务初始化完毕...监听端口：8080
+2019-11-07 18:19:01.444 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x2231334b, L:/127.0.0.1:8080 - R:/127.0.0.1:62958]
+2019-11-07 18:19:02.156 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:19:02.176 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:19:02.212 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 1024))
+2019-11-07 18:35:08.279 [nioEventLoopGroup-2-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:35:08.282 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(34) - 接入系统和分发系统连接断开: /127.0.0.1:8090
+2019-11-07 18:39:02.927 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(27) - 接入系统和分发系统连接建立: /127.0.0.1:8090
+2019-11-07 18:39:02.973 [main] INFO  c.z.i.a.AcceptorServerBootstrap(45) - 接入服务初始化完毕...监听端口：8080
+2019-11-07 18:39:17.439 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x67dfec39, L:/127.0.0.1:8080 - R:/127.0.0.1:55312]
+2019-11-07 18:39:17.494 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:39:17.514 [nioEventLoopGroup-4-1] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:39:17.564 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 1024))
+2019-11-07 18:43:07.917 [nioEventLoopGroup-4-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:43:12.572 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x38de34ba, L:/127.0.0.1:8080 - R:/127.0.0.1:53849]
+2019-11-07 18:43:12.620 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:43:12.621 [nioEventLoopGroup-4-2] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:43:12.623 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 1024))
+2019-11-07 18:43:19.133 [nioEventLoopGroup-4-2] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:44:22.704 [nioEventLoopGroup-4-3] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0xb806759e, L:/127.0.0.1:8080 - R:/127.0.0.1:53920]
+2019-11-07 18:44:22.744 [nioEventLoopGroup-4-3] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:44:22.744 [nioEventLoopGroup-4-3] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:44:22.746 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 512))
+2019-11-07 18:44:52.574 [nioEventLoopGroup-4-3] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:44:56.754 [nioEventLoopGroup-4-4] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x87637c70, L:/127.0.0.1:8080 - R:/127.0.0.1:53973]
+2019-11-07 18:44:56.808 [nioEventLoopGroup-4-4] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:44:56.808 [nioEventLoopGroup-4-4] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:44:56.811 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 512))
+2019-11-07 18:45:53.851 [nioEventLoopGroup-4-5] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x5cc3095e, L:/127.0.0.1:8080 - R:/127.0.0.1:54033]
+2019-11-07 18:45:53.896 [nioEventLoopGroup-4-5] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:45:53.896 [nioEventLoopGroup-4-5] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:45:53.898 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 496))
+2019-11-07 18:46:42.998 [nioEventLoopGroup-4-6] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x21999ecb, L:/127.0.0.1:8080 - R:/127.0.0.1:60749]
+2019-11-07 18:46:43.044 [nioEventLoopGroup-4-6] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:46:43.046 [nioEventLoopGroup-4-6] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:46:43.046 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 496))
+2019-11-07 18:50:52.001 [nioEventLoopGroup-4-7] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x85713d8e, L:/127.0.0.1:8080 - R:/127.0.0.1:61026]
+2019-11-07 18:50:52.045 [nioEventLoopGroup-4-7] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:50:52.045 [nioEventLoopGroup-4-7] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:50:52.047 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 480))
+2019-11-07 18:55:35.610 [nioEventLoopGroup-4-8] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0xe3b14c5f, L:/127.0.0.1:8080 - R:/127.0.0.1:56907]
+2019-11-07 18:55:35.657 [nioEventLoopGroup-4-8] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:55:35.657 [nioEventLoopGroup-4-8] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:55:35.659 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 480))
+2019-11-07 18:56:30.189 [nioEventLoopGroup-4-9] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x629bef5c, L:/127.0.0.1:8080 - R:/127.0.0.1:57008]
+2019-11-07 18:56:30.238 [nioEventLoopGroup-4-9] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:56:30.238 [nioEventLoopGroup-4-9] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:56:30.240 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 464))
+2019-11-07 18:57:24.743 [nioEventLoopGroup-4-10] INFO  com.zhss.im.acceptor.AcceptorHandler(25) - 客户端建立连接 : [id: 0x8ba1bd6b, L:/127.0.0.1:8080 - R:/127.0.0.1:57099]
+2019-11-07 18:57:24.797 [nioEventLoopGroup-4-10] INFO  com.zhss.im.acceptor.AcceptorHandler(30) - 收到客户端消息：PooledSlicedByteBuf(ridx: 0, widx: 57, cap: 57/57, unwrapped: PooledUnsafeDirectByteBuf(ridx: 59, widx: 59, cap: 1024))
+2019-11-07 18:57:24.797 [nioEventLoopGroup-4-10] INFO  com.zhss.im.acceptor.AcceptorHandler(41) - 将消息发送到分发系统
+2019-11-07 18:57:24.799 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(40) - 接入系统收到分发系统的消息：PooledSlicedByteBuf(ridx: 0, widx: 59, cap: 59/59, unwrapped: PooledUnsafeDirectByteBuf(ridx: 61, widx: 61, cap: 464))
+2019-11-07 18:58:13.539 [nioEventLoopGroup-2-1] WARN  i.n.channel.DefaultChannelPipeline(1164) - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:247)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1147)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:347)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:700)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:635)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:514)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$6.run(SingleThreadEventExecutor.java:1044)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+2019-11-07 18:58:13.539 [nioEventLoopGroup-2-1] INFO  c.z.i.a.dispatcher.DispatcherHandler(34) - 接入系统和分发系统连接断开: /127.0.0.1:8090

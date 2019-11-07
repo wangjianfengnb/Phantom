@@ -9,4 +9,5 @@ message AuthenticateResponse {
     string uid = 1;
     string token = 2;
     int64 timestamp = 3;
+    int32 status = 4;
 }

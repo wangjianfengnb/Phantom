@@ -1,8 +1,19 @@
 package com.zhss.im.client;
 
-import com.zhss.im.client.interceptor.MessageInterceptor;
 import com.zhss.im.protocol.AuthenticateRequestProto;
+import com.zhss.im.protocol.Constants;
 import com.zhss.im.protocol.Message;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Im客户端启动类
@@ -10,9 +21,8 @@ import com.zhss.im.protocol.Message;
  * @author Jianfeng Wang
  * @since 2019/11/1 12:56
  */
+@Slf4j
 public class ImClient {
-
-    private volatile boolean initialized = false;
 
     public static ImClient client = new ImClient();
 
@@ -33,23 +43,7 @@ public class ImClient {
      * 初始化
      */
     public void initialize() {
-        if (initialized) {
-            return;
-        }
-        initialized = true;
-        ConnectManager instance = ConnectManager.getInstance();
-        instance.initialize();
-        instance.addMessageInterceptor(new MessageInterceptor() {
-            @Override
-            public void beforeSend(Message message) {
-                System.out.println("开始发送消息：" + message);
-            }
-
-            @Override
-            public void afterSend(Message message) {
-                System.out.println("发送消息成功：" + message);
-            }
-        });
+        ConnectionManager.getInstance().connect("localhost", 8080);
     }
 
     /**
@@ -59,7 +53,7 @@ public class ImClient {
      * @param token 用户Token
      */
     public void authenticate(String uid, String token) {
-        ConnectManager connectManager = ConnectManager.getInstance();
+        ConnectionManager connectManager = ConnectionManager.getInstance();
         AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
                 AuthenticateRequestProto.AuthenticateRequest.newBuilder()
                         .setTimestamp(System.currentTimeMillis())

@@ -42,12 +42,9 @@ public class DispatcherBootstrap {
 
             ChannelFuture channelFuture = server.bind(PORT).sync();
             System.out.println("分发系统已经启动......");
-            channelFuture.channel().closeFuture().sync();
+            channelFuture.sync();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            connectionThreadGroup.shutdownGracefully();
-            ioThreadGroup.shutdownGracefully();
         }
     }
 }
