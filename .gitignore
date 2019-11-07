@@ -27,3 +27,4 @@
 /mvnw
 /logs/
 /.DS_Store
+*.log
