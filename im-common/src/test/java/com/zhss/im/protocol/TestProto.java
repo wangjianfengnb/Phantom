@@ -11,15 +11,15 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class TestProto {
 
     public static void main(String[] args) throws InvalidProtocolBufferException {
-        AuthenticateRequestProto.AuthenticateRequest request = AuthenticateRequestProto.AuthenticateRequest.newBuilder()
+        AuthenticateRequest request = AuthenticateRequest.newBuilder()
                 .setToken("test_token_001")
                 .setUid("test_uid_001")
                 .setTimestamp(System.currentTimeMillis())
                 .build();
 
         System.out.println("before encode : " + request.toString());
-        AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
-                AuthenticateRequestProto.AuthenticateRequest.parseFrom(request.toByteArray());
+        AuthenticateRequest authenticateRequest =
+                AuthenticateRequest.parseFrom(request.toByteArray());
         System.out.println("after decode : " + authenticateRequest);
         System.out.println("Assert equal : " + authenticateRequest.equals(request));
 

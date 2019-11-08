@@ -1,18 +1,7 @@
 package com.zhss.im.client;
 
-import com.zhss.im.protocol.AuthenticateRequestProto;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.protocol.AuthenticateRequest;
 import com.zhss.im.protocol.Message;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -54,8 +43,8 @@ public class ImClient {
      */
     public void authenticate(String uid, String token) {
         ConnectionManager connectManager = ConnectionManager.getInstance();
-        AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
-                AuthenticateRequestProto.AuthenticateRequest.newBuilder()
+        AuthenticateRequest authenticateRequest =
+                AuthenticateRequest.newBuilder()
                         .setTimestamp(System.currentTimeMillis())
                         .setToken(token)
                         .setUid(uid)

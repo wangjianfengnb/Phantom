@@ -32,12 +32,11 @@ public class AuthenticateMessageHandler implements MessageHandler {
     public void handleMessage(Message message, SocketChannel channel) throws Exception {
         log.info("收到认证请求.....");
         byte[] body = message.getBody();
-        AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
-                AuthenticateRequestProto.AuthenticateRequest.parseFrom(body);
+        AuthenticateRequest authenticateRequest =
+                AuthenticateRequest.parseFrom(body);
         String uid = authenticateRequest.getUid();
         String token = authenticateRequest.getToken();
-        AuthenticateResponseProto.AuthenticateResponse.Builder responseBuilder =
-                AuthenticateResponseProto.AuthenticateResponse.newBuilder()
+        AuthenticateResponse.Builder responseBuilder = AuthenticateResponse.newBuilder()
                         .setToken(authenticateRequest.getToken())
                         .setUid(authenticateRequest.getUid())
                         .setTimestamp(System.currentTimeMillis());

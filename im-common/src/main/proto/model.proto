@@ -2,8 +2,14 @@ syntax = "proto3";
 
 package com.zhss.im.protocol;
 
+option java_multiple_files = true;
 option java_package = "com.zhss.im.protocol";
-option java_outer_classname = "AuthenticateResponseProto";
+
+message AuthenticateRequest {
+    string uid = 1;
+    string token = 2;
+    int64 timestamp = 3;
+}
 
 message AuthenticateResponse {
     string uid = 1;

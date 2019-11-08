@@ -3,8 +3,8 @@ package com.zhss.im.acceptor.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.AuthenticateRequestProto;
-import com.zhss.im.protocol.AuthenticateResponseProto;
+import com.zhss.im.protocol.AuthenticateRequest;
+import com.zhss.im.protocol.AuthenticateResponse;
 import com.zhss.im.protocol.Constants;
 import com.zhss.im.protocol.Message;
 import io.netty.channel.socket.SocketChannel;
@@ -47,8 +47,7 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
      */
     private void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
         byte[] body = message.getBody();
-        AuthenticateResponseProto.AuthenticateResponse authenticateResponse =
-                AuthenticateResponseProto.AuthenticateResponse.parseFrom(body);
+        AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(body);
         String uid = authenticateResponse.getUid();
         SocketChannel session = sessionManagerFacade.getSession(uid);
         if (session != null) {
@@ -65,8 +64,7 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
      */
     private void handleRequestMessage(Message message, SocketChannel channel) throws InvalidProtocolBufferException {
         byte[] body = message.getBody();
-        AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
-                AuthenticateRequestProto.AuthenticateRequest.parseFrom(body);
+        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
         sessionManagerFacade.addSession(authenticateRequest.getUid(), channel);
         sendMessage(message);
     }

@@ -50,7 +50,7 @@ public class Message {
      * @param authenticateRequest 认证请求
      * @return 消息
      */
-    public static Message buildAuthenticateRequest(AuthenticateRequestProto.AuthenticateRequest authenticateRequest) {
+    public static Message buildAuthenticateRequest(AuthenticateRequest authenticateRequest) {
         byte[] body = authenticateRequest.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)
@@ -67,7 +67,7 @@ public class Message {
      * @param authenticateResponse 认证响应
      * @return 消息
      */
-    public static Message buildAuthenticateResponse(AuthenticateResponseProto.AuthenticateResponse authenticateResponse) {
+    public static Message buildAuthenticateResponse(AuthenticateResponse authenticateResponse) {
         byte[] body = authenticateResponse.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)

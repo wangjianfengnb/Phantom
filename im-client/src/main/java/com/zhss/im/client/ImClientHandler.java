@@ -1,6 +1,6 @@
 package com.zhss.im.client;
 
-import com.zhss.im.protocol.AuthenticateResponseProto;
+import com.zhss.im.protocol.AuthenticateResponse;
 import com.zhss.im.protocol.Constants;
 import com.zhss.im.protocol.Message;
 import io.netty.buffer.ByteBuf;
@@ -31,8 +31,8 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
         int requestType = message.getRequestType();
         if (Constants.REQUEST_TYPE_AUTHENTICATE == requestType) {
             byte[] body = message.getBody();
-            AuthenticateResponseProto.AuthenticateResponse authenticateResponse =
-                    AuthenticateResponseProto.AuthenticateResponse.parseFrom(body);
+            AuthenticateResponse authenticateResponse =
+                    AuthenticateResponse.parseFrom(body);
             if (authenticateResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
                 log.info("认证请求成功...");
             } else {
