@@ -1,7 +1,10 @@
-package com.zhss.im.dispatcher;
+package com.zhss.im.dispatcher.server;
 
 import com.zhss.im.dispatcher.acceptor.AcceptorInstance;
 import com.zhss.im.dispatcher.acceptor.AcceptorServerManager;
+import com.zhss.im.dispatcher.message.MessageHandler;
+import com.zhss.im.dispatcher.message.MessageHandlerFactory;
+import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.protocol.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,6 +20,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DispatcherHandler extends ChannelInboundHandlerAdapter {
+
+    private SessionManager sessionManager;
+
+    public DispatcherHandler(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -40,21 +49,10 @@ public class DispatcherHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         Message message = Message.parse(byteBuf);
-        int requestType = message.getRequestType();
-        if (Constants.REQUEST_TYPE_AUTHENTICATE == requestType) {
-            log.info("收到认证请求.....");
-            byte[] body = message.getBody();
-            AuthenticateRequestProto.AuthenticateRequest authenticateRequest =
-                    AuthenticateRequestProto.AuthenticateRequest.parseFrom(body);
-            AuthenticateResponseProto.AuthenticateResponse response =
-                    AuthenticateResponseProto.AuthenticateResponse.newBuilder()
-                            .setToken(authenticateRequest.getToken())
-                            .setUid(authenticateRequest.getUid())
-                            .setTimestamp(System.currentTimeMillis())
-                            .setStatus(Constants.RESPONSE_STATUS_OK)
-                            .build();
-            Message resp = Message.buildAuthenticateResponse(response);
-            ctx.channel().writeAndFlush(resp.getBuffer());
+        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType(),
+                sessionManager);
+        if (messageHandler != null) {
+            messageHandler.handleMessage(message, (SocketChannel) ctx.channel());
         }
     }
 

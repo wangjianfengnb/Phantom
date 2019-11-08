@@ -1,5 +1,8 @@
 package com.zhss.im.acceptor.dispatcher;
 
+import com.zhss.im.acceptor.config.AcceptorConfig;
+import com.zhss.im.acceptor.server.AcceptorServer;
+import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.protocol.Constants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -28,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class DispatcherManager {
 
-    private static volatile DispatcherManager instance = new DispatcherManager();
 
     /**
      * 分发系统实例地址列表
@@ -36,17 +38,27 @@ public class DispatcherManager {
     private static List<DispatcherInstanceAddress> dispatcherInstanceAddresses =
             new ArrayList<>();
 
-    private Map<String, DispatcherInstance> dispatcherInstanceMap = new ConcurrentHashMap<>();
-
-    private DispatcherManager() {
-    }
-
     static {
+        // 后面基于zk来做
         dispatcherInstanceAddresses.add(new DispatcherInstanceAddress("localhost", "127.0.0.1", 8090));
     }
 
-    public static DispatcherManager getInstance() {
-        return instance;
+    private final SessionManagerFacade sessionManagerFacade;
+
+
+    /**
+     * 配置
+     */
+    private AcceptorConfig config;
+
+    /**
+     * 分发服务器实例
+     */
+    private Map<String, DispatcherInstance> dispatcherInstanceMap = new ConcurrentHashMap<>();
+
+    public DispatcherManager(AcceptorConfig config, SessionManagerFacade sessionManagerFacade) {
+        this.config = config;
+        this.sessionManagerFacade = sessionManagerFacade;
     }
 
 
@@ -68,9 +80,9 @@ public class DispatcherManager {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(4096,
+                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(),
                                     Unpooled.copiedBuffer(Constants.DELIMITER)));
-                            ch.pipeline().addLast(new DispatcherHandler());
+                            ch.pipeline().addLast(new DispatcherHandler(DispatcherManager.this, sessionManagerFacade));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect(address.getIp(), address.getPort()).sync();
@@ -81,7 +93,7 @@ public class DispatcherManager {
     }
 
     public void addDispatcherInstance(String instanceId, DispatcherInstance instance) {
-        dispatcherInstanceMap.put(instanceId, instance);
+        this.dispatcherInstanceMap.put(instanceId, instance);
     }
 
     public void removeDispatcherInstance(String instanceId) {

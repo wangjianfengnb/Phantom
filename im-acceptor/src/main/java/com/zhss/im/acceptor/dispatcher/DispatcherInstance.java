@@ -13,9 +13,17 @@ import lombok.Builder;
 @Builder
 public class DispatcherInstance {
 
+    /**
+     * 渠道
+     */
     private SocketChannel channel;
 
-    public void sendMsg(Object msg) {
+    /**
+     * 发送消息
+     *
+     * @param msg 消息
+     */
+    public void sendMessage(Object msg) {
         channel.writeAndFlush(msg);
     }
 }

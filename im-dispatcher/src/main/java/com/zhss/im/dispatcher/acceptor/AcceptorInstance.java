@@ -14,7 +14,8 @@ import lombok.Data;
 @Data
 public class AcceptorInstance {
 
+    /**
+     * 渠道
+     */
     private SocketChannel channel;
-
-
 }

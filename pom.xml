@@ -48,6 +48,16 @@
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
             </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.62</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

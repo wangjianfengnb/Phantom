@@ -44,6 +44,12 @@ public class Message {
      */
     protected byte[] body;
 
+    /**
+     * 创建认证请求
+     *
+     * @param authenticateRequest 认证请求
+     * @return 消息
+     */
     public static Message buildAuthenticateRequest(AuthenticateRequestProto.AuthenticateRequest authenticateRequest) {
         byte[] body = authenticateRequest.toByteArray();
         return Message.builder()
@@ -55,6 +61,12 @@ public class Message {
                 .build();
     }
 
+    /**
+     * 创建认证响应
+     *
+     * @param authenticateResponse 认证响应
+     * @return 消息
+     */
     public static Message buildAuthenticateResponse(AuthenticateResponseProto.AuthenticateResponse authenticateResponse) {
         byte[] body = authenticateResponse.toByteArray();
         return Message.builder()

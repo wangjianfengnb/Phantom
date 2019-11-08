@@ -37,7 +37,7 @@ public class ConnectionManager {
     }
 
     public void connect(String ip, int port) {
-        log.info("开始和系统发起连接....");
+        log.info("开始和接入系统发起连接....");
         connectThreadGroup = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -107,12 +107,5 @@ public class ConnectionManager {
             this.connectThreadGroup = null;
         }
         log.info("停止NIO eventloop");
-    }
-
-    public void success() {
-        long e = System.nanoTime();
-
-        log.info("认证用时：{}ms", (e - s) / 1000000.0d);
-
     }
 }

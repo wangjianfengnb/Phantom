@@ -62,6 +62,7 @@ public class ImClient {
                         .build();
         Message message = Message.buildAuthenticateRequest(authenticateRequest);
         connectManager.sendMessage(message);
+        log.info("发送认证请求...");
     }
 
 

@@ -35,7 +35,6 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
                     AuthenticateResponseProto.AuthenticateResponse.parseFrom(body);
             if (authenticateResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
                 log.info("认证请求成功...");
-                ConnectionManager.getInstance().success();
             } else {
                 log.info("认证请求失败...");
                 ctx.close();

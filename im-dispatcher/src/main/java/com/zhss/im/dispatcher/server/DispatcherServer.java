@@ -1,5 +1,7 @@
-package com.zhss.im.dispatcher;
+package com.zhss.im.dispatcher.server;
 
+import com.zhss.im.dispatcher.config.DispatcherConfig;
+import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.protocol.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -11,18 +13,27 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 分发服务器启动类
+ * 分发系统服务器
  *
  * @author Jianfeng Wang
- * @since 2019/11/1 18:02
+ * @since 2019/11/8 16:41
  */
-public class DispatcherBootstrap {
+@Slf4j
+public class DispatcherServer {
 
-    public static final int PORT = 8090;
+    private DispatcherConfig config;
 
-    public static void main(String[] args) {
+    private SessionManager sessionManager;
+
+    public DispatcherServer(DispatcherConfig config, SessionManager sessionManager) {
+        this.config = config;
+        this.sessionManager = sessionManager;
+    }
+
+    public void initialize() {
         EventLoopGroup connectionThreadGroup = new NioEventLoopGroup();
         EventLoopGroup ioThreadGroup = new NioEventLoopGroup();
         try {
@@ -34,17 +45,18 @@ public class DispatcherBootstrap {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ByteBuf delimiter = Unpooled.copiedBuffer(Constants.DELIMITER);
-                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(4096, delimiter));
-                            socketChannel.pipeline().addLast(new DispatcherHandler());
+                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(), delimiter));
+                            socketChannel.pipeline().addLast(new DispatcherHandler(sessionManager));
                         }
 
                     });
-
-            ChannelFuture channelFuture = server.bind(PORT).sync();
-            System.out.println("分发系统已经启动......");
+            ChannelFuture channelFuture = server.bind(config.getPort()).sync();
+            log.info("分发系统已经启动......");
             channelFuture.sync();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -1,6 +1,8 @@
-package com.zhss.im.acceptor;
+package com.zhss.im.acceptor.server;
 
+import com.zhss.im.acceptor.config.AcceptorConfig;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
+import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.protocol.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
@@ -14,18 +16,29 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * IM 接入服务启动类
+ * 接入系统Netty服务端
  *
  * @author Jianfeng Wang
- * @since 2019/10/28 21:36
+ * @since 2019/11/8 15:43
  */
 @Slf4j
-public class AcceptorServerBootstrap {
+public class AcceptorServer {
 
-    public static final int PORT = 8080;
+    private DispatcherManager dispatcherManager;
+    private AcceptorConfig config;
+    private SessionManagerFacade sessionManagerFacade;
 
-    public static void main(String[] args) {
-        DispatcherManager.getInstance().initialize();
+    public AcceptorServer(DispatcherManager dispatcherManager, AcceptorConfig config,
+                          SessionManagerFacade sessionManagerFacade) {
+        this.config = config;
+        this.sessionManagerFacade = sessionManagerFacade;
+        this.dispatcherManager = dispatcherManager;
+    }
+
+    /**
+     * 初始化服务器
+     */
+    public void initialize() {
         EventLoopGroup connectThreadGroup = new NioEventLoopGroup();
         EventLoopGroup ioThreadGroup = new NioEventLoopGroup();
         try {
@@ -35,16 +48,19 @@ public class AcceptorServerBootstrap {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(4096,
+                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(),
                                     Unpooled.copiedBuffer(Constants.DELIMITER)));
-                            socketChannel.pipeline().addLast(new AcceptorHandler());
+                            socketChannel.pipeline().addLast(new AcceptorHandler(dispatcherManager,
+                                    sessionManagerFacade));
                         }
                     });
-            ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
+            ChannelFuture channelFuture = bootstrap.bind(config.getPort()).sync();
             channelFuture.sync();
-            log.info("接入服务初始化完毕...监听端口：{}",PORT);
+            log.info("接入服务初始化完毕...监听端口：{}", config.getPort());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

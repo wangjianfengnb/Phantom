@@ -2,6 +2,8 @@ package com.zhss.im.protocol;
 
 /**
  * 常量表
+ *
+ * @author Jianfeng Wang
  */
 public class Constants {
 
@@ -33,10 +35,14 @@ public class Constants {
      * 响应状态：异常
      */
     public static final int RESPONSE_STATUS_ERROR = 2;
+
     /**
      * 消息头长度
      */
     public static final int HEADER_LENGTH = 20;
 
-
+    /**
+     * session key 前缀
+     */
+    public static final String SESSION_PREFIX = "zhss-im-session-";
 }
