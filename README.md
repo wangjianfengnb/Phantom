@@ -6,7 +6,7 @@
 ## 软件架构
 
 ### 系统整体流程图
-![](https://www.processon.com/view/link/5db6cb2ce4b0c5553743ab0d)
+![](http://assets.processon.com/chart_image/5db6cb2ce4b0335f1e4338ef.png)
 
 ### 认证流程图
 
