@@ -54,13 +54,15 @@ public class AcceptorServer {
                                     sessionManagerFacade));
                         }
                     });
+            log.info("接入服务初始化......监听端口：{}", config.getPort());
             ChannelFuture channelFuture = bootstrap.bind(config.getPort()).sync();
             channelFuture.sync();
-            log.info("接入服务初始化完毕...监听端口：{}", config.getPort());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
 
 }

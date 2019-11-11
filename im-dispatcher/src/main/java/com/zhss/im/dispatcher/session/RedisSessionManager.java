@@ -1,6 +1,7 @@
 package com.zhss.im.dispatcher.session;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zhss.im.dispatcher.config.Configurable;
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
@@ -14,7 +15,7 @@ import static com.zhss.im.protocol.Constants.SESSION_PREFIX;
  * @since 2019/10/28 21:38
  */
 @Slf4j
-public class RedisSessionManager implements SessionManager {
+public class RedisSessionManager implements SessionManager, Configurable {
 
     private DispatcherConfig config;
     private Jedis jedis;
@@ -40,6 +41,16 @@ public class RedisSessionManager implements SessionManager {
 
     @Override
     public Session getSession(String uid) {
-        return null;
+        String key = SESSION_PREFIX + uid;
+        String value = jedis.get(key);
+        if (value == null) {
+            return null;
+        }
+        return JSONObject.parseObject(value, Session.class);
+    }
+
+    @Override
+    public DispatcherConfig getConfig() {
+        return config;
     }
 }

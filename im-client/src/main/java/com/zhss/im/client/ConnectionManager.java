@@ -15,7 +15,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 连接管理器
@@ -32,6 +35,7 @@ public class ConnectionManager {
     private ThreadPoolExecutor threadPool = null;
     private volatile boolean shutdown = false;
     private EventLoopGroup connectThreadGroup = null;
+    private volatile boolean isAuthenticate = false;
 
     private ConnectionManager() {
     }
@@ -65,10 +69,19 @@ public class ConnectionManager {
             while (!shutdown) {
                 try {
                     Message msg = messages.poll(10, TimeUnit.SECONDS);
-                    while (channel == null) {
-                        Thread.sleep(1000);
+                    if (msg == null) {
+                        continue;
                     }
-                    if (channel != null && msg != null) {
+                    if (msg.getRequestType() == Constants.REQUEST_TYPE_AUTHENTICATE) {
+                        while (channel == null) {
+                            Thread.sleep(1000);
+                        }
+                    } else {
+                        while (!isAuthenticate) {
+                            Thread.sleep(1000);
+                        }
+                    }
+                    if (channel != null) {
                         channel.writeAndFlush(msg.getBuffer());
                     }
                 } catch (InterruptedException e) {
@@ -76,6 +89,10 @@ public class ConnectionManager {
                 }
             }
         });
+    }
+
+    public void setAuthenticate(boolean authenticate) {
+        this.isAuthenticate = authenticate;
     }
 
 
@@ -88,10 +105,7 @@ public class ConnectionManager {
         this.channel = channel;
     }
 
-    long s = 0;
-
     public void sendMessage(Message message) {
-        s = System.nanoTime();
         messages.add(message);
     }
 

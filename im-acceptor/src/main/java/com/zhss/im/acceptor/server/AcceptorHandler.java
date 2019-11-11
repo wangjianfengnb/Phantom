@@ -30,4 +30,8 @@ public class AcceptorHandler extends AbstractChannelHandler {
         sessionManagerFacade.removeSession((SocketChannel) ctx.channel());
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("发生异常：{}", cause.getMessage());
+    }
 }

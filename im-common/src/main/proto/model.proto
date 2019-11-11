@@ -8,7 +8,6 @@ option java_package = "com.zhss.im.protocol";
 message AuthenticateRequest {
     string uid = 1;
     string token = 2;
-    int64 timestamp = 3;
 }
 
 message AuthenticateResponse {
@@ -16,4 +15,24 @@ message AuthenticateResponse {
     string token = 2;
     int64 timestamp = 3;
     int32 status = 4;
+}
+
+message C2CMessageRequest {
+    string senderId = 1;
+    string receiverId = 2;
+    string content = 3;
+}
+
+message C2CMessageResponse {
+    string senderId = 1;
+    string receiverId = 2;
+    int64 timestamp = 3;
+    int32 status = 4;
+}
+
+message C2CPushMessageRequest {
+    string senderId = 1;
+    string receiverId = 2;
+    int64 timestamp = 3;
+    string content = 4;
 }

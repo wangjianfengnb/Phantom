@@ -19,53 +19,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthenticateMessageHandler extends AbstractMessageHandler {
 
-    private SessionManagerFacade sessionManagerFacade;
-
-    public AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        super(dispatcherManager);
-        this.sessionManagerFacade = sessionManagerFacade;
+    AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
+        super(dispatcherManager, sessionManagerFacade);
     }
 
     @Override
-    public void handleMessage(Message message, SocketChannel channel) throws Exception {
-        switch (message.getMessageType()) {
-            case Constants.MESSAGE_TYPE_REQUEST:
-                handleRequestMessage(message, channel);
-                break;
-            case Constants.MESSAGE_TYPE_RESPONSE:
-                handleResponseMessage(message);
-                break;
-            default:
-                break; // no-op
+    protected String getUid(Message message, int messageType) throws InvalidProtocolBufferException {
+        byte[] body = message.getBody();
+        if (messageType == Constants.MESSAGE_TYPE_REQUEST) {
+            AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
+            return authenticateRequest.getUid();
+        } else {
+            AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(body);
+            return authenticateResponse.getUid();
         }
     }
 
-    /**
-     * 处理认证响应
-     *
-     * @param message 消息
-     */
-    private void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
-        byte[] body = message.getBody();
-        AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(body);
-        String uid = authenticateResponse.getUid();
-        SocketChannel session = sessionManagerFacade.getSession(uid);
-        if (session != null) {
-            // 有可能在分发系统发到接入系统的过程中，刚好客户端断线了
-            session.writeAndFlush(message.getBuffer());
-        }
-    }
 
-    /**
-     * 处理认证请求
-     *
-     * @param message 消息
-     * @param channel 渠道
-     */
-    private void handleRequestMessage(Message message, SocketChannel channel) throws InvalidProtocolBufferException {
-        byte[] body = message.getBody();
-        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
-        sessionManagerFacade.addSession(authenticateRequest.getUid(), channel);
-        sendMessage(message);
+    @Override
+    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {
+        // 认证的时候，在转发到分发系统前需要保存和客户端的连接
+        sessionManagerFacade.addSession(uid, channel);
     }
 }

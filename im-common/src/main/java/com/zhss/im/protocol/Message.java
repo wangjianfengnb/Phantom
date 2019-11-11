@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * IM消息协议
  * 消息头长度 20
@@ -73,6 +76,28 @@ public class Message {
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)
                 .messageType(Constants.MESSAGE_TYPE_RESPONSE)
                 .requestType(Constants.REQUEST_TYPE_AUTHENTICATE)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
+    public static Message buildC2CMessageRequest(C2CMessageRequest request) {
+        byte[] body = request.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_REQUEST)
+                .requestType(Constants.REQUEST_TYPE_C2C_SEND)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
+    public static Message buildC2cMessageResponse(C2CMessageResponse response) {
+        byte[] body = response.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_RESPONSE)
+                .requestType(Constants.REQUEST_TYPE_C2C_SEND)
                 .bodyLength(body.length)
                 .body(body)
                 .build();

@@ -22,6 +22,8 @@ public class MessageHandlerFactory {
                                                    SessionManagerFacade sessionManagerFacade) {
         if (requestType == Constants.REQUEST_TYPE_AUTHENTICATE) {
             return new AuthenticateMessageHandler(dispatcherManager, sessionManagerFacade);
+        } else if (requestType == Constants.REQUEST_TYPE_C2C_SEND) {
+            return new C2CMessageHandler(dispatcherManager, sessionManagerFacade);
         }
         return null;
     }

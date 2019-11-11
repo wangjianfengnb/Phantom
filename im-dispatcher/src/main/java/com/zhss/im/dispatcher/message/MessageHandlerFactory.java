@@ -11,6 +11,10 @@ import com.zhss.im.protocol.Constants;
  */
 public class MessageHandlerFactory {
 
+    private AuthenticateMessageHandler authenticateMessageHandler;
+
+    private C2CMessageHandler c2CMessageHandler;
+
     /**
      * 根据请求类型获取消息处理器
      *
@@ -20,6 +24,8 @@ public class MessageHandlerFactory {
     public static MessageHandler getMessageHandler(int requestType, SessionManager sessionManager) {
         if (requestType == Constants.REQUEST_TYPE_AUTHENTICATE) {
             return new AuthenticateMessageHandler(sessionManager);
+        } else if (requestType == Constants.REQUEST_TYPE_C2C_SEND) {
+            return new C2CMessageHandler(sessionManager);
         }
         return null;
     }

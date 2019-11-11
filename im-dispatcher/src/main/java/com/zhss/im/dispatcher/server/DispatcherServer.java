@@ -51,7 +51,7 @@ public class DispatcherServer {
 
                     });
             ChannelFuture channelFuture = server.bind(config.getPort()).sync();
-            log.info("分发系统已经启动......");
+            log.info("分发系统已经启动......监听端口：{}", config.getPort());
             channelFuture.sync();
         } catch (Exception e) {
             e.printStackTrace();

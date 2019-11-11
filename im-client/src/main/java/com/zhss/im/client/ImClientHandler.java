@@ -1,6 +1,7 @@
 package com.zhss.im.client;
 
 import com.zhss.im.protocol.AuthenticateResponse;
+import com.zhss.im.protocol.C2CMessageResponse;
 import com.zhss.im.protocol.Constants;
 import com.zhss.im.protocol.Message;
 import io.netty.buffer.ByteBuf;
@@ -35,9 +36,19 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
                     AuthenticateResponse.parseFrom(body);
             if (authenticateResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
                 log.info("认证请求成功...");
+                ConnectionManager.getInstance().setAuthenticate(true);
             } else {
                 log.info("认证请求失败...");
                 ctx.close();
+            }
+        } else if (Constants.REQUEST_TYPE_C2C_SEND == requestType) {
+            byte[] body = message.getBody();
+            C2CMessageResponse c2CMessageResponse =
+                    C2CMessageResponse.parseFrom(body);
+            if (c2CMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
+                log.info("发送单聊消息成功...");
+            } else {
+                log.info("发送单聊消息失败，重新发送...");
             }
         }
     }

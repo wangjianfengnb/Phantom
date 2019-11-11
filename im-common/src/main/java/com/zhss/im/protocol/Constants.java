@@ -23,6 +23,12 @@ public class Constants {
      * 请求类型：用户认证
      */
     public static final int REQUEST_TYPE_AUTHENTICATE = 1;
+
+    /**
+     * 发送C2C消息
+     */
+    public static final int REQUEST_TYPE_C2C_SEND = 2;
+
     /**
      * 每条消息的分隔符
      */
@@ -45,4 +51,8 @@ public class Constants {
      * session key 前缀
      */
     public static final String SESSION_PREFIX = "zhss-im-session-";
+    /**
+     * 发送C2C消息topic
+     */
+    public static final String TOPIC_SEND_C2C_MESSAGE = "send_c2c_message";
 }

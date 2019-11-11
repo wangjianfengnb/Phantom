@@ -15,16 +15,15 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/11/8 10:54
  */
 @Slf4j
-public class AuthenticateMessageHandler implements MessageHandler {
+public class AuthenticateMessageHandler extends AbstractMessageHandler {
 
-    private SessionManager sessionManager;
     /**
      * 请求认证器
      */
     private Authenticator authenticator;
 
-    public AuthenticateMessageHandler(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    AuthenticateMessageHandler(SessionManager sessionManager) {
+        super(sessionManager);
         this.authenticator = new DefaultAuthenticator();
     }
 
@@ -36,25 +35,28 @@ public class AuthenticateMessageHandler implements MessageHandler {
                 AuthenticateRequest.parseFrom(body);
         String uid = authenticateRequest.getUid();
         String token = authenticateRequest.getToken();
-        AuthenticateResponse.Builder responseBuilder = AuthenticateResponse.newBuilder()
-                        .setToken(authenticateRequest.getToken())
-                        .setUid(authenticateRequest.getUid())
-                        .setTimestamp(System.currentTimeMillis());
-        if (authenticator.authenticate(uid, token)) {
-            responseBuilder.setStatus(Constants.RESPONSE_STATUS_OK);
-            log.info("认证请求成功");
-            Session session = Session.builder()
-                    .uid(uid)
-                    .token(token)
-                    .acceptorChannelId(NetUtils.getInstanceId(channel))
-                    .timestamp(System.currentTimeMillis())
-                    .build();
-            sessionManager.addSession(uid, session);
-        } else {
-            responseBuilder.setStatus(Constants.RESPONSE_STATUS_ERROR);
-            log.info("认证请求失败");
-        }
-        Message response = Message.buildAuthenticateResponse(responseBuilder.build());
-        channel.writeAndFlush(response.getBuffer());
+        execute(uid, () -> {
+            // 认证发送响应
+            AuthenticateResponse.Builder responseBuilder = AuthenticateResponse.newBuilder()
+                    .setToken(authenticateRequest.getToken())
+                    .setUid(authenticateRequest.getUid())
+                    .setTimestamp(System.currentTimeMillis());
+            if (authenticator.authenticate(uid, token)) {
+                responseBuilder.setStatus(Constants.RESPONSE_STATUS_OK);
+                log.info("认证请求成功");
+                Session session = Session.builder()
+                        .uid(uid)
+                        .token(token)
+                        .acceptorChannelId(NetUtils.getInstanceId(channel))
+                        .timestamp(System.currentTimeMillis())
+                        .build();
+                sessionManager.addSession(uid, session);
+            } else {
+                responseBuilder.setStatus(Constants.RESPONSE_STATUS_ERROR);
+                log.info("认证请求失败");
+            }
+            Message response = Message.buildAuthenticateResponse(responseBuilder.build());
+            channel.writeAndFlush(response.getBuffer());
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.zhss.im.dispatcher.server;
 
 import com.zhss.im.dispatcher.acceptor.AcceptorInstance;
 import com.zhss.im.dispatcher.acceptor.AcceptorServerManager;
+import com.zhss.im.dispatcher.config.DispatcherConfig;
 import com.zhss.im.dispatcher.message.MessageHandler;
 import com.zhss.im.dispatcher.message.MessageHandlerFactory;
 import com.zhss.im.dispatcher.session.SessionManager;
@@ -56,5 +57,8 @@ public class DispatcherHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+    }
 }
