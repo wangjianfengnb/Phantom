@@ -1,7 +1,9 @@
-package com.zhss.im.dispatcher.message;
+package com.zhss.im.common.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * C2C的消息
@@ -9,9 +11,11 @@ import lombok.Data;
  * @author Jianfeng Wang
  * @since 2019/11/11 18:01
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
-public class C2CMessage {
+public class C2cMessage {
     /**
      * 发送者ID
      */

@@ -1,8 +1,8 @@
 package com.zhss.im.client;
 
 
-import com.zhss.im.protocol.Constants;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.Constants;
+import com.zhss.im.common.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;

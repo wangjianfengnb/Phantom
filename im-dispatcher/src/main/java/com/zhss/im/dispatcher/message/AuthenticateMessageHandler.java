@@ -4,7 +4,7 @@ import com.zhss.im.dispatcher.session.Session;
 import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.dispatcher.sso.Authenticator;
 import com.zhss.im.dispatcher.sso.DefaultAuthenticator;
-import com.zhss.im.protocol.*;
+import com.zhss.im.common.*;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 

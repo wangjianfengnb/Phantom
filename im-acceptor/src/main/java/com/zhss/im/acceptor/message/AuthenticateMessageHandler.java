@@ -3,9 +3,9 @@ package com.zhss.im.acceptor.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.AuthenticateRequest;
-import com.zhss.im.protocol.AuthenticateResponse;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.AuthenticateRequest;
+import com.zhss.im.common.AuthenticateResponse;
+import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 

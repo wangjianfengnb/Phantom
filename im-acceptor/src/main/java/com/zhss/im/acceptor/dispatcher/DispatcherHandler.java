@@ -2,7 +2,7 @@ package com.zhss.im.acceptor.dispatcher;
 
 import com.zhss.im.acceptor.server.AbstractChannelHandler;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.NetUtils;
+import com.zhss.im.common.NetUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;

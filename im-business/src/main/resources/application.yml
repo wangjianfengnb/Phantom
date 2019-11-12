@@ -2,20 +2,25 @@ server:
   port: 8091
 
 spring:
-  kafka:
-    bootstrap-servers: kafka-0:9092,kafka-1:9092,kafka-2:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      acks: -1
-      retries: 100
-      batch-size: 16384
-      linger.ms: 10
-      buffer-memory: 33554432
-      max:
-        in:
-          flight:
-            requests:
-              per:
-                connection: 1
-
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://193.112.18.149:3306/im?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull&&useSSL=false
+    username: root
+    password: 921029
+    driverClassName: com.mysql.jdbc.Driver
+    initialSize: 3
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+kafka:
+  bootstrap-servers: kafka-0:9092,kafka-1:9092,kafka-2:9092

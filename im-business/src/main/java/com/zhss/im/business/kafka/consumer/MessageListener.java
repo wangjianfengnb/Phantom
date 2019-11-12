@@ -1,4 +1,4 @@
-package com.zhss.im.business.kafka;
+package com.zhss.im.business.kafka.consumer;
 
 /**
  * 单消息消费

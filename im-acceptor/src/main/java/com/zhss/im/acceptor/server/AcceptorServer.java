@@ -3,7 +3,7 @@ package com.zhss.im.acceptor.server;
 import com.zhss.im.acceptor.config.AcceptorConfig;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;

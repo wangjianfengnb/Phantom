@@ -1,9 +1,9 @@
 package com.zhss.im.client;
 
-import com.zhss.im.protocol.AuthenticateResponse;
-import com.zhss.im.protocol.C2CMessageResponse;
-import com.zhss.im.protocol.Constants;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.AuthenticateResponse;
+import com.zhss.im.common.C2CMessageResponse;
+import com.zhss.im.common.Constants;
+import com.zhss.im.common.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

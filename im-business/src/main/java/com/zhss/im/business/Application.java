@@ -1,7 +1,9 @@
 package com.zhss.im.business;
 
+import com.zhss.im.business.db.DataSourceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
 /**
  * IM业务系统
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Jianfeng Wang
  * @since 2019/11/12 11:06
  */
+@Import(DataSourceConfig.class)
 @SpringBootApplication
 public class Application {
 

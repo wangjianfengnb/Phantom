@@ -1,4 +1,4 @@
-package com.zhss.im.business.kafka;
+package com.zhss.im.business.kafka.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,7 +25,7 @@ import java.util.*;
 @Component
 public class Consumer implements InitializingBean {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     /**

@@ -1,4 +1,4 @@
-package com.zhss.im.protocol;
+package com.zhss.im.common;
 
 /**
  * 常量表
@@ -55,4 +55,9 @@ public class Constants {
      * 发送C2C消息topic
      */
     public static final String TOPIC_SEND_C2C_MESSAGE = "send_c2c_message";
+
+    /**
+     * 发送C2C消息topic
+     */
+    public static final String TOPIC_SEND_C2C_MESSAGE_RESPONSE = "send_c2c_message_response";
 }

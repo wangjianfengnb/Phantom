@@ -1,8 +1,8 @@
 package com.zhss.im.client;
 
-import com.zhss.im.protocol.AuthenticateRequest;
-import com.zhss.im.protocol.C2CMessageRequest;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.AuthenticateRequest;
+import com.zhss.im.common.C2CMessageRequest;
+import com.zhss.im.common.Message;
 import lombok.extern.slf4j.Slf4j;
 
 /**

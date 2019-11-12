@@ -1,7 +1,7 @@
 package com.zhss.im.acceptor.session;
 
 import com.zhss.im.acceptor.config.AcceptorConfig;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 

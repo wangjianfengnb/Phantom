@@ -2,7 +2,7 @@ package com.zhss.im.dispatcher.server;
 
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import com.zhss.im.dispatcher.session.SessionManager;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

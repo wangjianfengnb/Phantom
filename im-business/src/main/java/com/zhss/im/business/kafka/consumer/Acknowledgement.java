@@ -1,4 +1,4 @@
-package com.zhss.im.business.kafka;
+package com.zhss.im.business.kafka.consumer;
 
 /**
  * 消息确认ack

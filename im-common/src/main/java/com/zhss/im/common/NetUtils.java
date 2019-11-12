@@ -1,4 +1,4 @@
-package com.zhss.im.protocol;
+package com.zhss.im.common;
 
 
 import io.netty.channel.socket.SocketChannel;

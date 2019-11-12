@@ -6,7 +6,7 @@ import com.zhss.im.dispatcher.config.DispatcherConfig;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
-import static com.zhss.im.protocol.Constants.SESSION_PREFIX;
+import static com.zhss.im.common.Constants.SESSION_PREFIX;
 
 /**
  * 客户端会话门面

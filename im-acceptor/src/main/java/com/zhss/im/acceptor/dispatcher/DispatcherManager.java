@@ -1,9 +1,8 @@
 package com.zhss.im.acceptor.dispatcher;
 
 import com.zhss.im.acceptor.config.AcceptorConfig;
-import com.zhss.im.acceptor.server.AcceptorServer;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.common.Constants;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

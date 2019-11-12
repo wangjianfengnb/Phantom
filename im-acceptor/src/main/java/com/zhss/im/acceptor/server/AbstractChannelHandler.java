@@ -4,7 +4,7 @@ import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.message.MessageHandler;
 import com.zhss.im.acceptor.message.MessageHandlerFactory;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

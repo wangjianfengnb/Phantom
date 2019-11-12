@@ -1,6 +1,6 @@
 package com.zhss.im.acceptor.message;
 
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 
 /**

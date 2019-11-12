@@ -2,7 +2,7 @@ package com.zhss.im.acceptor.message;
 
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.Constants;
+import com.zhss.im.common.Constants;
 
 /**
  * 消息处理器工厂

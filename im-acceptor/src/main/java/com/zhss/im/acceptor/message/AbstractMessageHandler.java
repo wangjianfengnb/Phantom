@@ -4,8 +4,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.acceptor.dispatcher.DispatcherInstance;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.Constants;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.Constants;
+import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 

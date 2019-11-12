@@ -3,9 +3,9 @@ package com.zhss.im.acceptor.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.C2CMessageRequest;
-import com.zhss.im.protocol.C2CMessageResponse;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.C2CMessageRequest;
+import com.zhss.im.common.C2CMessageResponse;
+import com.zhss.im.common.Message;
 
 /**
  * 处理C2C消息

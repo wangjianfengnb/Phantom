@@ -1,13 +1,14 @@
 package com.zhss.im.dispatcher.message;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zhss.im.common.model.C2cMessage;
 import com.zhss.im.dispatcher.mq.KafkaClient;
 import com.zhss.im.dispatcher.session.Session;
 import com.zhss.im.dispatcher.session.SessionManager;
-import com.zhss.im.protocol.C2CMessageRequest;
-import com.zhss.im.protocol.C2CMessageResponse;
-import com.zhss.im.protocol.Constants;
-import com.zhss.im.protocol.Message;
+import com.zhss.im.common.C2CMessageRequest;
+import com.zhss.im.common.C2CMessageResponse;
+import com.zhss.im.common.Constants;
+import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +50,7 @@ public class C2CMessageHandler extends AbstractMessageHandler {
         // 2. 基于snowflake算法生成messageId
 
         // 3. 投递到kafka
-        C2CMessage msg = C2CMessage.builder()
+        C2cMessage msg = C2cMessage.builder()
                 .senderId(c2CMessageRequest.getSenderId())
                 .receiverId(c2CMessageRequest.getReceiverId())
                 .content(c2CMessageRequest.getContent())
