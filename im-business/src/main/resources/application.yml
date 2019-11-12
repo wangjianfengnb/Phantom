@@ -1,0 +1,21 @@
+server:
+  port: 8091
+
+spring:
+  kafka:
+    bootstrap-servers: kafka-0:9092,kafka-1:9092,kafka-2:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: -1
+      retries: 100
+      batch-size: 16384
+      linger.ms: 10
+      buffer-memory: 33554432
+      max:
+        in:
+          flight:
+            requests:
+              per:
+                connection: 1
+

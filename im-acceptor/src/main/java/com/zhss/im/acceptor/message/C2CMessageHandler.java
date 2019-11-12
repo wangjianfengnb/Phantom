@@ -3,7 +3,9 @@ package com.zhss.im.acceptor.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
-import com.zhss.im.protocol.*;
+import com.zhss.im.protocol.C2CMessageRequest;
+import com.zhss.im.protocol.C2CMessageResponse;
+import com.zhss.im.protocol.Message;
 
 /**
  * 处理C2C消息
@@ -20,20 +22,14 @@ public class C2CMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
-    protected String getUid(Message message, int messageType) throws InvalidProtocolBufferException {
-        byte[] body = message.getBody();
-        if (messageType == Constants.MESSAGE_TYPE_REQUEST) {
-            C2CMessageRequest c2CMessageRequest = C2CMessageRequest.parseFrom(body);
-            return c2CMessageRequest.getSenderId();
-        } else {
-            C2CMessageResponse c2CMessageResponse = C2CMessageResponse.parseFrom(body);
-            return c2CMessageResponse.getSenderId();
-        }
+    protected String getReceiverId(Message message) throws InvalidProtocolBufferException {
+        C2CMessageRequest c2CMessageRequest = C2CMessageRequest.parseFrom(message.getBody());
+        return c2CMessageRequest.getReceiverId();
     }
 
     @Override
-    protected void handleResponseMessage(String uid, Message message) {
-
+    protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
+        C2CMessageResponse c2CMessageResponse = C2CMessageResponse.parseFrom(message.getBody());
+        return c2CMessageResponse.getSenderId();
     }
-
 }

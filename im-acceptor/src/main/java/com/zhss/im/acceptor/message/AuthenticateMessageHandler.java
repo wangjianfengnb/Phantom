@@ -5,7 +5,6 @@ import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.protocol.AuthenticateRequest;
 import com.zhss.im.protocol.AuthenticateResponse;
-import com.zhss.im.protocol.Constants;
 import com.zhss.im.protocol.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +23,16 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
-    protected String getUid(Message message, int messageType) throws InvalidProtocolBufferException {
-        byte[] body = message.getBody();
-        if (messageType == Constants.MESSAGE_TYPE_REQUEST) {
-            AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
-            return authenticateRequest.getUid();
-        } else {
-            AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(body);
-            return authenticateResponse.getUid();
-        }
+    protected String getReceiverId(Message message) throws InvalidProtocolBufferException {
+        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(message.getBody());
+        return authenticateRequest.getUid();
     }
 
+    @Override
+    protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
+        AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(message.getBody());
+        return authenticateResponse.getUid();
+    }
 
     @Override
     protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {

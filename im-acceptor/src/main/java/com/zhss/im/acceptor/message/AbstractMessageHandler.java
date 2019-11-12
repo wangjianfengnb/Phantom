@@ -29,13 +29,12 @@ public abstract class AbstractMessageHandler implements MessageHandler {
 
     @Override
     public void handleMessage(Message message, SocketChannel channel) throws Exception {
-        String uid = getUid(message, message.getMessageType());
         switch (message.getMessageType()) {
             case Constants.MESSAGE_TYPE_REQUEST:
-                handleRequestMessage(uid, message, channel);
+                handleRequestMessage(message, channel);
                 break;
             case Constants.MESSAGE_TYPE_RESPONSE:
-                handleResponseMessage(uid, message);
+                handleResponseMessage(message);
                 break;
             default:
                 break; // no-op
@@ -43,23 +42,31 @@ public abstract class AbstractMessageHandler implements MessageHandler {
     }
 
     /**
-     * 获取用户ID
+     * 获取这条消息是发送给谁的。
      *
-     * @param message     消息
-     * @param messageType 消息类型 {@link Constants#MESSAGE_TYPE_REQUEST}
+     * @param message 消息
      * @return 用户Id
      * @throws InvalidProtocolBufferException Protobuf序列化失败
      */
-    protected abstract String getUid(Message message, int messageType) throws InvalidProtocolBufferException;
+    protected abstract String getReceiverId(Message message) throws InvalidProtocolBufferException;
+
+    /**
+     * 获取这条消息是响应给谁的。
+     *
+     * @param message 消息
+     * @return 用户Id
+     * @throws InvalidProtocolBufferException Protobuf序列化失败
+     */
+    protected abstract String getResponseUid(Message message) throws InvalidProtocolBufferException;
 
 
     /**
      * 处理响应消息,返回给客户端
      *
-     * @param uid     用户ID
      * @param message 消息
      */
-    protected void handleResponseMessage(String uid, Message message) {
+    protected void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
+        String uid = getResponseUid(message);
         SocketChannel session = sessionManagerFacade.getSession(uid);
         if (session != null) {
             // 有可能在分发系统发到接入系统的过程中，刚好客户端断线了
@@ -70,11 +77,11 @@ public abstract class AbstractMessageHandler implements MessageHandler {
     /**
      * 处理请求消息，公共逻辑，提供一个钩子，直接把消息转发给分发系统
      *
-     * @param uid     用户ID
      * @param message 消息
      * @param channel 客户端连接的channel
      */
-    private void handleRequestMessage(String uid, Message message, SocketChannel channel) {
+    private void handleRequestMessage(Message message, SocketChannel channel) throws InvalidProtocolBufferException {
+        String uid = getReceiverId(message);
         beforeDispatchMessage(uid, message, channel);
         sendMessage(uid, message);
     }
