@@ -30,6 +30,16 @@ public class Constants {
     public static final int REQUEST_TYPE_C2C_SEND = 2;
 
     /**
+     * 消息通知
+     */
+    public static final int REQUEST_TYPE_MESSAGE_NOTIFICATION = 3;
+
+    /**
+     * 消息抓取请求
+     */
+    public static final int REQUEST_TYPE_MESSAGE_FETCH = 4;
+
+    /**
      * 每条消息的分隔符
      */
     public static final byte[] DELIMITER = "$_".getBytes();
@@ -51,6 +61,17 @@ public class Constants {
      * session key 前缀
      */
     public static final String SESSION_PREFIX = "zhss-im-session-";
+
+    /**
+     * timeline key 前缀
+     */
+    public static final String TIMELINE_PREFIX = "zhss-im-timeline-";
+
+    /**
+     * 消息前缀
+     */
+    public static final String MESSAGE_SEQUENCE_PREFIX = "message_sequence_prefix";
+
     /**
      * 发送C2C消息topic
      */
@@ -60,4 +81,9 @@ public class Constants {
      * 发送C2C消息topic
      */
     public static final String TOPIC_SEND_C2C_MESSAGE_RESPONSE = "send_c2c_message_response";
+
+    /**
+     * 推送消息
+     */
+    public static final String TOPIC_PUSH_MESSAGE = "push_message";
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * C2C的消息
+ * 发送到Kafka的C2C的消息
  *
  * @author Jianfeng Wang
  * @since 2019/11/11 18:01

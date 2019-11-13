@@ -3,7 +3,10 @@ package com.zhss.im.acceptor.session;
 import com.zhss.im.acceptor.config.AcceptorConfig;
 import com.zhss.im.common.Constants;
 import lombok.extern.slf4j.Slf4j;
-import redis.clients.jedis.Jedis;
+import org.redisson.Redisson;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 
 /**
  * 保存到redis的会话管理器
@@ -17,21 +20,26 @@ public class RedisSessionManager implements SessionManager {
      * 配置
      */
     private AcceptorConfig config;
+
     /**
      * 操作redis
      */
-    private Jedis jedis;
+    private RedissonClient redissonClient;
 
-    public RedisSessionManager(AcceptorConfig config) {
-        this.config = config;
-        this.jedis = new Jedis(config.getRedisServer());
+    RedisSessionManager(AcceptorConfig acceptorConfig) {
+        this.config = acceptorConfig;
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress(acceptorConfig.getRedisServer());
+        this.redissonClient = Redisson.create(config);
     }
 
     @Override
     public void removeSession(String uid) {
         String sessionKey = Constants.SESSION_PREFIX + uid;
-        String sessionValue = jedis.get(sessionKey);
-        jedis.del(sessionKey);
-        log.info("从redis中删除session: {}", sessionValue);
+        RBucket<String> bucket = redissonClient.getBucket(sessionKey);
+        log.info("从redis中删除session: {}", bucket.get());
+        bucket.delete();
     }
+
 }

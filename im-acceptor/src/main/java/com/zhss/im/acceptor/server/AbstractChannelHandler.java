@@ -30,8 +30,7 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         Message message = Message.parse(byteBuf);
-        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType(),
-                dispatcherManager, sessionManagerFacade);
+        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType());
         if (messageHandler != null) {
             SocketChannel channel = (SocketChannel) ctx.channel();
             messageHandler.handleMessage(message, channel);

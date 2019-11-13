@@ -20,18 +20,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractMessageHandler implements MessageHandler {
 
-
     protected DispatcherConfig dispatcherConfig;
     protected ProcessorManager processorManager;
     protected SessionManager sessionManager;
 
-    public AbstractMessageHandler(SessionManager sessionManager) {
+    AbstractMessageHandler(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         this.dispatcherConfig = getConfig(sessionManager);
         this.processorManager = new ProcessorManager(dispatcherConfig);
     }
 
-    protected DispatcherConfig getConfig(SessionManager sessionManager) {
+    private DispatcherConfig getConfig(SessionManager sessionManager) {
         DispatcherConfig config = null;
         if (sessionManager instanceof Configurable) {
             config = ((Configurable) sessionManager).getConfig();
@@ -55,7 +54,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param uid     用户id
      * @param message 消息
      */
-    protected void sendToAcceptor(String uid, Message message) {
+    void sendToAcceptor(String uid, Message message) {
         Session session = sessionManager.getSession(uid);
         if (session != null) {
             String acceptorChannelId = session.getAcceptorChannelId();
@@ -70,6 +69,4 @@ public abstract class AbstractMessageHandler implements MessageHandler {
             log.error("无法找到session，返回发送C2c消息的响应失败...");
         }
     }
-
-
 }

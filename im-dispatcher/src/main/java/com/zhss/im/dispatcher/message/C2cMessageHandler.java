@@ -31,14 +31,16 @@ public class C2cMessageHandler extends AbstractMessageHandler {
         consumer.setMessageListener(message -> {
             log.info("分发系统收到发送单聊消息响应：{}", message);
             C2cMessage msg = JSONObject.parseObject(message, C2cMessage.class);
-            C2CMessageResponse response = C2CMessageResponse.newBuilder()
-                    .setSenderId(msg.getSenderId())
-                    .setReceiverId(msg.getReceiverId())
-                    .setTimestamp(msg.getTimestamp())
-                    .setStatus(Constants.RESPONSE_STATUS_OK)
-                    .build();
-            Message resp = Message.buildC2cMessageResponse(response);
-            sendToAcceptor(msg.getSenderId(), resp);
+            execute(msg.getSenderId(), () -> {
+                C2CMessageResponse response = C2CMessageResponse.newBuilder()
+                        .setSenderId(msg.getSenderId())
+                        .setReceiverId(msg.getReceiverId())
+                        .setTimestamp(msg.getTimestamp())
+                        .setStatus(Constants.RESPONSE_STATUS_OK)
+                        .build();
+                Message resp = Message.buildC2cMessageResponse(response);
+                sendToAcceptor(msg.getSenderId(), resp);
+            });
         });
     }
 

@@ -18,6 +18,10 @@ public class SessionManagerFacade {
 
 
     /**
+     * 配置
+     */
+    private AcceptorConfig config;
+    /**
      * 用户会话，表示接入系统内存中保存和用户的连接
      */
     private Map<String, SocketChannel> sessions = new ConcurrentHashMap<>();
@@ -33,6 +37,7 @@ public class SessionManagerFacade {
     private SessionManager delegate;
 
     public SessionManagerFacade(AcceptorConfig config) {
+        this.config = config;
         this.delegate = new RedisSessionManager(config);
     }
 
@@ -56,6 +61,10 @@ public class SessionManagerFacade {
     public void addSession(String uid, SocketChannel channel) {
         sessions.put(uid, channel);
         channel2Uid.put(channel, uid);
+    }
+
+    public AcceptorConfig getAcceptorConfig() {
+        return config;
     }
 
     /**

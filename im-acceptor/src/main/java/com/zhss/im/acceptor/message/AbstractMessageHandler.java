@@ -93,7 +93,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param message 消息
      * @param channel 客户端连接的channel
      */
-    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {
+    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) throws InvalidProtocolBufferException {
         // default no-op
     }
 

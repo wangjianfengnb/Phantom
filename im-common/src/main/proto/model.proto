@@ -21,6 +21,7 @@ message C2CMessageRequest {
     string senderId = 1;
     string receiverId = 2;
     string content = 3;
+    int64 sequence = 4;
 }
 
 message C2CMessageResponse {

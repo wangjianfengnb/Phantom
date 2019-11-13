@@ -3,6 +3,7 @@ package com.zhss.im.business.mapper;
 import com.zhss.im.common.model.C2cMessage;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 
 /**
  * 单聊消息mapper
@@ -31,6 +32,7 @@ public interface C2cMessageMapper {
             "#{receiverId}," +
             "#{content}," +
             "#{timestamp})")
+    @Options(keyColumn = "message_id", keyProperty = "messageId", useGeneratedKeys = true)
     void saveMessage(C2cMessage c2CMessage);
 
 

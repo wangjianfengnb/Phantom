@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhss.im.dispatcher.config.Configurable;
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import lombok.extern.slf4j.Slf4j;
-import redis.clients.jedis.Jedis;
+import org.redisson.Redisson;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 
 import static com.zhss.im.common.Constants.SESSION_PREFIX;
 
@@ -18,11 +21,14 @@ import static com.zhss.im.common.Constants.SESSION_PREFIX;
 public class RedisSessionManager implements SessionManager, Configurable {
 
     private DispatcherConfig config;
-    private Jedis jedis;
+    private RedissonClient redissonClient;
 
-    public RedisSessionManager(DispatcherConfig config) {
-        this.config = config;
-        this.jedis = new Jedis(config.getRedisServer());
+    public RedisSessionManager(DispatcherConfig dispatcherConfig) {
+        this.config = dispatcherConfig;
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress(dispatcherConfig.getRedisServer());
+        this.redissonClient = Redisson.create(config);
     }
 
 
@@ -30,7 +36,8 @@ public class RedisSessionManager implements SessionManager, Configurable {
     public void addSession(String uid, Session session) {
         String key = SESSION_PREFIX + uid;
         String value = JSONObject.toJSONString(session);
-        jedis.set(key, value);
+        RBucket<Session> bucket = redissonClient.getBucket(key);
+        bucket.set(session);
         log.info("往redis中写入session ：{} -> {}", key, value);
     }
 
@@ -42,11 +49,8 @@ public class RedisSessionManager implements SessionManager, Configurable {
     @Override
     public Session getSession(String uid) {
         String key = SESSION_PREFIX + uid;
-        String value = jedis.get(key);
-        if (value == null) {
-            return null;
-        }
-        return JSONObject.parseObject(value, Session.class);
+        RBucket<Session> bucket = redissonClient.getBucket(key);
+        return bucket.get();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.zhss.im.business.kafka.producer.Producer;
 import com.zhss.im.business.mapper.C2cMessageMapper;
 import com.zhss.im.common.Constants;
 import com.zhss.im.common.model.C2cMessage;
+import com.zhss.im.common.model.PushMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -47,10 +48,18 @@ public class C2cMessageListener implements SingleMessageListener {
         // 发送给发送者的响应，按照senderId做partition hash
         producer.send(Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE, c2CMessage.getSenderId(), value);
 
-        // push message
+        // push message, 按照receiverId做partition hash
+        PushMessage pushMessage = PushMessage.builder()
+                .senderId(c2CMessage.getSenderId())
+                .receiverId(c2CMessage.getReceiverId())
+                .content(c2CMessage.getContent())
+                .type(PushMessage.MESSAGE_TYPE_C2C)
+                .timestamp(c2CMessage.getTimestamp())
+                .messageId(c2CMessage.getMessageId())
+                .build();
+        producer.send(Constants.TOPIC_PUSH_MESSAGE, pushMessage.getReceiverId(), JSONObject.toJSONString(pushMessage));
 
-
-
+        // send kafka ack
         acknowledgement.ack();
     }
 }
