@@ -1,8 +1,8 @@
 package com.zhss.im.dispatcher.server;
 
+import com.zhss.im.common.Constants;
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import com.zhss.im.dispatcher.session.SessionManager;
-import com.zhss.im.common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -26,11 +26,8 @@ public class DispatcherServer {
 
     private DispatcherConfig config;
 
-    private SessionManager sessionManager;
-
-    public DispatcherServer(DispatcherConfig config, SessionManager sessionManager) {
+    public DispatcherServer(DispatcherConfig config) {
         this.config = config;
-        this.sessionManager = sessionManager;
     }
 
     public void initialize() {
@@ -46,7 +43,7 @@ public class DispatcherServer {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ByteBuf delimiter = Unpooled.copiedBuffer(Constants.DELIMITER);
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(), delimiter));
-                            socketChannel.pipeline().addLast(new DispatcherHandler(sessionManager));
+                            socketChannel.pipeline().addLast(new DispatcherHandler());
                         }
 
                     });

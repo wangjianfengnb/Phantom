@@ -17,15 +17,14 @@ import java.util.Properties;
  */
 @Slf4j
 @Component
-public class KafkaClient implements InitializingBean {
+public class Producer implements InitializingBean {
 
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     private KafkaProducer<String, String> producer;
 
-
-    public KafkaClient() {
+    public Producer() {
     }
 
     /**
@@ -59,6 +58,6 @@ public class KafkaClient implements InitializingBean {
         properties.put("linger.ms", 10);
         properties.put("buffer.memory", 32 * 1024 * 1024);
         this.producer = new KafkaProducer<>(properties);
-        log.info("初始化kafka........");
+        log.info("初始化kafkaProducer........");
     }
 }

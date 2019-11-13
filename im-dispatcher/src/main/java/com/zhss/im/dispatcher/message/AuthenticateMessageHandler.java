@@ -31,8 +31,7 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
     public void handleMessage(Message message, SocketChannel channel) throws Exception {
         log.info("收到认证请求.....");
         byte[] body = message.getBody();
-        AuthenticateRequest authenticateRequest =
-                AuthenticateRequest.parseFrom(body);
+        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
         String uid = authenticateRequest.getUid();
         String token = authenticateRequest.getToken();
         execute(uid, () -> {

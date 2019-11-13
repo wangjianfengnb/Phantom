@@ -1,11 +1,11 @@
 package com.zhss.im.dispatcher.server;
 
+import com.zhss.im.common.Message;
+import com.zhss.im.common.NetUtils;
 import com.zhss.im.dispatcher.acceptor.AcceptorInstance;
 import com.zhss.im.dispatcher.acceptor.AcceptorServerManager;
 import com.zhss.im.dispatcher.message.MessageHandler;
 import com.zhss.im.dispatcher.message.MessageHandlerFactory;
-import com.zhss.im.dispatcher.session.SessionManager;
-import com.zhss.im.common.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -21,11 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DispatcherHandler extends ChannelInboundHandlerAdapter {
 
-    private SessionManager sessionManager;
-
-    public DispatcherHandler(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -49,8 +44,7 @@ public class DispatcherHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         Message message = Message.parse(byteBuf);
-        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType(),
-                sessionManager);
+        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType());
         if (messageHandler != null) {
             messageHandler.handleMessage(message, (SocketChannel) ctx.channel());
         }

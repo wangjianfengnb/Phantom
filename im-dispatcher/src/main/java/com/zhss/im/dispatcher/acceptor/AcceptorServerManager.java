@@ -29,4 +29,8 @@ public class AcceptorServerManager {
     public void removeAcceptorInstance(String instanceId) {
         acceptorInstances.remove(instanceId);
     }
+
+    public AcceptorInstance getAcceptorInstance(String instanceId) {
+        return acceptorInstances.get(instanceId);
+    }
 }

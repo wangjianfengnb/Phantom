@@ -14,20 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImClient {
 
-    public static ImClient client = new ImClient();
+    private static ImClient client = new ImClient();
 
     private ImClient() {
     }
 
     public static ImClient getInstance() {
         return client;
-    }
-
-
-    public static void main(String[] args) {
-        ImClient.getInstance().initialize();
-        ImClient.getInstance().authenticate("test_uid_001", "test_token_001");
-        ImClient.getInstance().sendMessage("test_uid_001", "test_uid_002", "hello world");
     }
 
     /**
@@ -71,6 +64,7 @@ public class ImClient {
                 .build();
         Message message = Message.buildC2CMessageRequest(request);
         connectManager.sendMessage(message);
+        log.info("发送消息:{}", content);
     }
 
 

@@ -1,7 +1,10 @@
 package com.zhss.im.dispatcher.message;
 
-import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.common.Constants;
+import com.zhss.im.dispatcher.session.SessionManager;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 消息处理器工厂
@@ -11,9 +14,20 @@ import com.zhss.im.common.Constants;
  */
 public class MessageHandlerFactory {
 
-    private AuthenticateMessageHandler authenticateMessageHandler;
+    /**
+     * 处理消息的handler集合
+     */
+    private static Map<Integer, MessageHandler> handlers = new ConcurrentHashMap<>();
 
-    private C2CMessageHandler c2CMessageHandler;
+    /**
+     * 初始化
+     *
+     * @param sessionManager 回话管理器
+     */
+    public static void initialize(SessionManager sessionManager) {
+        handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(sessionManager));
+        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(sessionManager));
+    }
 
     /**
      * 根据请求类型获取消息处理器
@@ -21,13 +35,8 @@ public class MessageHandlerFactory {
      * @param requestType 请求类型
      * @return 消息处理器
      */
-    public static MessageHandler getMessageHandler(int requestType, SessionManager sessionManager) {
-        if (requestType == Constants.REQUEST_TYPE_AUTHENTICATE) {
-            return new AuthenticateMessageHandler(sessionManager);
-        } else if (requestType == Constants.REQUEST_TYPE_C2C_SEND) {
-            return new C2CMessageHandler(sessionManager);
-        }
-        return null;
+    public static MessageHandler getMessageHandler(int requestType) {
+        return handlers.get(requestType);
     }
 
 

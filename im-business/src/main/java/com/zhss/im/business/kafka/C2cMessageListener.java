@@ -3,7 +3,7 @@ package com.zhss.im.business.kafka;
 import com.alibaba.fastjson.JSONObject;
 import com.zhss.im.business.kafka.consumer.Acknowledgement;
 import com.zhss.im.business.kafka.consumer.SingleMessageListener;
-import com.zhss.im.business.kafka.producer.KafkaClient;
+import com.zhss.im.business.kafka.producer.Producer;
 import com.zhss.im.business.mapper.C2cMessageMapper;
 import com.zhss.im.common.Constants;
 import com.zhss.im.common.model.C2cMessage;
@@ -26,7 +26,7 @@ public class C2cMessageListener implements SingleMessageListener {
     private C2cMessageMapper c2CMessageMapper;
 
     @Resource
-    private KafkaClient kafkaClient;
+    private Producer producer;
 
 
     @Override
@@ -38,10 +38,19 @@ public class C2cMessageListener implements SingleMessageListener {
     public void onMessage(String message, Acknowledgement acknowledgement) {
         log.info("收到消息：{}", message);
         C2cMessage c2CMessage = JSONObject.parseObject(message, C2cMessage.class);
+        c2CMessage.setMessageId(null);
         c2CMessageMapper.saveMessage(c2CMessage);
+
+
         // send response
         String value = JSONObject.toJSONString(c2CMessage);
-        kafkaClient.send(Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE, c2CMessage.getSenderId(), value);
+        // 发送给发送者的响应，按照senderId做partition hash
+        producer.send(Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE, c2CMessage.getSenderId(), value);
+
+        // push message
+
+
+
         acknowledgement.ack();
     }
 }

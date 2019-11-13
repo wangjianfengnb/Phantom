@@ -15,9 +15,9 @@ import com.zhss.im.common.Message;
  * @author Jianfeng Wang
  * @since 2019/11/11 16:50
  */
-public class C2CMessageHandler extends AbstractMessageHandler {
+public class C2cMessageHandler extends AbstractMessageHandler {
 
-    C2CMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
+    C2cMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
         super(dispatcherManager, sessionManagerFacade);
     }
 
