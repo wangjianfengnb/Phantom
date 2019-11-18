@@ -68,5 +68,7 @@ public class ImClient {
     }
 
 
-
+    public void addMessageListener(MessageListener listener) {
+        ConnectionManager.getInstance().addMessageListener(listener);
+    }
 }

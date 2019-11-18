@@ -14,6 +14,9 @@ public class ImClientTest {
         String token = "test_token";
         ImClient.getInstance().initialize();
         ImClient.getInstance().authenticate(uid, token);
+        ImClient.getInstance().addMessageListener(msg -> {
+            System.out.println("收到消息：" + msg);
+        });
         System.out.println("我是" + uid);
         Scanner input = new Scanner(System.in);
 
@@ -24,7 +27,6 @@ public class ImClientTest {
             if (toUid.equals("")) {
                 continue;
             }
-
             System.out.println("请输入要发送的内容：");
             String content = input.nextLine();
             if (content.equals("")) {

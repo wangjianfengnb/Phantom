@@ -15,6 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
@@ -74,6 +75,12 @@ public class ConnectionManager {
      */
     private volatile long maxTimestamp = 0;
 
+    /**
+     * 消息监听器
+     */
+    private List<MessageListener> messageListeners = new ArrayList<>();
+
+
     private ConnectionManager() {
     }
 
@@ -127,6 +134,14 @@ public class ConnectionManager {
                 }
             }
         });
+    }
+
+    public void addMessageListener(MessageListener listener) {
+        messageListeners.add(listener);
+    }
+
+    public void removeMessageListener(MessageListener listener) {
+        messageListeners.remove(listener);
     }
 
     public void setAuthenticate(boolean authenticate) {
@@ -197,6 +212,10 @@ public class ConnectionManager {
                         if (msg.getSequence() == maxSequence + 1) {
                             maxSequence++;
                             maxTimestamp = msg.getTimestamp();
+                            // TODO sequence需要落地磁盘，一般就是数据库mysql
+                            for (MessageListener listener : messageListeners) {
+                                listener.onMessage(msg);
+                            }
                         } else {
                             log.info("发现获取到的消息sequence不连续，丢弃后续的消息");
                             break;

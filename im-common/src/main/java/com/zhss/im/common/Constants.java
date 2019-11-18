@@ -75,7 +75,7 @@ public class Constants {
     /**
      * 消息前缀
      */
-    public static final String MESSAGE_SEQUENCE_PREFIX = "zhss-im-message_sequence_prefix";
+    public static final String MESSAGE_SEQUENCE_PREFIX = "zhss-im-message-sequence-";
 
     /**
      * 发送C2C消息topic
