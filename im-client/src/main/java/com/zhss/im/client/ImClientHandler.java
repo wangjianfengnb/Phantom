@@ -1,9 +1,6 @@
 package com.zhss.im.client;
 
-import com.zhss.im.common.AuthenticateResponse;
-import com.zhss.im.common.C2CMessageResponse;
-import com.zhss.im.common.Constants;
-import com.zhss.im.common.Message;
+import com.zhss.im.common.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -29,30 +26,8 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         Message message = Message.parse(byteBuf);
-        int requestType = message.getRequestType();
-        if (Constants.REQUEST_TYPE_AUTHENTICATE == requestType) {
-            byte[] body = message.getBody();
-            AuthenticateResponse authenticateResponse =
-                    AuthenticateResponse.parseFrom(body);
-            if (authenticateResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
-                log.info("认证请求成功...");
-                ConnectionManager.getInstance().setAuthenticate(true);
-            } else {
-                log.info("认证请求失败...");
-                ctx.close();
-            }
-        } else if (Constants.REQUEST_TYPE_C2C_SEND == requestType) {
-            byte[] body = message.getBody();
-            C2CMessageResponse c2CMessageResponse =
-                    C2CMessageResponse.parseFrom(body);
-            if (c2CMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
-                log.info("发送单聊消息成功...");
-            } else {
-                log.info("发送单聊消息失败，重新发送...");
-            }
-        }
+        ConnectionManager.getInstance().onReceiveMessage(message);
     }
-
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {

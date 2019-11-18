@@ -3,7 +3,7 @@ syntax = "proto3";
 package com.zhss.im.protocol;
 
 option java_multiple_files = true;
-option java_package = "com.zhss.im.protocol";
+option java_package = "com.zhss.im.common";
 
 message AuthenticateRequest {
     string uid = 1;
@@ -36,4 +36,31 @@ message C2CPushMessageRequest {
     string receiverId = 2;
     int64 timestamp = 3;
     string content = 4;
+}
+
+message InformFetchMessageResponse {
+    string uid = 1;
+}
+
+message FetchMessageRequest {
+    string uid = 1;
+    int32 size = 2;
+    int64 timestamp = 3;
+    int32 platform = 4;
+}
+
+message FetchMessageResponse{
+    bool isEmpty = 1;
+    repeated OfflineMessage messages = 2;
+    string uid = 3;
+}
+
+message OfflineMessage {
+    string senderId = 1;
+    string receiverId = 2;
+    string content = 3;
+    int64 timestamp = 4;
+    int64 messageId = 5;
+    int64 groupId = 6;
+    int64 sequence = 7;
 }

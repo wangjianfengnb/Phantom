@@ -100,6 +100,39 @@ public class Message {
                 .build();
     }
 
+    public static Message buildInformFetchMessageResponse(InformFetchMessageResponse message) {
+        byte[] body = message.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_RESPONSE)
+                .requestType(Constants.REQUEST_TYPE_INFORM_FETCH)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
+    public static Message buildFetcherMessageRequest(FetchMessageRequest request) {
+        byte[] body = request.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_REQUEST)
+                .requestType(Constants.REQUEST_TYPE_MESSAGE_FETCH)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
+    public static Message buildFetcherMessageResponse(FetchMessageResponse response) {
+        byte[] body = response.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_RESPONSE)
+                .requestType(Constants.REQUEST_TYPE_MESSAGE_FETCH)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
     public ByteBuf getBuffer() {
         ByteBuf buffer = Unpooled.buffer(Constants.HEADER_LENGTH +
                 body.length + Constants.DELIMITER.length);

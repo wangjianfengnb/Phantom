@@ -27,7 +27,9 @@ public class MessageHandlerFactory {
     public static void initialize(SessionManager sessionManager) {
         handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(sessionManager));
         handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(sessionManager));
-        handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new MessagePushHandler(sessionManager));
+        handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new PushMessageHandler(sessionManager));
+
+
     }
 
     /**

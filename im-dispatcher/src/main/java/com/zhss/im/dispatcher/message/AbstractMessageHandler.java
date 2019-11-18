@@ -61,12 +61,13 @@ public abstract class AbstractMessageHandler implements MessageHandler {
             AcceptorInstance acceptorInstance =
                     AcceptorServerManager.getInstance().getAcceptorInstance(acceptorChannelId);
             if (acceptorInstance != null) {
+                log.info("将消息转发给接入系统：uid = {}, requestType = {}", uid, message.getRequestType());
                 acceptorInstance.getChannel().writeAndFlush(message.getBuffer());
             } else {
                 log.error("获取接入服务器channel失败....");
             }
         } else {
-            log.error("无法找到session，返回发送C2c消息的响应失败...");
+            log.error("无法找到session，发送消息到接入系统失败...");
         }
     }
 }

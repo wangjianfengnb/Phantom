@@ -1,9 +1,7 @@
 package com.zhss.im.dispatcher.config;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -54,6 +52,11 @@ public class DispatcherConfig {
     private String kafkaBrokers;
 
     /**
+     * 多平台离线消息同步相差最大的消息数量，超过这个数量的消息会被截取
+     */
+    private int maxOfflineLag;
+
+    /**
      * 解析配置文件
      *
      * @param configFileName 配置文件名
@@ -70,6 +73,7 @@ public class DispatcherConfig {
         int threadNum = Integer.valueOf(properties.getProperty("io.thread.num"));
         int queueSize = Integer.valueOf(properties.getProperty("io.queue.size"));
         String kafkaBrokers = properties.getProperty("kafka.broker.list");
+        int maxOfflineLag = Integer.parseInt(properties.getProperty("max.offline.lag"));
         return DispatcherConfig.builder()
                 .maxMessageBytes(maxMessageBytes)
                 .redisServer(redisServer)
@@ -78,6 +82,7 @@ public class DispatcherConfig {
                 .threadNum(threadNum)
                 .queueSize(queueSize)
                 .kafkaBrokers(kafkaBrokers)
+                .maxOfflineLag(maxOfflineLag)
                 .build();
 
     }

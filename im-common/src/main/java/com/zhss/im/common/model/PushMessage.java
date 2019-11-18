@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 推送消息,发送到Kafka的消息
  *
@@ -18,16 +20,6 @@ import lombok.NoArgsConstructor;
 public class PushMessage {
 
     /**
-     * 单聊消息
-     */
-    public static final int MESSAGE_TYPE_C2C = 1;
-
-    /**
-     * 群聊消息
-     */
-    public static final int MESSAGE_TYPE_C2G = 2;
-
-    /**
      * 发送者ID
      */
     private String senderId;
@@ -35,10 +27,6 @@ public class PushMessage {
      * 接受者ID
      */
     private String receiverId;
-    /**
-     * 消息类型
-     */
-    private int type;
     /**
      * 消息内容
      */
@@ -52,17 +40,22 @@ public class PushMessage {
     /**
      * 消息ID
      */
-    private long messageId;
+    private Long messageId;
 
     /**
      * 群聊ID
      */
-    private long groupId;
+    private Long groupId;
 
     /**
      * 消息严格的顺序
      */
     private long sequence;
+
+    /**
+     * 群聊消息接收者ID
+     */
+    private List<String> groupUId;
 
 
 }

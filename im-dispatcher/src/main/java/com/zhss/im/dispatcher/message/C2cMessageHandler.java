@@ -70,7 +70,6 @@ public class C2cMessageHandler extends AbstractMessageHandler {
                     .receiverId(c2CMessageRequest.getReceiverId())
                     .content(c2CMessageRequest.getContent())
                     .timestamp(System.currentTimeMillis())
-                    .messageId(1L)
                     .build();
             String value = JSONObject.toJSONString(msg);
             log.info("投递单聊消息到Kafka -> {}", value);

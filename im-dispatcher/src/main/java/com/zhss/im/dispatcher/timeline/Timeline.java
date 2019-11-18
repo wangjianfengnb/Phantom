@@ -1,6 +1,6 @@
 package com.zhss.im.dispatcher.timeline;
 
-import com.zhss.im.common.model.PushMessage;
+import java.util.List;
 
 /**
  * 基于TimeLine模型
@@ -34,17 +34,16 @@ public interface Timeline {
      * <p>
      * <p>
      * <p>
-     * 考虑这样一种情况：假如APP一直登录，但是WEB过了很久都不等了，这有可能导致Timeline中的消息列表过大。
+     * 考虑这样一种情况：假如APP一直登录，但是WEB过了很久都不登录，这有可能导致Timeline中的消息列表过大。
      * <p>
      * 如果多个端相差过多，比如超过200条记录(可配置),则只保留最新的200条记录。
      * <p>
      * 例如：web的sequence = 100，app的sequence为1000，则会调整web的sequence为800，web端会丢失600条消息
      *
-     * @param uid      用户ID
-     * @param size     抓取记录条数
-     * @param sequence 序列号
+     * @param request 请求参数
+     * @return 消息，如果没有消息返回空集合
      */
-    void fetchMessage(String uid, int size, long sequence);
+    List<TimelineMessage> fetchMessage(FetchRequest request);
 
 
     /**
@@ -52,9 +51,8 @@ public interface Timeline {
      * <p>
      * 按照时间为消息排序，同时为消息生成一个唯一的严格递增的ID,用于保证消息顺序性。
      *
-     * @param uid         用户id
-     * @param pushMessage 消息
+     * @param timelineMessage 消息
      */
-    void saveMessage(String uid, PushMessage pushMessage);
+    void saveMessage(TimelineMessage timelineMessage);
 
 }

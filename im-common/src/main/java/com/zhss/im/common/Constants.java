@@ -30,9 +30,9 @@ public class Constants {
     public static final int REQUEST_TYPE_C2C_SEND = 2;
 
     /**
-     * 消息通知
+     * 消息通知抓取
      */
-    public static final int REQUEST_TYPE_MESSAGE_NOTIFICATION = 3;
+    public static final int REQUEST_TYPE_INFORM_FETCH = 3;
 
     /**
      * 消息抓取请求
@@ -68,9 +68,14 @@ public class Constants {
     public static final String TIMELINE_PREFIX = "zhss-im-timeline-";
 
     /**
+     * 平台同步offset前缀
+     */
+    public static final String TIMELINE_TIMESTAMP_PREFIX = "zhss-im-timeline-timestamp-";
+
+    /**
      * 消息前缀
      */
-    public static final String MESSAGE_SEQUENCE_PREFIX = "message_sequence_prefix";
+    public static final String MESSAGE_SEQUENCE_PREFIX = "zhss-im-message_sequence_prefix";
 
     /**
      * 发送C2C消息topic
@@ -86,4 +91,5 @@ public class Constants {
      * 推送消息
      */
     public static final String TOPIC_PUSH_MESSAGE = "push_message";
+
 }

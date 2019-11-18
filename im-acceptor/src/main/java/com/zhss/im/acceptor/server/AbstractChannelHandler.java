@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 默认的消息处理器，封装了消息处理的流程
@@ -16,6 +17,7 @@ import io.netty.channel.socket.SocketChannel;
  * @author Jianfeng Wang
  * @since 2019/11/8 15:56
  */
+@Slf4j
 public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapter {
 
     protected DispatcherManager dispatcherManager;

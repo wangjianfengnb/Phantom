@@ -9,10 +9,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Kafka消费端
@@ -36,7 +33,7 @@ public class Consumer {
     @Setter
     private MessageListener messageListener;
 
-    public Consumer(DispatcherConfig dispatcherConfig, String topic) {
+    public Consumer(DispatcherConfig dispatcherConfig, String... topics) {
         Properties properties = new Properties();
         properties.put("bootstrap.servers", dispatcherConfig.getKafkaBrokers());
         properties.put("group.id", "business-group");
@@ -46,7 +43,7 @@ public class Consumer {
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("auto.offset.reset", "earliest");
         this.consumer = new KafkaConsumer<>(properties);
-        this.consumer.subscribe(Collections.singletonList(topic));
+        this.consumer.subscribe(Arrays.asList(topics));
         log.info("初始化kafkaConsumer........");
         new Processor().start();
     }

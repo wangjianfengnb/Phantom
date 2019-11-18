@@ -53,7 +53,6 @@ public class C2cMessageListener implements SingleMessageListener {
                 .senderId(c2CMessage.getSenderId())
                 .receiverId(c2CMessage.getReceiverId())
                 .content(c2CMessage.getContent())
-                .type(PushMessage.MESSAGE_TYPE_C2C)
                 .timestamp(c2CMessage.getTimestamp())
                 .messageId(c2CMessage.getMessageId())
                 .build();

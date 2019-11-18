@@ -1,13 +1,15 @@
 package com.zhss.im.dispatcher.timeline;
 
 import com.zhss.im.common.Constants;
-import com.zhss.im.common.model.PushMessage;
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
-import org.redisson.api.RAtomicLong;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.config.Config;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 基于Redis的Timeline
@@ -20,7 +22,10 @@ public class RedisBaseTimeline implements Timeline {
 
     private RedissonClient redissonClient;
 
+    private DispatcherConfig dispatcherConfig;
+
     public RedisBaseTimeline(DispatcherConfig dispatcherConfig) {
+        this.dispatcherConfig = dispatcherConfig;
         Config config = new Config();
         config.useSingleServer()
                 .setAddress(dispatcherConfig.getRedisServer());
@@ -28,28 +33,59 @@ public class RedisBaseTimeline implements Timeline {
     }
 
 
-    /**
-     * @param uid      用户ID
-     * @param size     抓取记录条数
-     * @param sequence 序列号
-     */
     @Override
-    public void fetchMessage(String uid, int size, long sequence) {
+    public List<TimelineMessage> fetchMessage(FetchRequest request) {
+        String key = generateKey(request.getUid());
+        RScoredSortedSet<TimelineMessage> timeline = redissonClient.getScoredSortedSet(key);
+        // 根据timestamp获取数据
+        Collection<TimelineMessage> timelineMessages = timeline.valueRange(request.getTimestamp(), false,
+                Double.POSITIVE_INFINITY, true, 0, request.getSize());
+
+        // 维护platform抓取数据的timestamp
+        RMap<Integer, Long> platformStampMap =
+                redissonClient.getMap(Constants.TIMELINE_TIMESTAMP_PREFIX + request.getUid());
+        platformStampMap.put(request.getPlatform(), request.getTimestamp());
+        // 获取各个平台最小的timestamp，按照最小的timestamp删除离线消息
+        Collection<Long> allPlatformStamp = platformStampMap.values();
+        long minTimestamp = Long.MAX_VALUE;
+        long maxTimestamp = Long.MIN_VALUE;
+        for (Long time : allPlatformStamp) {
+            minTimestamp = Math.min(time, minTimestamp);
+            maxTimestamp = Math.max(time, maxTimestamp);
+        }
+
+        // 判断最大和最小的timestamp之间消息是否超过阈值,如果超过某个阈值，就只保留limit条消息
+        int count = timeline.count(minTimestamp, true, maxTimestamp, true);
+        int limit = dispatcherConfig.getMaxOfflineLag();
+        if (count > limit) {
+            // 从最大的timestamp往前推limit条消息，取1条消息，这条消息之前的就是要删除的消息
+            Collection<TimelineMessage> targetMessage = timeline.valueRangeReversed(maxTimestamp, true,
+                    Double.NEGATIVE_INFINITY, true, limit, 1);
+            if (targetMessage != null && !targetMessage.isEmpty()) {
+                TimelineMessage timelineMessage = targetMessage.stream().findFirst().get();
+                minTimestamp = timelineMessage.getTimestamp();
+            }
+        }
+        int removed = timeline.removeRangeByScore(Double.NEGATIVE_INFINITY, true, minTimestamp, true);
+        log.info("移除【{}】之前的消息{}条", minTimestamp, removed);
+        if (timelineMessages != null && !timelineMessages.isEmpty()) {
+            return new ArrayList<>(timelineMessages);
+        }
+        return new ArrayList<>();
 
     }
 
-    /**
-     * @param uid         用户id
-     * @param pushMessage 消息
-     */
     @Override
-    public void saveMessage(String uid, PushMessage pushMessage) {
-        log.info("保存消息到timeline：{} -> {}", uid, pushMessage);
+    public void saveMessage(TimelineMessage timelineMessage) {
+        String uid = timelineMessage.getReceiverId();
+        log.info("保存消息到timeline：{} -> {}", uid, timelineMessage);
         long sequence = incrementSequence(uid);
-        String receiverId = pushMessage.getReceiverId();
-        String key = Constants.TIMELINE_PREFIX + receiverId;
-
-
+        timelineMessage.setSequence(sequence);
+        String receiverId = timelineMessage.getReceiverId();
+        String key = generateKey(receiverId);
+        RScoredSortedSet<TimelineMessage> timeline = redissonClient.getScoredSortedSet(key);
+        // 按时间顺序加入
+        timeline.add(timelineMessage.getTimestamp(), timelineMessage);
     }
 
     /**
@@ -68,6 +104,10 @@ public class RedisBaseTimeline implements Timeline {
         String key = Constants.MESSAGE_SEQUENCE_PREFIX + uid;
         RAtomicLong sequence = redissonClient.getAtomicLong(key);
         return sequence.incrementAndGet();
+    }
+
+    private String generateKey(String uid) {
+        return Constants.TIMELINE_PREFIX + uid;
     }
 
 

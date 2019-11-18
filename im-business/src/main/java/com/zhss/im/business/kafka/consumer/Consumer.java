@@ -125,7 +125,7 @@ public class Consumer implements InitializingBean {
                             offsets.clear();
                         }
                     } else {
-                        throw new IllegalArgumentException("Unknown MessageListener type: " + messageListener);
+                        throw new IllegalArgumentException("Unknown MessageListener messageType: " + messageListener);
                     }
                 } catch (Exception e) {
                     log.error("消费消息产生错误：" + e);

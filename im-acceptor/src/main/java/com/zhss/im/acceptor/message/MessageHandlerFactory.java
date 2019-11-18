@@ -18,12 +18,11 @@ public class MessageHandlerFactory {
 
     private static Map<Integer, MessageHandler> handlers = new HashMap<>();
 
-    public static void initialize(DispatcherManager dispatcherManager,
-                                  SessionManagerFacade sessionManagerFacade) {
-        handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(dispatcherManager,
-                sessionManagerFacade));
-        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager,
-                sessionManagerFacade));
+    public static void initialize(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
+        handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(dispatcherManager, sessionManagerFacade));
+        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManagerFacade));
+        handlers.put(Constants.REQUEST_TYPE_INFORM_FETCH, new InformFetcherMessageHandler(dispatcherManager, sessionManagerFacade));
+        handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new FetchMessageHandler(dispatcherManager, sessionManagerFacade));
     }
 
 
