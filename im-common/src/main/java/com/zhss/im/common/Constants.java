@@ -92,6 +92,10 @@ public class Constants {
      */
     public static final String TOPIC_PUSH_MESSAGE = "push_message";
 
+    /**
+     * 消息下发结果
+     */
+    public static final String TOPIC_DELIVERY_REPORT = "delivery_report";
 
     public static String requestTypeName(int type) {
         if (type == REQUEST_TYPE_AUTHENTICATE) {

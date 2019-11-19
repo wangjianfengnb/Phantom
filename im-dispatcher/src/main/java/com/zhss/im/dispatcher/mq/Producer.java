@@ -19,7 +19,7 @@ import java.util.Properties;
 public class Producer {
 
 
-    private static Producer instance = null;
+    private static volatile Producer instance = null;
 
     /**
      * 获取实例

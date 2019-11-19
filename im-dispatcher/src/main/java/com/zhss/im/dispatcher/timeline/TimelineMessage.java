@@ -48,7 +48,7 @@ public class TimelineMessage implements Serializable {
     /**
      * 群聊ID
      */
-    private long groupId;
+    private Long groupId;
 
     /**
      * 消息严格的顺序
@@ -61,6 +61,7 @@ public class TimelineMessage implements Serializable {
                 .receiverId(pushMessage.getReceiverId())
                 .content(pushMessage.getContent())
                 .timestamp(pushMessage.getTimestamp())
+                .messageId(pushMessage.getMessageId())
                 .build();
     }
 
@@ -74,6 +75,7 @@ public class TimelineMessage implements Serializable {
                     .content(pushMessage.getContent())
                     .timestamp(pushMessage.getTimestamp())
                     .groupId(pushMessage.getGroupId())
+                    .messageId(pushMessage.getMessageId())
                     .build();
             messages.add(message);
         }

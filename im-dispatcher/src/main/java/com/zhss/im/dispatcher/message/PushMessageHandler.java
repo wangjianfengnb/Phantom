@@ -1,10 +1,11 @@
 package com.zhss.im.dispatcher.message;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.util.StringUtils;
 import com.zhss.im.common.*;
+import com.zhss.im.common.model.DeliveryMessage;
 import com.zhss.im.common.model.PushMessage;
 import com.zhss.im.dispatcher.mq.Consumer;
+import com.zhss.im.dispatcher.mq.Producer;
 import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.dispatcher.timeline.FetchRequest;
 import com.zhss.im.dispatcher.timeline.RedisBaseTimeline;
@@ -13,6 +14,7 @@ import com.zhss.im.dispatcher.timeline.TimelineMessage;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,9 +30,12 @@ public class PushMessageHandler extends AbstractMessageHandler {
 
     private Timeline timeline;
 
+    private Producer producer;
+
     PushMessageHandler(SessionManager sessionManager) {
         super(sessionManager);
         this.timeline = new RedisBaseTimeline(dispatcherConfig);
+        this.producer = Producer.getInstance(dispatcherConfig);
         Consumer consumer = new Consumer(dispatcherConfig,
                 Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE,
                 Constants.TOPIC_PUSH_MESSAGE);
@@ -82,22 +87,35 @@ public class PushMessageHandler extends AbstractMessageHandler {
             } else {
                 FetchMessageResponse.Builder builder = FetchMessageResponse.newBuilder()
                         .setIsEmpty(false);
+                List<Long> messageIds = new ArrayList<>(timelineMessages.size());
                 for (TimelineMessage timelineMessage : timelineMessages) {
+                    long groupId = timelineMessage.getGroupId() == null ? -1 : timelineMessage.getGroupId();
                     builder.addMessages(OfflineMessage.newBuilder()
                             .setSenderId(timelineMessage.getSenderId())
                             .setReceiverId(timelineMessage.getReceiverId())
                             .setContent(timelineMessage.getContent())
-                            .setGroupId(timelineMessage.getGroupId())
+                            .setGroupId(groupId)
                             .setMessageId(timelineMessage.getMessageId())
                             .setTimestamp(timelineMessage.getTimestamp())
                             .setSequence(timelineMessage.getSequence())
                             .build());
+                    if (timelineMessage.getGroupId() == null) {
+                        messageIds.add(timelineMessage.getMessageId());
+                    }
                 }
                 builder.setUid(request.getUid());
                 response = builder.build();
+                DeliveryMessage deliveryMessage = DeliveryMessage.builder()
+                        .messageIds(messageIds)
+                        .build();
+                producer.send(Constants.TOPIC_DELIVERY_REPORT, "", JSONObject.toJSONString(deliveryMessage));
+
+
             }
             log.info("抓取离线消息返回给客户端：{}", response);
             sendToAcceptor(request.getUid(), Message.buildFetcherMessageResponse(response));
+
+
         });
 
 

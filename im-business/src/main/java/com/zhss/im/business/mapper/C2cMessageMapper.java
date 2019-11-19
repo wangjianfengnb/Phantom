@@ -4,6 +4,9 @@ import com.zhss.im.common.model.C2cMessage;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * 单聊消息mapper
@@ -36,4 +39,13 @@ public interface C2cMessageMapper {
     void saveMessage(C2cMessage c2CMessage);
 
 
+    /**
+     * 更新消息投递成功
+     *
+     * @param messageId 消息ID
+     */
+    @Update("UPDATE c2c_msg SET " +
+            "delivery_status = 1 " +
+            "WHERE message_id = #{messageId}")
+    void updateMessageDeliverySuccess(Long messageId);
 }
