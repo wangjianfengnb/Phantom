@@ -29,6 +29,8 @@ public class C2cMessageListener implements SingleMessageListener {
     @Resource
     private Producer producer;
 
+    @Resource
+    private SnowflakeIdWorker snowflakeIdWorker;
 
     @Override
     public String getTopic() {
@@ -39,7 +41,7 @@ public class C2cMessageListener implements SingleMessageListener {
     public void onMessage(String message, Acknowledgement acknowledgement) {
         log.info("收到消息：{}", message);
         C2cMessage c2CMessage = JSONObject.parseObject(message, C2cMessage.class);
-        c2CMessage.setMessageId(null);
+        c2CMessage.setMessageId(snowflakeIdWorker.nextId());
         c2CMessageMapper.saveMessage(c2CMessage);
 
 

@@ -45,7 +45,6 @@ public class ImClient {
                         .build();
         Message message = Message.buildAuthenticateRequest(authenticateRequest);
         connectManager.sendMessage(message);
-        log.info("发送认证请求...");
     }
 
     /**
@@ -64,10 +63,13 @@ public class ImClient {
                 .build();
         Message message = Message.buildC2CMessageRequest(request);
         connectManager.sendMessage(message);
-        log.info("发送消息:{}", content);
     }
 
-
+    /**
+     * 添加消息监听器
+     *
+     * @param listener 消息监听器
+     */
     public void addMessageListener(MessageListener listener) {
         ConnectionManager.getInstance().addMessageListener(listener);
     }

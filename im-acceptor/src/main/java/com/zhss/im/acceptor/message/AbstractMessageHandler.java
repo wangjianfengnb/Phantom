@@ -69,7 +69,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
         String uid = getResponseUid(message);
         SocketChannel session = sessionManagerFacade.getSession(uid);
         if (session != null) {
-            log.info("将响应消息推送给客户端：uid = {} , requestType = {}", uid, message.getRequestType());
+            log.info("将响应推送给客户端：uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
             // 有可能在分发系统发到接入系统的过程中，刚好客户端断线了
             session.writeAndFlush(message.getBuffer());
         }
@@ -106,7 +106,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param message 消息
      */
     private void sendMessage(String uid, Message message) {
-        log.info("将消息转发到分发系统, uid = {} , requestType = {}", uid, message.getRequestType());
+        log.info("将请求转发到分发系统, uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
         DispatcherInstance dispatcherInstance = dispatcherManager.chooseDispatcher(uid);
         dispatcherInstance.sendMessage(message.getBuffer());
     }

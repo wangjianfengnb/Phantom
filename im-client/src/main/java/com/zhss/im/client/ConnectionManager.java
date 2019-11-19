@@ -68,12 +68,12 @@ public class ConnectionManager {
     /**
      * 本地最大的sequence
      */
-    private volatile long maxSequence = 0;
+    private volatile long sequence = 0;
 
     /**
      * 本地最大的时间戳
      */
-    private volatile long maxTimestamp = 0;
+    private volatile long timestamp = 0;
 
     /**
      * 消息监听器
@@ -82,6 +82,7 @@ public class ConnectionManager {
 
 
     private ConnectionManager() {
+
     }
 
     public void connect(String ip, int port) {
@@ -126,7 +127,7 @@ public class ConnectionManager {
                         }
                     }
                     if (channel != null) {
-                        log.info("发送消息：{}", msg.getRequestType());
+                        log.info("发送消息：requestType = {}", Constants.requestTypeName(msg.getRequestType()));
                         channel.writeAndFlush(msg.getBuffer());
                     }
                 } catch (InterruptedException e) {
@@ -181,8 +182,9 @@ public class ConnectionManager {
             AuthenticateResponse authenticateResponse =
                     AuthenticateResponse.parseFrom(body);
             if (authenticateResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
-                log.info("认证请求成功...");
                 ConnectionManager.getInstance().setAuthenticate(true);
+                log.info("认证请求成功...开始拉取离线消息");
+                fetchMessage(authenticateResponse.getUid());
             } else {
                 log.info("认证请求失败...");
             }
@@ -209,17 +211,17 @@ public class ConnectionManager {
                 synchronized (ConnectionManager.class) {
                     List<OfflineMessage> messagesList = response.getMessagesList();
                     for (OfflineMessage msg : messagesList) {
-                        if (msg.getSequence() == maxSequence + 1) {
-                            maxSequence++;
-                            maxTimestamp = msg.getTimestamp();
-                            // TODO sequence需要落地磁盘，一般就是数据库mysql
-                            for (MessageListener listener : messageListeners) {
-                                listener.onMessage(msg);
-                            }
-                        } else {
-                            log.info("发现获取到的消息sequence不连续，丢弃后续的消息");
-                            break;
+                        // 要求sequence严格递增，但是由于测试阶段没有地方持久化sequence，先注释
+                        //if (msg.getSequence() == sequence + 1) {
+                        sequence++;
+                        timestamp = msg.getTimestamp();
+                        for (MessageListener listener : messageListeners) {
+                            listener.onMessage(msg);
                         }
+                        // } else {
+                        //    log.info("发现获取到的消息sequence不连续，丢弃后续的消息");
+                        //    break;
+                        //}
                     }
                     fetchMessage(response.getUid());
                 }
@@ -236,7 +238,7 @@ public class ConnectionManager {
         FetchMessageRequest request = FetchMessageRequest.newBuilder()
                 .setPlatform(1)
                 .setSize(10)
-                .setTimestamp(maxTimestamp)
+                .setTimestamp(timestamp)
                 .setUid(uid)
                 .build();
         log.info("发送抓取离线消息：{}", request);

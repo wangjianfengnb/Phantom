@@ -92,4 +92,20 @@ public class Constants {
      */
     public static final String TOPIC_PUSH_MESSAGE = "push_message";
 
+
+    public static String requestTypeName(int type) {
+        if (type == REQUEST_TYPE_AUTHENTICATE) {
+            return "认证";
+        }
+        if (type == REQUEST_TYPE_C2C_SEND) {
+            return "单聊消息";
+        }
+        if (type == REQUEST_TYPE_INFORM_FETCH) {
+            return "通知拉取消息";
+        }
+        if (type == REQUEST_TYPE_MESSAGE_FETCH) {
+            return "拉取消息";
+        }
+        return "未知";
+    }
 }
