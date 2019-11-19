@@ -10,8 +10,11 @@
 1. 项目使用了Lombok, 需要安装IDEA lombok 插件
 2. 项目使用IDEA的Protobuf插件，需要执行一下命令
     
- 
-    cd im-common && mvn protobuf:compile
+
+```
+cd im-common && mvn protobuf:compile
+```
+
 
 
 | 功能 | 进度 |
