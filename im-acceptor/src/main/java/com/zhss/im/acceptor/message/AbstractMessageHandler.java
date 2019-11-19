@@ -9,6 +9,8 @@ import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * 公共消息处理器
  *
@@ -22,23 +24,35 @@ public abstract class AbstractMessageHandler implements MessageHandler {
 
     protected SessionManagerFacade sessionManagerFacade;
 
-    AbstractMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
+    private ThreadPoolExecutor threadPoolExecutor;
+
+    AbstractMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+                           ThreadPoolExecutor threadPoolExecutor) {
         this.dispatcherManager = dispatcherManager;
         this.sessionManagerFacade = sessionManagerFacade;
+        this.threadPoolExecutor = threadPoolExecutor;
+
     }
 
     @Override
-    public void handleMessage(Message message, SocketChannel channel) throws Exception {
-        switch (message.getMessageType()) {
-            case Constants.MESSAGE_TYPE_REQUEST:
-                handleRequestMessage(message, channel);
-                break;
-            case Constants.MESSAGE_TYPE_RESPONSE:
-                handleResponseMessage(message);
-                break;
-            default:
-                break; // no-op
-        }
+    public void handleMessage(Message message, SocketChannel channel) {
+        threadPoolExecutor.execute(() -> {
+            try {
+                switch (message.getMessageType()) {
+                    case Constants.MESSAGE_TYPE_REQUEST:
+                        handleRequestMessage(message, channel);
+                        break;
+                    case Constants.MESSAGE_TYPE_RESPONSE:
+                        handleResponseMessage(message);
+                        break;
+                    default:
+                        break; // no-op
+                }
+            } catch (InvalidProtocolBufferException e) {
+                log.error("序列化异常：", e);
+            }
+        });
+
     }
 
     /**

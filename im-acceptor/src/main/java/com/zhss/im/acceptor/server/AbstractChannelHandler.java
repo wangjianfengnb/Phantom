@@ -35,7 +35,7 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
         MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType());
         if (messageHandler != null) {
             SocketChannel channel = (SocketChannel) ctx.channel();
-            messageHandler.handleMessage(message, channel);
+            messageHandler.  handleMessage(message, channel);
         }
     }
 }

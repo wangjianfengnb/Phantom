@@ -7,6 +7,8 @@ import com.zhss.im.common.InformFetchMessageResponse;
 import com.zhss.im.common.Message;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * 通知客户端抓取离线消息处理器
  *
@@ -16,8 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class InformFetcherMessageHandler extends AbstractMessageHandler {
 
-    InformFetcherMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        super(dispatcherManager, sessionManagerFacade);
+    InformFetcherMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+                                ThreadPoolExecutor threadPoolExecutor) {
+        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
     }
 
     @Override

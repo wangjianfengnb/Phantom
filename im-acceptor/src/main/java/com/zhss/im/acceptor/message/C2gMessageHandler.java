@@ -7,6 +7,8 @@ import com.zhss.im.common.C2GMessageRequest;
 import com.zhss.im.common.C2GMessageResponse;
 import com.zhss.im.common.Message;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * 处理群聊消息
  *
@@ -15,8 +17,9 @@ import com.zhss.im.common.Message;
  */
 public class C2gMessageHandler extends AbstractMessageHandler {
 
-    C2gMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        super(dispatcherManager, sessionManagerFacade);
+    C2gMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+                      ThreadPoolExecutor threadPoolExecutor) {
+        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
     }
 
     @Override

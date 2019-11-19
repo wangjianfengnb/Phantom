@@ -10,6 +10,7 @@
 1. 项目使用了Lombok, 需要安装IDEA lombok 插件
 2. 项目使用IDEA的Protobuf插件，需要执行一下命令
     
+ 
     cd im-common && mvn protobuf:compile
 
 
@@ -32,6 +33,15 @@
 ### 认证流程图
 
 ![](http://assets.processon.com/chart_image/5dc53e6ce4b005b5778bd235.png)
+
+### 实现
+
+对于接入系统而言所有的消息处理都运行在一个线程池中。
+
+对于分发系而言，因为需要根据接收消息ID做hash分发，所以定义了若干个Processor线程来执行逻辑
+
+
+
 
 ### 单聊、群聊
 

@@ -9,6 +9,8 @@ import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * 认证消息处理器
  *
@@ -18,8 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthenticateMessageHandler extends AbstractMessageHandler {
 
-    AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        super(dispatcherManager, sessionManagerFacade);
+    AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+                               ThreadPoolExecutor threadPoolExecutor) {
+        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
     }
 
     @Override

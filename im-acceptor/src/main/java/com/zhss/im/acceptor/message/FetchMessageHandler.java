@@ -8,6 +8,8 @@ import com.zhss.im.common.FetchMessageResponse;
 import com.zhss.im.common.Message;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * 抓取消息请求处理器
  *
@@ -17,8 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FetchMessageHandler extends AbstractMessageHandler {
 
-    FetchMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        super(dispatcherManager, sessionManagerFacade);
+    FetchMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+                        ThreadPoolExecutor threadPoolExecutor) {
+        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
     }
 
     @Override

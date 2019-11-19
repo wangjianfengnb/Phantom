@@ -36,6 +36,10 @@ public class AcceptorConfig {
      */
     private int port;
 
+    /**
+     * 线程数量
+     */
+    private int coreSize;
 
     public static AcceptorConfig parse(String configFileName) throws Exception {
         InputStream resourceAsStream = AcceptorConfig.class.getClassLoader().getResourceAsStream(configFileName);
@@ -45,11 +49,13 @@ public class AcceptorConfig {
         String redisServer = properties.getProperty("redis.server");
         String zookeeperServer = properties.getProperty("zookeeper.server");
         int port = Integer.valueOf(properties.getProperty("acceptor.port"));
+        int thread = Integer.valueOf(properties.getProperty("io.thread"));
         return AcceptorConfig.builder()
                 .maxMessageBytes(maxMessageBytes)
                 .redisServer(redisServer)
                 .zookeeperServer(zookeeperServer)
                 .port(port)
+                .coreSize(thread)
                 .build();
 
     }

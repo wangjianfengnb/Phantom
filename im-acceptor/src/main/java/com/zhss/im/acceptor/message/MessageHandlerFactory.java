@@ -1,11 +1,17 @@
 package com.zhss.im.acceptor.message;
 
+import com.zhss.im.acceptor.config.AcceptorConfig;
 import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.common.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 消息处理器工厂
@@ -19,11 +25,19 @@ public class MessageHandlerFactory {
     private static Map<Integer, MessageHandler> handlers = new HashMap<>();
 
     public static void initialize(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
-        handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(dispatcherManager, sessionManagerFacade));
-        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManagerFacade));
-        handlers.put(Constants.REQUEST_TYPE_INFORM_FETCH, new InformFetcherMessageHandler(dispatcherManager, sessionManagerFacade));
-        handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new FetchMessageHandler(dispatcherManager, sessionManagerFacade));
-        handlers.put(Constants.REQUEST_TYPE_C2G_SEND, new C2gMessageHandler(dispatcherManager, sessionManagerFacade));
+        AcceptorConfig acceptorConfig = sessionManagerFacade.getAcceptorConfig();
+        AtomicInteger count = new AtomicInteger();
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(acceptorConfig.getCoreSize(), acceptorConfig.getCoreSize(),
+                0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
+            Thread t = new Thread(r);
+            t.setName("Acceptor-IO-Thread-" + count.incrementAndGet());
+            return t;
+        });
+        handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(dispatcherManager, sessionManagerFacade, threadPoolExecutor));
+        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManagerFacade, threadPoolExecutor));
+        handlers.put(Constants.REQUEST_TYPE_INFORM_FETCH, new InformFetcherMessageHandler(dispatcherManager, sessionManagerFacade, threadPoolExecutor));
+        handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new FetchMessageHandler(dispatcherManager, sessionManagerFacade, threadPoolExecutor));
+        handlers.put(Constants.REQUEST_TYPE_C2G_SEND, new C2gMessageHandler(dispatcherManager, sessionManagerFacade, threadPoolExecutor));
     }
 
 
