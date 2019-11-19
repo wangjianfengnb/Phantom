@@ -72,6 +72,8 @@ public abstract class AbstractMessageHandler implements MessageHandler {
             log.info("将响应推送给客户端：uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
             // 有可能在分发系统发到接入系统的过程中，刚好客户端断线了
             session.writeAndFlush(message.getBuffer());
+        } else {
+            log.info("将响应推送给客户端失败，找不到session");
         }
     }
 

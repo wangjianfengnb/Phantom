@@ -28,6 +28,6 @@ public class C2gMessageHandler extends AbstractMessageHandler {
     @Override
     protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
         C2GMessageResponse response = C2GMessageResponse.parseFrom(message.getBody());
-        return response.getGroupId();
+        return response.getSenderId();
     }
 }
