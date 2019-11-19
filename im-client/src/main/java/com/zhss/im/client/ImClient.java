@@ -2,6 +2,7 @@ package com.zhss.im.client;
 
 import com.zhss.im.common.AuthenticateRequest;
 import com.zhss.im.common.C2CMessageRequest;
+import com.zhss.im.common.C2GMessageRequest;
 import com.zhss.im.common.Message;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,6 +63,24 @@ public class ImClient {
                 .setReceiverId(receiverId)
                 .build();
         Message message = Message.buildC2CMessageRequest(request);
+        connectManager.sendMessage(message);
+    }
+
+    /**
+     * 发送一条群聊消息
+     *
+     * @param senderId 发送者ID
+     * @param groupId   群ID
+     * @param content  内容
+     */
+    public void sendGroupMessage(String senderId, String groupId, String content) {
+        ConnectionManager connectManager = ConnectionManager.getInstance();
+        C2GMessageRequest request = C2GMessageRequest.newBuilder()
+                .setContent(content)
+                .setSenderId(senderId)
+                .setGroupId(groupId)
+                .build();
+        Message message = Message.buildC2gMessageRequest(request);
         connectManager.sendMessage(message);
     }
 

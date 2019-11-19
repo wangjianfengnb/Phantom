@@ -40,6 +40,11 @@ public class Constants {
     public static final int REQUEST_TYPE_MESSAGE_FETCH = 4;
 
     /**
+     * 发送群聊消息
+     */
+    public static final int REQUEST_TYPE_C2G_SEND = 5;
+
+    /**
      * 每条消息的分隔符
      */
     public static final byte[] DELIMITER = "$_".getBytes();
@@ -97,6 +102,15 @@ public class Constants {
      */
     public static final String TOPIC_DELIVERY_REPORT = "delivery_report";
 
+    /**
+     * 发送C2G消息topic
+     */
+    public static final String TOPIC_SEND_C2G_MESSAGE = "send_c2g_message";
+    /**
+     * 发送C2G消息Topic
+     */
+    public static final String TOPIC_SEND_C2G_MESSAGE_RESPONSE = "send_c2g_message_response";
+
     public static String requestTypeName(int type) {
         if (type == REQUEST_TYPE_AUTHENTICATE) {
             return "认证";
@@ -109,6 +123,9 @@ public class Constants {
         }
         if (type == REQUEST_TYPE_MESSAGE_FETCH) {
             return "拉取消息";
+        }
+        if (type == REQUEST_TYPE_C2G_SEND) {
+            return "群聊消息";
         }
         return "未知";
     }

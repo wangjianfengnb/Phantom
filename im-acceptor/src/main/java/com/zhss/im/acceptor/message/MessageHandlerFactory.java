@@ -23,6 +23,7 @@ public class MessageHandlerFactory {
         handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManagerFacade));
         handlers.put(Constants.REQUEST_TYPE_INFORM_FETCH, new InformFetcherMessageHandler(dispatcherManager, sessionManagerFacade));
         handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new FetchMessageHandler(dispatcherManager, sessionManagerFacade));
+        handlers.put(Constants.REQUEST_TYPE_C2G_SEND, new C2gMessageHandler(dispatcherManager, sessionManagerFacade));
     }
 
 

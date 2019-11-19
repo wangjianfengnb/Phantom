@@ -1,5 +1,6 @@
 package com.zhss.im.dispatcher.message;
 
+import com.zhss.im.common.Constants;
 import com.zhss.im.common.Message;
 import com.zhss.im.dispatcher.acceptor.AcceptorInstance;
 import com.zhss.im.dispatcher.acceptor.AcceptorServerManager;
@@ -61,7 +62,8 @@ public abstract class AbstractMessageHandler implements MessageHandler {
             AcceptorInstance acceptorInstance =
                     AcceptorServerManager.getInstance().getAcceptorInstance(acceptorChannelId);
             if (acceptorInstance != null) {
-                log.info("将消息转发给接入系统：uid = {}, requestType = {}", uid, message.getRequestType());
+                log.info("将消息转发给接入系统：uid = {}, requestType = {}", uid,
+                        Constants.requestTypeName(message.getRequestType()));
                 acceptorInstance.getChannel().writeAndFlush(message.getBuffer());
             } else {
                 log.error("获取接入服务器channel失败....");

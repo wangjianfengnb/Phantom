@@ -226,6 +226,15 @@ public class ConnectionManager {
                     fetchMessage(response.getUid());
                 }
             }
+        } else if (Constants.REQUEST_TYPE_C2G_SEND == requestType) {
+            byte[] body = message.getBody();
+            C2GMessageResponse c2GMessageResponse =
+                    C2GMessageResponse.parseFrom(body);
+            if (c2GMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
+                log.info("发送群聊消息成功...");
+            } else {
+                log.info("发送群聊消息失败，重新发送...");
+            }
         }
     }
 

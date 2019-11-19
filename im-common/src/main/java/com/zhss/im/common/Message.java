@@ -133,6 +133,28 @@ public class Message {
                 .build();
     }
 
+    public static Message buildC2gMessageRequest(C2GMessageRequest request) {
+        byte[] body = request.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_REQUEST)
+                .requestType(Constants.REQUEST_TYPE_C2G_SEND)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
+    public static Message buildC2gMessageResponse(C2GMessageResponse response) {
+        byte[] body = response.toByteArray();
+        return Message.builder()
+                .appSdkVersion(Constants.APP_SDK_VERSION_1)
+                .messageType(Constants.MESSAGE_TYPE_RESPONSE)
+                .requestType(Constants.REQUEST_TYPE_C2G_SEND)
+                .bodyLength(body.length)
+                .body(body)
+                .build();
+    }
+
     public ByteBuf getBuffer() {
         ByteBuf buffer = Unpooled.buffer(Constants.HEADER_LENGTH +
                 body.length + Constants.DELIMITER.length);

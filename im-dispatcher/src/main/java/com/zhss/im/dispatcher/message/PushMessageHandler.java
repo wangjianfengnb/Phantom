@@ -3,7 +3,7 @@ package com.zhss.im.dispatcher.message;
 import com.alibaba.fastjson.JSONObject;
 import com.zhss.im.common.*;
 import com.zhss.im.common.model.DeliveryMessage;
-import com.zhss.im.common.model.PushMessage;
+import com.zhss.im.common.model.KafkaMessage;
 import com.zhss.im.dispatcher.mq.Consumer;
 import com.zhss.im.dispatcher.mq.Producer;
 import com.zhss.im.dispatcher.session.SessionManager;
@@ -40,29 +40,42 @@ public class PushMessageHandler extends AbstractMessageHandler {
                 Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE,
                 Constants.TOPIC_PUSH_MESSAGE);
         consumer.setMessageListener(message -> {
-            PushMessage msg = JSONObject.parseObject(message, PushMessage.class);
-            // 这里收到消息推送的时候需要做两件事情
-            execute(msg.getReceiverId(), () -> {
+            KafkaMessage msg = JSONObject.parseObject(message, KafkaMessage.class);
+            execute(getReceiverId(msg), () -> {
                 // 1. 将消息放入timeline模型
                 log.info("分发系统收到消息推送请求：{}", msg);
                 if (msg.getGroupId() == null) {
                     TimelineMessage timelineMessage = TimelineMessage.parseC2CMessage(msg);
                     timeline.saveMessage(timelineMessage);
+                    sendInformMessage(timelineMessage);
                 } else {
                     List<TimelineMessage> timelineMessages = TimelineMessage.parseC2GMessage(msg);
                     for (TimelineMessage timelineMessage : timelineMessages) {
                         timeline.saveMessage(timelineMessage);
+                        sendInformMessage(timelineMessage);
                     }
                 }
-                log.info("下发通知给客户端，让客户端过来拉取消息...");
-                // 2. 发送通知给对应的客户端，让他过来拉取最新的消息
-                InformFetchMessageResponse informFetchMessageResponse = InformFetchMessageResponse.newBuilder()
-                        .setUid(msg.getReceiverId())
-                        .build();
-                Message response = Message.buildInformFetchMessageResponse(informFetchMessageResponse);
-                sendToAcceptor(msg.getReceiverId(), response);
             });
         });
+    }
+
+    /**
+     * 发送通知消息给客户端
+     *
+     * @param timelineMessage 通知消息
+     */
+    private void sendInformMessage(TimelineMessage timelineMessage) {
+        log.info("下发通知给客户端，让客户端过来拉取消息...uid = {}", timelineMessage.getReceiverId());
+        // 2. 发送通知给对应的客户端，让他过来拉取最新的消息
+        InformFetchMessageResponse informFetchMessageResponse = InformFetchMessageResponse.newBuilder()
+                .setUid(timelineMessage.getReceiverId())
+                .build();
+        Message response = Message.buildInformFetchMessageResponse(informFetchMessageResponse);
+        sendToAcceptor(timelineMessage.getReceiverId(), response);
+    }
+
+    private String getReceiverId(KafkaMessage message) {
+        return message.getGroupId() == null ? message.getReceiverId() : message.getGroupId();
     }
 
     @Override
@@ -89,7 +102,7 @@ public class PushMessageHandler extends AbstractMessageHandler {
                         .setIsEmpty(false);
                 List<Long> messageIds = new ArrayList<>(timelineMessages.size());
                 for (TimelineMessage timelineMessage : timelineMessages) {
-                    long groupId = timelineMessage.getGroupId() == null ? -1 : timelineMessage.getGroupId();
+                    String groupId = timelineMessage.getGroupId();
                     builder.addMessages(OfflineMessage.newBuilder()
                             .setSenderId(timelineMessage.getSenderId())
                             .setReceiverId(timelineMessage.getReceiverId())
@@ -105,12 +118,13 @@ public class PushMessageHandler extends AbstractMessageHandler {
                 }
                 builder.setUid(request.getUid());
                 response = builder.build();
-                DeliveryMessage deliveryMessage = DeliveryMessage.builder()
-                        .messageIds(messageIds)
-                        .build();
-                producer.send(Constants.TOPIC_DELIVERY_REPORT, "", JSONObject.toJSONString(deliveryMessage));
+                if (!messageIds.isEmpty()) {
+                    DeliveryMessage deliveryMessage = DeliveryMessage.builder()
+                            .messageIds(messageIds)
+                            .build();
 
-
+                    producer.send(Constants.TOPIC_DELIVERY_REPORT, "", JSONObject.toJSONString(deliveryMessage));
+                }
             }
             log.info("抓取离线消息返回给客户端：{}", response);
             sendToAcceptor(request.getUid(), Message.buildFetcherMessageResponse(response));

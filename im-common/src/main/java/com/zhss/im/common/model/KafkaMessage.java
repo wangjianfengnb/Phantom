@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PushMessage {
+public class KafkaMessage {
 
     /**
      * 发送者ID
@@ -45,7 +45,7 @@ public class PushMessage {
     /**
      * 群聊ID
      */
-    private Long groupId;
+    private String groupId;
 
     /**
      * 消息严格的顺序

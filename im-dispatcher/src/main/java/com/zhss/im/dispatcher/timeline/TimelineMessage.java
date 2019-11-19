@@ -1,6 +1,6 @@
 package com.zhss.im.dispatcher.timeline;
 
-import com.zhss.im.common.model.PushMessage;
+import com.zhss.im.common.model.KafkaMessage;
 import lombok.Builder;
 import lombok.Data;
 
@@ -48,34 +48,34 @@ public class TimelineMessage implements Serializable {
     /**
      * 群聊ID
      */
-    private Long groupId;
+    private String groupId;
 
     /**
      * 消息严格的顺序
      */
     private long sequence;
 
-    public static TimelineMessage parseC2CMessage(PushMessage pushMessage) {
+    public static TimelineMessage parseC2CMessage(KafkaMessage kafkaMessage) {
         return TimelineMessage.builder()
-                .senderId(pushMessage.getSenderId())
-                .receiverId(pushMessage.getReceiverId())
-                .content(pushMessage.getContent())
-                .timestamp(pushMessage.getTimestamp())
-                .messageId(pushMessage.getMessageId())
+                .senderId(kafkaMessage.getSenderId())
+                .receiverId(kafkaMessage.getReceiverId())
+                .content(kafkaMessage.getContent())
+                .timestamp(kafkaMessage.getTimestamp())
+                .messageId(kafkaMessage.getMessageId())
                 .build();
     }
 
 
-    public static List<TimelineMessage> parseC2GMessage(PushMessage pushMessage) {
-        List<TimelineMessage> messages = new ArrayList<>(pushMessage.getGroupUId().size());
-        for (String receiverId : pushMessage.getGroupUId()) {
+    public static List<TimelineMessage> parseC2GMessage(KafkaMessage kafkaMessage) {
+        List<TimelineMessage> messages = new ArrayList<>(kafkaMessage.getGroupUId().size());
+        for (String receiverId : kafkaMessage.getGroupUId()) {
             TimelineMessage message = TimelineMessage.builder()
-                    .senderId(pushMessage.getSenderId())
+                    .senderId(kafkaMessage.getSenderId())
                     .receiverId(receiverId)
-                    .content(pushMessage.getContent())
-                    .timestamp(pushMessage.getTimestamp())
-                    .groupId(pushMessage.getGroupId())
-                    .messageId(pushMessage.getMessageId())
+                    .content(kafkaMessage.getContent())
+                    .timestamp(kafkaMessage.getTimestamp())
+                    .groupId(kafkaMessage.getGroupId())
+                    .messageId(kafkaMessage.getMessageId())
                     .build();
             messages.add(message);
         }

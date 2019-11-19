@@ -55,7 +55,7 @@ public class SnowflakeIdWorker {
      */
     private long lastTimestamp = -1;
 
-    public long nextId() {
+    public synchronized long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
             throw new RuntimeException("Clock moved backwards. Refusing to generate id for " + (
