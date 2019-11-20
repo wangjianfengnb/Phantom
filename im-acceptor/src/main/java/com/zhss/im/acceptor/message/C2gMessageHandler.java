@@ -5,6 +5,7 @@ import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.common.C2GMessageRequest;
 import com.zhss.im.common.C2GMessageResponse;
+import com.zhss.im.common.Constants;
 import com.zhss.im.common.Message;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -32,5 +33,17 @@ public class C2gMessageHandler extends AbstractMessageHandler {
     protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
         C2GMessageResponse response = C2GMessageResponse.parseFrom(message.getBody());
         return response.getSenderId();
+    }
+
+    @Override
+    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
+        C2GMessageRequest c2GMessageRequest = C2GMessageRequest.parseFrom(message.getBody());
+        C2GMessageResponse response = C2GMessageResponse.newBuilder()
+                .setSenderId(c2GMessageRequest.getSenderId())
+                .setGroupId(c2GMessageRequest.getGroupId())
+                .setTimestamp(c2GMessageRequest.getTimestamp())
+                .setStatus(Constants.RESPONSE_STATUS_ERROR)
+                .build();
+        return Message.buildC2gMessageResponse(response);
     }
 }

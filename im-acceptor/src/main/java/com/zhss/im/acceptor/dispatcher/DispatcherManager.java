@@ -13,11 +13,16 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.data.Stat;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -29,18 +34,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class DispatcherManager {
 
-
     /**
-     * 分发系统实例地址列表
+     * Sessoin管理
      */
-    private static List<DispatcherInstanceAddress> dispatcherInstanceAddresses =
-            new ArrayList<>();
-
-    static {
-        // 后面基于zk来做
-        dispatcherInstanceAddresses.add(new DispatcherInstanceAddress("localhost", "127.0.0.1", 8090));
-    }
-
     private final SessionManagerFacade sessionManagerFacade;
 
 
@@ -54,6 +50,12 @@ public class DispatcherManager {
      */
     private Map<String, DispatcherInstance> dispatcherInstanceMap = new ConcurrentHashMap<>();
 
+    /**
+     * 保存了连接地址
+     */
+    private Set<String> ipList = new HashSet<>();
+
+
     public DispatcherManager(AcceptorConfig config, SessionManagerFacade sessionManagerFacade) {
         this.config = config;
         this.sessionManagerFacade = sessionManagerFacade;
@@ -61,9 +63,69 @@ public class DispatcherManager {
 
 
     public void initialize() {
-        for (DispatcherInstanceAddress address : dispatcherInstanceAddresses) {
-            connect(address);
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        CuratorFramework framework = CuratorFrameworkFactory.newClient(config.getZookeeperServer(), retryPolicy);
+        framework.start();
+        List<DispatcherInstanceAddress> dispatcherAddress = getDispatcherAddress(framework);
+        if (!dispatcherAddress.isEmpty()) {
+            for (DispatcherInstanceAddress address : dispatcherAddress) {
+                connect(address);
+            }
         }
+        addWatcher(framework);
+    }
+
+    private void addWatcher(CuratorFramework framework) {
+        try {
+            framework.getChildren()
+                    .usingWatcher((Watcher) watchedEvent -> {
+                        Watcher.Event.EventType type = watchedEvent.getType();
+                        if (type == Watcher.Event.EventType.NodeChildrenChanged) {
+                            processDispatcherListChanged(framework);
+                        }
+                    }).forPath(Constants.ZK_DISPATCH_PATH);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 获取分发服务器IP地址
+     *
+     * @param framework 客户端
+     * @return 分发服务器IP列表
+     */
+    private List<DispatcherInstanceAddress> getDispatcherAddress(CuratorFramework framework) {
+        try {
+            Stat stat = framework.checkExists().forPath(Constants.ZK_DISPATCH_PATH);
+            if (stat == null) {
+                framework.create().creatingParentsIfNeeded().forPath(Constants.ZK_DISPATCH_PATH);
+            }
+            List<String> children = framework.getChildren().forPath(Constants.ZK_DISPATCH_PATH);
+            if (children.isEmpty()) {
+                return new ArrayList<>();
+            }
+            List<DispatcherInstanceAddress> addresses = new ArrayList<>();
+            for (String child : children) {
+                DispatcherInstanceAddress address = parseAddress(child);
+                addresses.add(address);
+            }
+            return addresses;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    private DispatcherInstanceAddress parseAddress(String child) {
+        String[] split = child.split(":");
+        String ip = split[0];
+        int port = Integer.valueOf(split[1]);
+        return DispatcherInstanceAddress.builder()
+                .ip(ip)
+                .port(port)
+                .build();
     }
 
     private void connect(DispatcherInstanceAddress address) {
@@ -90,6 +152,48 @@ public class DispatcherManager {
         }
     }
 
+    /**
+     * 对于ZK的数据而言，大概是这样的：
+     * <p>
+     * /zhss-im/dispatcher/
+     * -----http://localhost:8019
+     * -----http://localhost:8090
+     * <p>
+     * 节点路径表示ip地址，节点内容表示该节点目标有多少个客户端连接
+     */
+    private void processDispatcherListChanged(CuratorFramework framework) {
+        try {
+            List<String> children = framework.getChildren().forPath(Constants.ZK_DISPATCH_PATH);
+            if (children.isEmpty()) {
+                log.info("分发系统列表为空，清除内存缓存");
+                ipList.clear();
+                addWatcher(framework);
+                return;
+            }
+            // handle new node
+            for (String child : children) {
+                if (!ipList.contains(child)) {
+                    log.info("分发系统上线，添加地址：{} , 同时需要建立和分发系统的连接", child);
+                    ipList.add(child);
+                    DispatcherInstanceAddress dispatcherInstanceAddress = parseAddress(child);
+                    connect(dispatcherInstanceAddress);
+                }
+            }
+
+            // handle remove node
+            for (String existsIP : ipList) {
+                if (!children.contains(existsIP)) {
+                    log.info("分发系统下线，移除地址：{}", existsIP);
+                    ipList.remove(existsIP);
+                }
+            }
+            addWatcher(framework);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void addDispatcherInstance(String instanceId, DispatcherInstance instance) {
         this.dispatcherInstanceMap.put(instanceId, instance);
     }
@@ -100,6 +204,9 @@ public class DispatcherManager {
 
     public DispatcherInstance chooseDispatcher(String uid) {
         ArrayList<DispatcherInstance> dispatcherInstances = new ArrayList<>(dispatcherInstanceMap.values());
+        if (dispatcherInstances.isEmpty()) {
+            return null;
+        }
         int hash = toPositive(murmur2(uid.getBytes())) % dispatcherInstances.size();
         int index = hash % dispatcherInstances.size();
         return dispatcherInstances.get(index);
@@ -154,5 +261,4 @@ public class DispatcherManager {
         h ^= h >>> 15;
         return h;
     }
-
 }

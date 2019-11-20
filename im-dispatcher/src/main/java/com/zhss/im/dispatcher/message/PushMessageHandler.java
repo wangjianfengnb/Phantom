@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhss.im.common.*;
 import com.zhss.im.common.model.DeliveryMessage;
 import com.zhss.im.common.model.KafkaMessage;
-import com.zhss.im.dispatcher.mq.Consumer;
-import com.zhss.im.dispatcher.mq.Producer;
+import com.zhss.im.dispatcher.kafka.Consumer;
+import com.zhss.im.dispatcher.kafka.Producer;
 import com.zhss.im.dispatcher.session.SessionManager;
 import com.zhss.im.dispatcher.timeline.FetchRequest;
 import com.zhss.im.dispatcher.timeline.RedisBaseTimeline;
@@ -103,18 +103,19 @@ public class PushMessageHandler extends AbstractMessageHandler {
                 List<Long> messageIds = new ArrayList<>(timelineMessages.size());
                 for (TimelineMessage timelineMessage : timelineMessages) {
                     String groupId = timelineMessage.getGroupId();
-                    builder.addMessages(OfflineMessage.newBuilder()
+                    OfflineMessage.Builder offlineMessageBuilder = OfflineMessage.newBuilder()
                             .setSenderId(timelineMessage.getSenderId())
                             .setReceiverId(timelineMessage.getReceiverId())
                             .setContent(timelineMessage.getContent())
-                            .setGroupId(groupId)
                             .setMessageId(timelineMessage.getMessageId())
                             .setTimestamp(timelineMessage.getTimestamp())
-                            .setSequence(timelineMessage.getSequence())
-                            .build());
-                    if (timelineMessage.getGroupId() == null) {
+                            .setSequence(timelineMessage.getSequence());
+                    if (groupId == null) {
                         messageIds.add(timelineMessage.getMessageId());
+                    } else {
+                        offlineMessageBuilder.setGroupId(groupId);
                     }
+                    builder.addMessages(offlineMessageBuilder.build());
                 }
                 builder.setUid(request.getUid());
                 response = builder.build();

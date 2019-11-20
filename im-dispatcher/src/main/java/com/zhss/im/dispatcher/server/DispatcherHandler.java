@@ -10,6 +10,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DispatcherHandler extends ChannelInboundHandlerAdapter {
-
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -42,16 +42,20 @@ public class DispatcherHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf) msg;
-        Message message = Message.parse(byteBuf);
-        MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType());
-        if (messageHandler != null) {
-            messageHandler.handleMessage(message, (SocketChannel) ctx.channel());
+        try {
+            ByteBuf byteBuf = (ByteBuf) msg;
+            Message message = Message.parse(byteBuf);
+            MessageHandler messageHandler = MessageHandlerFactory.getMessageHandler(message.getRequestType());
+            if (messageHandler != null) {
+                messageHandler.handleMessage(message, (SocketChannel) ctx.channel());
+            }
+        } finally {
+            ReferenceCountUtil.release(msg);
         }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        log.error("发生异常：{}", cause.getMessage());
     }
 }

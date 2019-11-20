@@ -2,9 +2,11 @@ package com.zhss.im.client;
 
 import com.zhss.im.common.*;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,14 +26,23 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf) msg;
-        Message message = Message.parse(byteBuf);
-        ConnectionManager.getInstance().onReceiveMessage(message);
+        try {
+            ByteBuf byteBuf = (ByteBuf) msg;
+            Message message = Message.parse(byteBuf);
+            ConnectionManager.getInstance().onReceiveMessage(message);
+        } finally {
+            ReferenceCountUtil.release(msg);
+        }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("连接断开：{}", ctx);
-        ConnectionManager.getInstance().shutdown();
+        ConnectionManager.getInstance().setChannel(null);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("客户端发生了异常：{}", cause);
     }
 }

@@ -1,4 +1,4 @@
-package com.zhss.im.dispatcher.mq;
+package com.zhss.im.dispatcher.kafka;
 
 /**
  * 消息监听器

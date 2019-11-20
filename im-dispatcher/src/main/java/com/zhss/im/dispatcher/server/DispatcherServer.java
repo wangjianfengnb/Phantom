@@ -3,10 +3,12 @@ package com.zhss.im.dispatcher.server;
 import com.zhss.im.common.Constants;
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import com.zhss.im.dispatcher.session.SessionManager;
+import com.zhss.im.dispatcher.zookeeper.ZookeeperManager;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -34,6 +36,7 @@ public class DispatcherServer {
         EventLoopGroup connectionThreadGroup = new NioEventLoopGroup();
         EventLoopGroup ioThreadGroup = new NioEventLoopGroup();
         try {
+            ZookeeperManager zookeeperManager = new ZookeeperManager(config);
             ServerBootstrap server = new ServerBootstrap();
             server.group(connectionThreadGroup, ioThreadGroup)
                     .channel(NioServerSocketChannel.class)
@@ -50,6 +53,7 @@ public class DispatcherServer {
             ChannelFuture channelFuture = server.bind(config.getPort()).sync();
             log.info("分发系统已经启动......监听端口：{}", config.getPort());
             channelFuture.sync();
+            channelFuture.addListener((ChannelFutureListener) channelFuture1 -> zookeeperManager.createNode());
         } catch (Exception e) {
             e.printStackTrace();
         }

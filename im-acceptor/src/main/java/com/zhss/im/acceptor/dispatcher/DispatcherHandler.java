@@ -37,4 +37,5 @@ public class DispatcherHandler extends AbstractChannelHandler {
         log.info("接入系统和分发系统连接断开: {}", instanceId);
         dispatcherManager.removeDispatcherInstance(instanceId);
     }
+
 }

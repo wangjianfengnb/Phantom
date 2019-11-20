@@ -33,4 +33,9 @@ public class InformFetcherMessageHandler extends AbstractMessageHandler {
         InformFetchMessageResponse informFetchMessageResponse = InformFetchMessageResponse.parseFrom(message.getBody());
         return informFetchMessageResponse.getUid();
     }
+
+    @Override
+    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
+        throw new IllegalArgumentException("通知消息不能由客户端主动发送");
+    }
 }

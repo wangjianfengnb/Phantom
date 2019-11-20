@@ -5,6 +5,7 @@ import com.zhss.im.acceptor.dispatcher.DispatcherManager;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
 import com.zhss.im.common.AuthenticateRequest;
 import com.zhss.im.common.AuthenticateResponse;
+import com.zhss.im.common.Constants;
 import com.zhss.im.common.Message;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,18 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
     protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
         AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(message.getBody());
         return authenticateResponse.getUid();
+    }
+
+    @Override
+    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
+        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(message.getBody());
+        AuthenticateResponse response = AuthenticateResponse.newBuilder()
+                .setToken(authenticateRequest.getToken())
+                .setUid(authenticateRequest.getUid())
+                .setTimestamp(System.currentTimeMillis())
+                .setStatus(Constants.RESPONSE_STATUS_ERROR)
+                .build();
+        return Message.buildAuthenticateResponse(response);
     }
 
     @Override

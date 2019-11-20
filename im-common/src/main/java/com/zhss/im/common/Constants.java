@@ -111,6 +111,22 @@ public class Constants {
      */
     public static final String TOPIC_SEND_C2G_MESSAGE_RESPONSE = "send_c2g_message_response";
 
+    /**
+     * zk用于保存acceptor节点的路径
+     */
+    public static final String ZK_ACCEPTOR_PATH = "/zhss-im/acceptor";
+
+    /**
+     * zk用于更新acceptor客户端的分布式锁
+     */
+    public static final String ZK_ACCEPTOR_CLIENT_LOCK = "/zhss-im/lock/client";
+
+    /**
+     * zk用于保存DISPATCHER节点的路径
+     */
+    public static final String ZK_DISPATCH_PATH = "/zhss-im/dispatcher";
+
+
     public static String requestTypeName(int type) {
         if (type == REQUEST_TYPE_AUTHENTICATE) {
             return "认证";

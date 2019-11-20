@@ -6,6 +6,10 @@ import com.zhss.im.acceptor.message.MessageHandlerFactory;
 import com.zhss.im.acceptor.server.AcceptorServer;
 import com.zhss.im.acceptor.session.SessionManagerFacade;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 
 /**
  * IM 接入服务启动类
@@ -29,6 +33,7 @@ public class Bootstrap {
 
         // 4. init handlers
         MessageHandlerFactory.initialize(dispatcherManager, sessionManagerFacade);
+
 
         // 5. init acceptor server
         AcceptorServer server = new AcceptorServer(dispatcherManager, config, sessionManagerFacade);

@@ -5,7 +5,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.common.*;
 import com.zhss.im.common.model.KafkaMessage;
 import com.zhss.im.dispatcher.message.wrapper.C2gMessageRequestWrapper;
-import com.zhss.im.dispatcher.mq.Consumer;
+import com.zhss.im.dispatcher.kafka.Consumer;
 import com.zhss.im.dispatcher.session.SessionManager;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;

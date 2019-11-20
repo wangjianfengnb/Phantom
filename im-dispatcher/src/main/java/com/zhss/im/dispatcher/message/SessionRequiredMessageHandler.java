@@ -3,7 +3,7 @@ package com.zhss.im.dispatcher.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.common.Message;
 import com.zhss.im.dispatcher.message.wrapper.Identifyable;
-import com.zhss.im.dispatcher.mq.Producer;
+import com.zhss.im.dispatcher.kafka.Producer;
 import com.zhss.im.dispatcher.session.Session;
 import com.zhss.im.dispatcher.session.SessionManager;
 import io.netty.channel.socket.SocketChannel;

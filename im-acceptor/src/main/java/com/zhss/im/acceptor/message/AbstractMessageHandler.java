@@ -100,8 +100,19 @@ public abstract class AbstractMessageHandler implements MessageHandler {
     private void handleRequestMessage(Message message, SocketChannel channel) throws InvalidProtocolBufferException {
         String uid = getReceiverId(message);
         beforeDispatchMessage(uid, message, channel);
-        sendMessage(uid, message);
+        if (!sendMessage(uid, message)) {
+            log.info("将错误信息写回给客户端");
+            channel.writeAndFlush(getErrorResponse(message).getBuffer());
+        }
     }
+
+    /**
+     * 获取错误响应
+     *
+     * @param message 请求消息
+     * @return 响应
+     */
+    protected abstract Message getErrorResponse(Message message) throws InvalidProtocolBufferException;
 
     /**
      * 钩子，转发到分发系统的逻辑，子类需要可以重写
@@ -110,7 +121,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param message 消息
      * @param channel 客户端连接的channel
      */
-    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel){
+    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {
         // default no-op
     }
 
@@ -121,10 +132,15 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param uid     用户ID
      * @param message 消息
      */
-    private void sendMessage(String uid, Message message) {
+    private boolean sendMessage(String uid, Message message) {
         log.info("将请求转发到分发系统, uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
         DispatcherInstance dispatcherInstance = dispatcherManager.chooseDispatcher(uid);
+        if (dispatcherInstance == null) {
+            log.error("无法找到接入系统，发送消息失败....");
+            return false;
+        }
         dispatcherInstance.sendMessage(message.getBuffer());
+        return true;
     }
 
 }

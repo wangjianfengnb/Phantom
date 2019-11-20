@@ -24,3 +24,5 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
 kafka:
   bootstrap-servers: kafka-0:9092,kafka-1:9092,kafka-2:9092
+zookeeper:
+  server: zk-0:2181,zk-1:2181,zk-2:2181

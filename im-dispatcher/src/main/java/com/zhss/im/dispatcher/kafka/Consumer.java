@@ -1,4 +1,4 @@
-package com.zhss.im.dispatcher.mq;
+package com.zhss.im.dispatcher.kafka;
 
 import com.zhss.im.dispatcher.config.DispatcherConfig;
 import lombok.Setter;

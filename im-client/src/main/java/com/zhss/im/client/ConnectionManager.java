@@ -1,7 +1,9 @@
 package com.zhss.im.client;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.zhss.im.client.util.HttpUtil;
 import com.zhss.im.common.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -13,6 +15,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -30,6 +33,10 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class ConnectionManager {
+
+
+    private static String API = "http://localhost:8091/acceptor/suitable";
+
 
     /**
      * 单例
@@ -80,61 +87,19 @@ public class ConnectionManager {
      */
     private List<MessageListener> messageListeners = new ArrayList<>();
 
+    /**
+     * 认证消息
+     */
+    private Message authenticateMessage;
+
 
     private ConnectionManager() {
 
     }
 
-    public void connect(String ip, int port) {
-        log.info("开始和接入系统发起连接....");
-        connectThreadGroup = new NioEventLoopGroup();
-        try {
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(connectThreadGroup)
-                    .option(ChannelOption.TCP_NODELAY, true)
-                    .option(ChannelOption.SO_KEEPALIVE, true)
-                    .channel(NioSocketChannel.class)
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10 * 1000)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(4096,
-                                    Unpooled.copiedBuffer(Constants.DELIMITER)));
-                            ch.pipeline().addLast(new ImClientHandler());
-                        }
-                    });
-            ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
-            channelFuture.sync();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        threadPool = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-                new SynchronousQueue<>(), r -> new Thread(r, "Connect-IO-Thread"));
-        threadPool.execute(() -> {
-            while (!shutdown) {
-                try {
-                    Message msg = messages.poll(10, TimeUnit.SECONDS);
-                    if (msg == null) {
-                        continue;
-                    }
-                    if (msg.getRequestType() == Constants.REQUEST_TYPE_AUTHENTICATE) {
-                        while (channel == null) {
-                            Thread.sleep(1000);
-                        }
-                    } else {
-                        while (!isAuthenticate) {
-                            Thread.sleep(1000);
-                        }
-                    }
-                    if (channel != null) {
-                        log.info("发送消息：requestType = {}", Constants.requestTypeName(msg.getRequestType()));
-                        channel.writeAndFlush(msg.getBuffer());
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void initialize() {
+        new ConnectThread().start();
+        new SendMessageThread().start();
     }
 
     public void addMessageListener(MessageListener listener) {
@@ -157,6 +122,16 @@ public class ConnectionManager {
 
     public void setChannel(SocketChannel channel) {
         this.channel = channel;
+        if (channel != null) {
+            log.info("发送认证请求...");
+            channel.writeAndFlush(authenticateMessage.getBuffer());
+        } else {
+            isAuthenticate = false;
+            log.info("接入系统宕机了，唤醒线程进行连接...");
+            synchronized (this) {
+                notifyAll();
+            }
+        }
     }
 
     public void sendMessage(Message message) {
@@ -175,7 +150,13 @@ public class ConnectionManager {
         }
     }
 
-    public void onReceiveMessage(Message message) throws InvalidProtocolBufferException {
+    /**
+     * 收到消息处理
+     *
+     * @param message 消息
+     * @throws InvalidProtocolBufferException 序列化异常
+     */
+    public void onReceiveMessage(Message message) throws InvalidProtocolBufferException, InterruptedException {
         int requestType = message.getRequestType();
         if (Constants.REQUEST_TYPE_AUTHENTICATE == requestType) {
             byte[] body = message.getBody();
@@ -186,7 +167,9 @@ public class ConnectionManager {
                 log.info("认证请求成功...开始拉取离线消息");
                 fetchMessage(authenticateResponse.getUid());
             } else {
-                log.info("认证请求失败...");
+                log.info("认证请求失败，休眠后再次发送认证请求...");
+                Thread.sleep(1000);
+                channel.writeAndFlush(authenticateMessage.getBuffer());
             }
         } else if (Constants.REQUEST_TYPE_C2C_SEND == requestType) {
             byte[] body = message.getBody();
@@ -253,4 +236,92 @@ public class ConnectionManager {
         log.info("发送抓取离线消息：{}", request);
         this.sendMessage(Message.buildFetcherMessageRequest(request));
     }
+
+    /**
+     * 保存认证信息
+     *
+     * @param message message
+     */
+    public void authenticate(Message message) {
+        this.authenticateMessage = message;
+    }
+
+    /**
+     * 用于建立连接的线程
+     */
+    class ConnectThread extends Thread {
+        @Override
+        public void run() {
+            while (!shutdown) {
+                try {
+                    String s = HttpUtil.get(API, null);
+                    JSONObject jsonObject = JSONObject.parseObject(s);
+                    if (StringUtil.isNullOrEmpty(s)) {
+                        Thread.sleep(5 * 1000);
+                        continue;
+                    }
+                    String ipAndPort = jsonObject.getString("ipAndPort");
+                    String ip = ipAndPort.split(":")[0];
+                    int port = Integer.valueOf(ipAndPort.split(":")[1]);
+                    log.info("开始和接入系统发起连接....");
+                    connectThreadGroup = new NioEventLoopGroup();
+                    Bootstrap bootstrap = new Bootstrap();
+                    bootstrap.group(connectThreadGroup)
+                            .option(ChannelOption.TCP_NODELAY, true)
+                            .option(ChannelOption.SO_KEEPALIVE, true)
+                            .channel(NioSocketChannel.class)
+                            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10 * 1000)
+                            .handler(new ChannelInitializer<SocketChannel>() {
+                                @Override
+                                protected void initChannel(SocketChannel ch) throws Exception {
+                                    ch.pipeline().addLast(new DelimiterBasedFrameDecoder(4096,
+                                            Unpooled.copiedBuffer(Constants.DELIMITER)));
+                                    ch.pipeline().addLast(new ImClientHandler());
+                                }
+                            });
+                    ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
+                    channelFuture.sync();
+                    synchronized (ConnectionManager.this) {
+                        log.info("连接接入系统成功，休眠......");
+                        ConnectionManager.this.wait();
+                    }
+                } catch (Exception e) {
+                    try {
+                        log.info("连接接入系统发生异常，休眠{} ms后开始重新连接", 5000);
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 用于发送消息的线程
+     */
+    class SendMessageThread extends Thread {
+        @Override
+        public void run() {
+            while (!shutdown) {
+                try {
+                    Message msg = messages.poll(10, TimeUnit.SECONDS);
+                    if (msg == null) {
+                        continue;
+                    }
+                    while (!isAuthenticate) {
+                        Thread.sleep(1000);
+                    }
+                    if (channel != null) {
+                        log.info("发送消息：requestType = {}", Constants.requestTypeName(msg.getRequestType()));
+                        channel.writeAndFlush(msg.getBuffer());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
 }

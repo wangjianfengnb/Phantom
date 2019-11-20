@@ -35,4 +35,14 @@ public class FetchMessageHandler extends AbstractMessageHandler {
         FetchMessageResponse fetchMessageResponse = FetchMessageResponse.parseFrom(message.getBody());
         return fetchMessageResponse.getUid();
     }
+
+    @Override
+    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
+        FetchMessageRequest request = FetchMessageRequest.parseFrom(message.getBody());
+        FetchMessageResponse response = FetchMessageResponse.newBuilder()
+                .setIsEmpty(true)
+                .setUid(request.getUid())
+                .build();
+        return Message.buildFetcherMessageResponse(response);
+    }
 }

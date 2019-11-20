@@ -28,7 +28,7 @@ public class ImClient {
      * 初始化
      */
     public void initialize() {
-        ConnectionManager.getInstance().connect("localhost", 8080);
+        ConnectionManager.getInstance().initialize();
     }
 
     /**
@@ -45,7 +45,7 @@ public class ImClient {
                         .setUid(uid)
                         .build();
         Message message = Message.buildAuthenticateRequest(authenticateRequest);
-        connectManager.sendMessage(message);
+        connectManager.authenticate(message);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ImClient {
      * 发送一条群聊消息
      *
      * @param senderId 发送者ID
-     * @param groupId   群ID
+     * @param groupId  群ID
      * @param content  内容
      */
     public void sendGroupMessage(String senderId, String groupId, String content) {
