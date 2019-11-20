@@ -15,8 +15,6 @@
 cd im-common && mvn protobuf:compile
 ```
 
-
-
 | 功能 | 进度 |
 | --- | --- |
 | 认证 | 已完成 |
@@ -26,9 +24,11 @@ cd im-common && mvn protobuf:compile
 | 创建群组 | 已完成 | 
 | IPlist | 未开始 | 
 | 单点登录SSO、JWT | 未开始|
+| Netty 支持SSL | 未开始 | 
 | 消息分库分表 | 未开始 |
 | 发红包 | 未开始 |
- 
+| 客户端消息状态监听 | 未开始 | 
+  
 
 ### 系统整体流程图
 ![](http://assets.processon.com/chart_image/5db6cb2ce4b0335f1e4338ef.png)

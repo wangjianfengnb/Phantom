@@ -2,7 +2,7 @@ package com.zhss.im.dispatcher.message;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.zhss.im.common.Message;
-import com.zhss.im.dispatcher.message.wrapper.UserInfo;
+import com.zhss.im.dispatcher.message.wrapper.Identifyable;
 import com.zhss.im.dispatcher.mq.Producer;
 import com.zhss.im.dispatcher.session.Session;
 import com.zhss.im.dispatcher.session.SessionManager;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/11/19 17:14
  */
 @Slf4j
-public abstract class SessionRequiredMessageHandler<T extends UserInfo> extends AbstractMessageHandler {
+public abstract class SessionRequiredMessageHandler<T extends Identifyable> extends AbstractMessageHandler {
 
     protected Producer producer;
 
@@ -61,6 +61,7 @@ public abstract class SessionRequiredMessageHandler<T extends UserInfo> extends 
      *
      * @param message 消息
      * @return 用户ID
+     * @throws InvalidProtocolBufferException Proto buf 序列化失败
      */
     protected abstract T parseMessage(Message message) throws InvalidProtocolBufferException;
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Builder
 @Getter
-public class C2cMessageRequestWrapper implements UserInfo {
+public class C2cMessageRequestWrapper implements Identifyable {
 
     private C2CMessageRequest c2cMessageRequest;
 

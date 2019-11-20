@@ -26,6 +26,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
+
     AbstractMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
                            ThreadPoolExecutor threadPoolExecutor) {
         this.dispatcherManager = dispatcherManager;
@@ -79,7 +80,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      *
      * @param message 消息
      */
-    protected void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
+    private void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
         String uid = getResponseUid(message);
         SocketChannel session = sessionManagerFacade.getSession(uid);
         if (session != null) {
@@ -109,7 +110,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      * @param message 消息
      * @param channel 客户端连接的channel
      */
-    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) throws InvalidProtocolBufferException {
+    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel){
         // default no-op
     }
 
