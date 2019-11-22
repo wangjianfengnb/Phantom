@@ -27,8 +27,7 @@ public class RedisBaseTimeline implements Timeline {
     public RedisBaseTimeline(DispatcherConfig dispatcherConfig) {
         this.dispatcherConfig = dispatcherConfig;
         Config config = new Config();
-        config.useSingleServer()
-                .setAddress(dispatcherConfig.getRedisServer());
+        config.useClusterServers().addNodeAddress(dispatcherConfig.getRedisServer().split(","));
         this.redissonClient = Redisson.create(config);
     }
 

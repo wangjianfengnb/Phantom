@@ -17,6 +17,33 @@
 cd im-common && mvn protobuf:compile
 ```
 
+方便测试，配置hostname：
+
+```
+193.112.18.149 mysql-server
+193.112.18.149 zk-0
+193.112.18.149 zk-1
+193.112.18.149 zk-2
+193.112.18.149 redis-0
+193.112.18.149 redis-1
+193.112.18.149 redis-2
+193.112.18.149 redis-3
+193.112.18.149 redis-4
+193.112.18.149 redis-5
+193.112.18.149 kafka-0
+193.112.18.149 kafka-1
+193.112.18.149 kafka-2
+```
+
+测试方式：
+
+- 启动phantom-business的Application
+- 启动phantom-dispatcher的Bootstrap
+- 启动phantom-acceptor的Bootstrap
+- 启动phantom-client测试包下面的ConsoleClient,启动多个实例
+- 试试幻影(Phantom)的威力
+
+
 | 功能 | 进度 | 特性 | 
 | --- | --- | --- | 
 | 认证 | 已完成 | 认证 |

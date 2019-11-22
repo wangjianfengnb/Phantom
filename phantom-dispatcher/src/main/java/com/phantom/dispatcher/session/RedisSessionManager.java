@@ -57,8 +57,7 @@ public class RedisSessionManager implements SessionManager, Configurable {
     public RedisSessionManager(DispatcherConfig dispatcherConfig) {
         this.config = dispatcherConfig;
         Config config = new Config();
-        config.useSingleServer()
-                .setAddress(dispatcherConfig.getRedisServer());
+        config.useClusterServers().addNodeAddress(this.config.getRedisServer().split(","));
         this.redissonClient = Redisson.create(config);
     }
 
