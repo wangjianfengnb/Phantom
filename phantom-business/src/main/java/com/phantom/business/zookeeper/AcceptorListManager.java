@@ -128,10 +128,12 @@ public class AcceptorListManager implements InitializingBean {
             }
 
             // handle remove node
-            for (String existsIP : ipList) {
+            Iterator<String> iterator = ipList.iterator();
+            while (iterator.hasNext()) {
+                String existsIP = iterator.next();
                 if (!children.contains(existsIP)) {
                     log.info("接入系统下线，移除地址：{}", existsIP);
-                    this.ipList.remove(existsIP);
+                    iterator.remove();
                     nodeList.removeIf(node -> node.ipAddress.equals(existsIP));
                 }
             }

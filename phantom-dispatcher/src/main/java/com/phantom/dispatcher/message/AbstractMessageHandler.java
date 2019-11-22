@@ -68,7 +68,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
                 AcceptorInstance acceptorInstance = acceptorServerManager.getAcceptorInstance(acceptorChannelId);
                 while (acceptorInstance == null) {
                     // 假设分发系统重启了，此时会等待接入系统发起连接，注册
-                    log.info("获取接入系统失败，阻塞一段时间后重新获取...");
+                    log.info("获取接入系统失败，阻塞一段时间后重新获取... " + acceptorChannelId);
                     Thread.sleep(100);
                     acceptorInstance = acceptorServerManager.getAcceptorInstance(acceptorChannelId);
                 }

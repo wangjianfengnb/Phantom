@@ -148,7 +148,7 @@ public class DispatcherManager {
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(),
                                     Unpooled.copiedBuffer(Constants.DELIMITER)));
                             ch.pipeline().addLast(new DispatcherHandler(DispatcherManager.this,
-                                    sessionManagerFacade,acceptorInstanceId));
+                                    sessionManagerFacade, acceptorInstanceId));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect(address.getIp(), address.getPort()).sync();
@@ -187,10 +187,12 @@ public class DispatcherManager {
             }
 
             // handle remove node
-            for (String existsIP : ipList) {
+            Iterator<String> iterator = ipList.iterator();
+            while (iterator.hasNext()) {
+                String existsIP = iterator.next();
                 if (!children.contains(existsIP)) {
                     log.info("分发系统下线，移除地址：{}", existsIP);
-                    ipList.remove(existsIP);
+                    iterator.remove();
                 }
             }
             addWatcher(framework);
