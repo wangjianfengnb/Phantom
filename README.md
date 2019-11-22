@@ -14,7 +14,7 @@
 
 
 ```
-cd im-common && mvn protobuf:compile
+cd phantom-common && mvn protobuf:compile
 ```
 
 方便测试，配置hostname：
@@ -52,11 +52,13 @@ cd im-common && mvn protobuf:compile
 | 群聊消息 | 已完成 | 支持群组 |
 | 创建群组 | 已完成 |   | 
 | IPlist | 已完成 |  支持接入服务、分发服务弹性伸缩 | 
+| snowflake算法生成messageId | 已完成 | 分布式唯一ID |
 | 单点登录SSO、JWT | 未开始| 
 | Netty 支持SSL | 未开始 | 
 | 消息分库分表 | 未开始 |
 | 发红包 | 未开始 |
-| 客户端消息状态监听 | 未开始 | 
+| 客户端消息状态监听 | 未开始 |
+| 重复登录提出kick out | 未开始 | 
   
 
 ### 系统整体流程图
