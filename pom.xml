@@ -10,23 +10,23 @@
         <version>2.0.3.RELEASE</version>
     </parent>
 
-    <groupId>com.zhss.im</groupId>
-    <artifactId>im-all</artifactId>
+    <groupId>com.phantom</groupId>
+    <artifactId>phantom-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>im-acceptor</module>
-        <module>im-client</module>
-        <module>im-common</module>
-        <module>im-dispatcher</module>
-        <module>im-business</module>
+        <module>phantom-acceptor</module>
+        <module>phantom-client</module>
+        <module>phantom-common</module>
+        <module>phantom-dispatcher</module>
+        <module>phantom-business</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.zhss.im</groupId>
-                <artifactId>im-common</artifactId>
+                <groupId>com.phantom</groupId>
+                <artifactId>phantom-common</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
