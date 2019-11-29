@@ -1,8 +1,5 @@
 package com.phantom.common.util;
 
-import com.sun.deploy.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.ByteArrayOutputStream;
@@ -29,7 +26,7 @@ public class HttpUtil {
                 for (Map.Entry<String, String> entry : params.entrySet()) {
                     p.add(entry.getKey() + "=" + entry.getValue());
                 }
-                String join = StringUtils.join(p, "&");
+                String join = StringUtils.join("&", p);
                 url = url + "?" + join;
             }
             URL conURL = new URL(url);

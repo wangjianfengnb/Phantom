@@ -54,7 +54,7 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>compile-custom</goal>
+                            <!--此参数在使用grpc的时候才需要<goal>compile-custom</goal>-->
                         </goals>
                     </execution>
                 </executions>

@@ -24,7 +24,7 @@ public class AcceptorController {
     /**
      * 获取合适的Acceptor地址
      */
-    @GetMapping("/suitable")
+    @GetMapping("/ip")
     public AcceptorAddress getOne() {
         String ipAddress = acceptorListManager.getFirst();
         return AcceptorAddress.builder()
