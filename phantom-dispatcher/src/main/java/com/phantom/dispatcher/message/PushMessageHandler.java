@@ -123,7 +123,6 @@ public class PushMessageHandler extends AbstractMessageHandler {
                     DeliveryMessage deliveryMessage = DeliveryMessage.builder()
                             .messageIds(messageIds)
                             .build();
-
                     producer.send(Constants.TOPIC_DELIVERY_REPORT, "", JSONObject.toJSONString(deliveryMessage));
                 }
             }

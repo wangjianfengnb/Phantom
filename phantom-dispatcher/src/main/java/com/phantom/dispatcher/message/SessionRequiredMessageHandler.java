@@ -31,7 +31,7 @@ public abstract class SessionRequiredMessageHandler<T extends Identifyable> exte
         String uid = msg.getUid();
         Session session = sessionManager.getSession(msg.getUid());
         if (session == null) {
-            log.info("找不到Session，发送消息失败");
+            log.info("找不到Session，发送消息失败, uid = {}", uid);
             Message errorMessage = getErrorMessage(msg, channel);
             sendToAcceptor(uid, errorMessage);
             return;
