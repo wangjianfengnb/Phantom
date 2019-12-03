@@ -42,6 +42,6 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("客户端发生了异常：{}", cause);
+        log.error("客户端发生了异常：{}", cause.getMessage());
     }
 }

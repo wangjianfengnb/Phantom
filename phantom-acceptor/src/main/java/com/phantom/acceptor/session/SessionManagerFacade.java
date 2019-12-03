@@ -47,8 +47,10 @@ public class SessionManagerFacade {
      */
     public void removeSession(SocketChannel channel) {
         String uid = channel2Uid.remove(channel);
-        sessions.remove(uid);
-        delegate.removeSession(uid);
+        if (uid != null) {
+            sessions.remove(uid);
+            delegate.removeSession(uid);
+        }
     }
 
     /**

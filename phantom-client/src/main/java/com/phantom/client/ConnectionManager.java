@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class ConnectionManager {
 
 
-    private static String API = "http://localhost:8091/acceptor/suitable";
+    private static String API = "http://localhost:8080/acceptor/ip";
 
 
     /**
@@ -253,11 +253,12 @@ public class ConnectionManager {
             while (!shutdown) {
                 try {
                     String s = HttpUtil.get(API, null);
-                    JSONObject jsonObject = JSONObject.parseObject(s);
+                    log.info("获取接入系统地址：{}", s);
                     if (StringUtil.isNullOrEmpty(s)) {
                         Thread.sleep(5 * 1000);
                         continue;
                     }
+                    JSONObject jsonObject = JSONObject.parseObject(s);
                     String ipAndPort = jsonObject.getString("ipAndPort");
                     String ip = ipAndPort.split(":")[0];
                     int port = Integer.valueOf(ipAndPort.split(":")[1]);
