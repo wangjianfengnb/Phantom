@@ -1,5 +1,6 @@
 package com.phantom.client;
 
+import com.alibaba.fastjson.JSONObject;
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,10 +65,13 @@ public class ConsoleClient {
             } else {
                 type = split[2];
             }
+            JSONObject obj = new JSONObject(1);
+            obj.put("type", 1);
+            obj.put("content", content);
             if (type.equals("1")) {
-                ImClient.getInstance().sendMessage(uid, receiverId, content);
+                ImClient.getInstance().sendMessage(uid, receiverId, obj.toJSONString());
             } else if (type.equals("2")) {
-                ImClient.getInstance().sendGroupMessage(uid, receiverId, content);
+                ImClient.getInstance().sendGroupMessage(uid, receiverId, obj.toJSONString());
             }
         }
     }
