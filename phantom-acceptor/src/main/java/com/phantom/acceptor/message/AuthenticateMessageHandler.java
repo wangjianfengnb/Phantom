@@ -3,6 +3,7 @@ package com.phantom.acceptor.message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
 import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import com.phantom.common.AuthenticateRequest;
 import com.phantom.common.AuthenticateResponse;
 import com.phantom.common.Constants;
@@ -21,9 +22,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class AuthenticateMessageHandler extends AbstractMessageHandler {
 
+    private ZookeeperManager zookeeperManager;
+
     AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
-                               ThreadPoolExecutor threadPoolExecutor) {
+                               ThreadPoolExecutor threadPoolExecutor, ZookeeperManager zookeeperManager) {
         super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
+        this.zookeeperManager = zookeeperManager;
     }
 
     @Override
@@ -53,6 +57,7 @@ public class AuthenticateMessageHandler extends AbstractMessageHandler {
     @Override
     protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {
         // 认证的时候，在转发到分发系统前需要保存和客户端的连接
-        sessionManagerFacade.addSession(uid, channel);
+        sessionManagerFacade.addChannel(uid, channel);
+        zookeeperManager.incrementClient();
     }
 }

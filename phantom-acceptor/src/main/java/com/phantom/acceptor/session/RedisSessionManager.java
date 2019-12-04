@@ -63,7 +63,9 @@ public class RedisSessionManager implements SessionManager {
     RedisSessionManager(AcceptorConfig acceptorConfig) {
         this.config = acceptorConfig;
         Config config = new Config();
-        config.useClusterServers().addNodeAddress(this.config.getRedisServer().split(","));
+        config.useClusterServers()
+                .setPingConnectionInterval(60 * 1000)
+                .addNodeAddress(this.config.getRedisServer().split(","));
         this.redissonClient = Redisson.create(config);
     }
 

@@ -51,7 +51,7 @@ public class Producer implements InitializingBean {
         properties.put("bootstrap.servers", bootstrapServer);
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("acks", "-1");
+        properties.put("acks", "1");
         properties.put("max.in.flight.requests.per.connection", "1");
         properties.put("retries", Integer.MAX_VALUE);
         properties.put("batch.size", 16 * 1024);

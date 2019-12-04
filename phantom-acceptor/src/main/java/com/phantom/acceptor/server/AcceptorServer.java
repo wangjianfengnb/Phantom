@@ -39,12 +39,13 @@ public class AcceptorServer {
 
     /**
      * 初始化服务器
+     *
+     * @param zookeeperManager zookeeper管理
      */
-    public void initialize() {
+    public void initialize(ZookeeperManager zookeeperManager) {
         EventLoopGroup connectThreadGroup = new NioEventLoopGroup();
         EventLoopGroup ioThreadGroup = new NioEventLoopGroup();
         try {
-            ZookeeperManager zookeeperManager = new ZookeeperManager(config);
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(connectThreadGroup, ioThreadGroup)
                     .channel(NioServerSocketChannel.class)

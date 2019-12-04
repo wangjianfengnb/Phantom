@@ -82,7 +82,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
      */
     private void handleResponseMessage(Message message) throws InvalidProtocolBufferException {
         String uid = getResponseUid(message);
-        SocketChannel session = sessionManagerFacade.getSession(uid);
+        SocketChannel session = sessionManagerFacade.getChannel(uid);
         if (session != null) {
             log.info("将响应推送给客户端：uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
             session.writeAndFlush(message.getBuffer());

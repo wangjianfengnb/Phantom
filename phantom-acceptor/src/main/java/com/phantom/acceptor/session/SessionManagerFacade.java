@@ -23,7 +23,7 @@ public class SessionManagerFacade {
     /**
      * 用户会话，表示接入系统内存中保存和用户的连接
      */
-    private Map<String, SocketChannel> sessions = new ConcurrentHashMap<>();
+    private Map<String, SocketChannel> uid2Channel = new ConcurrentHashMap<>();
 
     /**
      * channel对应用户ID
@@ -41,16 +41,18 @@ public class SessionManagerFacade {
     }
 
     /**
-     * 移除用户连接
+     * 移除用户连接，只有用户发起了认证消息才会保存
      *
      * @param channel 用户连接
+     * @return 是否移除了session
      */
-    public void removeSession(SocketChannel channel) {
+    public boolean removeChannel(SocketChannel channel) {
         String uid = channel2Uid.remove(channel);
         if (uid != null) {
-            sessions.remove(uid);
+            uid2Channel.remove(uid);
             delegate.removeSession(uid);
         }
+        return uid != null;
     }
 
     /**
@@ -59,8 +61,8 @@ public class SessionManagerFacade {
      * @param uid     用户ID
      * @param channel 渠道
      */
-    public void addSession(String uid, SocketChannel channel) {
-        sessions.put(uid, channel);
+    public void addChannel(String uid, SocketChannel channel) {
+        uid2Channel.put(uid, channel);
         channel2Uid.put(channel, uid);
     }
 
@@ -74,8 +76,8 @@ public class SessionManagerFacade {
      * @param uid 用户ID
      * @return 回话
      */
-    public SocketChannel getSession(String uid) {
-        return sessions.get(uid);
+    public SocketChannel getChannel(String uid) {
+        return uid2Channel.get(uid);
     }
 
 }

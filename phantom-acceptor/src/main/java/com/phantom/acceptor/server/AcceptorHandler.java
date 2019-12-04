@@ -27,13 +27,13 @@ public class AcceptorHandler extends AbstractChannelHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端建立连接 : {}", ctx.channel());
-        this.zookeeperManager.incrementClient();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端断开连接：{}", ctx.channel());
-        this.zookeeperManager.decrementClient();
-        sessionManagerFacade.removeSession((SocketChannel) ctx.channel());
+        if (sessionManagerFacade.removeChannel((SocketChannel) ctx.channel())) {
+            zookeeperManager.decrementClient();
+        }
     }
 }

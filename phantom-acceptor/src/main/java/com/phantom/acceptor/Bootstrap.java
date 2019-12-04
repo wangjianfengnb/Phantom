@@ -5,6 +5,7 @@ import com.phantom.acceptor.message.MessageHandlerFactory;
 import com.phantom.acceptor.server.AcceptorServer;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
 import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -28,11 +29,12 @@ public class Bootstrap {
         dispatcherManager.initialize();
 
         // 4. init handlers
-        MessageHandlerFactory.initialize(dispatcherManager, sessionManagerFacade);
+        ZookeeperManager zookeeperManager = new ZookeeperManager(config);
+        MessageHandlerFactory.initialize(dispatcherManager, sessionManagerFacade, zookeeperManager);
 
 
         // 5. init acceptor server
         AcceptorServer server = new AcceptorServer(dispatcherManager, config, sessionManagerFacade);
-        server.initialize();
+        server.initialize(zookeeperManager);
     }
 }
