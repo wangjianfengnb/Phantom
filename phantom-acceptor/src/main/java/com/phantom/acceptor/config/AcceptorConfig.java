@@ -41,6 +41,13 @@ public class AcceptorConfig {
      */
     private int coreSize;
 
+    /**
+     * SSL秘钥文件
+     */
+    private String keyStore;
+
+    private String sslPassword;
+
     public static AcceptorConfig parse(String configFileName) throws Exception {
         InputStream resourceAsStream = AcceptorConfig.class.getClassLoader().getResourceAsStream(configFileName);
         Properties properties = new Properties();
@@ -50,12 +57,16 @@ public class AcceptorConfig {
         String zookeeperServer = properties.getProperty("zookeeper.server");
         int port = Integer.valueOf(properties.getProperty("acceptor.port"));
         int thread = Integer.valueOf(properties.getProperty("io.thread"));
+        String keyStore = properties.getProperty("ssl.keystore");
+        String password = properties.getProperty("ssl.password");
         return AcceptorConfig.builder()
                 .maxMessageBytes(maxMessageBytes)
                 .redisServer(redisServer)
                 .zookeeperServer(zookeeperServer)
                 .port(port)
                 .coreSize(thread)
+                .keyStore(keyStore)
+                .sslPassword(password)
                 .build();
 
     }

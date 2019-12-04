@@ -179,6 +179,29 @@ acceptorInstanceId，然后分发系统内部会维持一个acceptorInstanceId -
 由于一个分发服务会连接多个接入系统，假设分发系统收到了消息分发任务，但是此时对应的接入系统还没有过来连接，
 此时消息会被阻塞一段时间(无限循环,直到等待到对应的接入系统和分发系统建立连接)
 
+### SSL加密通讯
+
+```
+
+# 创建服务端秘钥
+keytool -genkey -alias phantom-server -keysize 2048 -validity 365 -keyalg RSA -dname "CN=localhost" -keypass phantom-server -storepass phantom-server -keystore phantom-server.jks
+
+# 导出服务端秘钥
+keytool -export -alias phantom-server -keystore phantom-server.jks -storepass phantom-server -file phantom-server.cer
+		
+# 创建客户端秘钥
+keytool -genkey -alias phantom-client -keysize 2048 -validity 365  -keyalg RSA -dname "CN=localhost" -keypass phantom-client  -storepass phantom-client -keystore phantom-client.jks
+
+# 创建导出客户端秘钥
+keytool -export -alias phantom-client -keystore phantom-client.jks -storepass phantom-client -file phantom-client.cer
+
+# 将服务端的证书导入到客户端的信任证书仓库中
+keytool -import -trustcacerts -alias phantom-server -file phantom-server.cer -storepass phantom-client -keystore phantom-client.jks
+
+# 将客户端的证书导入到服务端的信任证书仓库中
+keytool -import -trustcacerts -alias phantom-client -file phantom-client.cer -storepass phantom-server -keystore phantom-server.jks
+```
+
 
 
 #### 参与贡献

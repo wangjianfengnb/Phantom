@@ -3,6 +3,7 @@ package com.phantom.client;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.phantom.client.ssl.SslEngineFactory;
 import com.phantom.common.*;
 import com.phantom.common.util.HttpUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -15,6 +16,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.ssl.SslHandler;
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -273,6 +275,7 @@ public class ConnectionManager {
                             .handler(new ChannelInitializer<SocketChannel>() {
                                 @Override
                                 protected void initChannel(SocketChannel ch) throws Exception {
+                                    ch.pipeline().addLast(new SslHandler(SslEngineFactory.getEngine()));
                                     ch.pipeline().addLast(new DelimiterBasedFrameDecoder(4096,
                                             Unpooled.copiedBuffer(Constants.DELIMITER)));
                                     ch.pipeline().addLast(new ImClientHandler());
