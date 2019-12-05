@@ -131,6 +131,21 @@ public class Constants {
      */
     public static final String ZK_DISPATCH_PATH = "/phantom/dispatcher";
 
+    /**
+     * Android 平台
+     */
+    public static final int PLATFORM_ANDROID = 1;
+
+    /**
+     * IOS 平台
+     */
+    public static final int PLATFORM_IOS = 2;
+
+    /**
+     * Web平台
+     */
+    public static final int PLATFORM_WEB = 3;
+
 
     public static String requestTypeName(int type) {
         if (type == REQUEST_TYPE_AUTHENTICATE) {

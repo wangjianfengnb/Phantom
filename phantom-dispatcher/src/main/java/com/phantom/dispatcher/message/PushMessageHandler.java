@@ -109,7 +109,9 @@ public class PushMessageHandler extends AbstractMessageHandler {
                             .setContent(timelineMessage.getContent())
                             .setMessageId(timelineMessage.getMessageId())
                             .setTimestamp(timelineMessage.getTimestamp())
-                            .setSequence(timelineMessage.getSequence());
+                            .setSequence(timelineMessage.getSequence())
+                            .setCrc(timelineMessage.getCrc())
+                            .setPlatform(timelineMessage.getPlatform());
                     if (groupId == null) {
                         messageIds.add(timelineMessage.getMessageId());
                     } else {

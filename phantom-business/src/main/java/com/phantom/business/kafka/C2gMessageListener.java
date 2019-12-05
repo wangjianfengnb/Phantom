@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.phantom.business.kafka.consumer.SingleMessageListener;
 import com.phantom.business.kafka.producer.Producer;
 import com.phantom.business.mapper.C2gMessageMapper;
-import com.phantom.business.mapper.ConversationMembersMapper;
+import com.phantom.business.mapper.GroupMembersMapper;
 import com.phantom.business.kafka.consumer.Acknowledgement;
 import com.phantom.common.Constants;
 import com.phantom.common.model.KafkaMessage;
@@ -36,7 +36,7 @@ public class C2gMessageListener implements SingleMessageListener {
     private SnowflakeIdWorker snowflakeIdWorker;
 
     @Resource
-    private ConversationMembersMapper conversationMembersMapper;
+    private GroupMembersMapper groupMembersMapper;
 
     @Override
     public String getTopic() {
@@ -47,8 +47,8 @@ public class C2gMessageListener implements SingleMessageListener {
     public void onMessage(String message, Acknowledgement acknowledgement) {
         log.info("收到消息：{}", message);
         KafkaMessage c2gMessage = JSONObject.parseObject(message, KafkaMessage.class);
-        List<Long> membersIds =
-                conversationMembersMapper.getMembersByConversationId(Long.valueOf(c2gMessage.getGroupId()));
+        List<String> membersIds =
+                groupMembersMapper.getMembersByConversationId(Long.valueOf(c2gMessage.getGroupId()));
         if (CollectionUtils.isEmpty(membersIds)) {
             log.info("无法找到群聊信息：不处理该消息");
             return;
@@ -69,9 +69,10 @@ public class C2gMessageListener implements SingleMessageListener {
                 .timestamp(c2gMessage.getTimestamp())
                 .messageId(c2gMessage.getMessageId())
                 .groupUId(membersIds.stream()
-                        .map(String::valueOf)
                         .filter(e -> !e.equals(c2gMessage.getSenderId()))
                         .collect(Collectors.toList()))
+                .crc(c2gMessage.getCrc())
+                .platform(c2gMessage.getPlatform())
                 .build();
         producer.send(Constants.TOPIC_PUSH_MESSAGE, kafkaMessage.getGroupId(), JSONObject.toJSONString(kafkaMessage));
 

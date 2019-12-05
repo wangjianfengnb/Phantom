@@ -25,7 +25,8 @@ message C2CMessageRequest {
     string senderId = 1;
     string receiverId = 2;
     string content = 3;
-    int64 sequence = 4;
+    string crc = 4;
+    int32 platform = 5;
 }
 
 message C2CMessageResponse {
@@ -33,13 +34,9 @@ message C2CMessageResponse {
     string receiverId = 2;
     int64 timestamp = 3;
     int32 status = 4;
-}
-
-message C2CPushMessageRequest {
-    string senderId = 1;
-    string receiverId = 2;
-    int64 timestamp = 3;
-    string content = 4;
+    string crc = 5;
+    int32 platform = 6;
+    int64 messageId = 7;
 }
 
 message InformFetchMessageResponse {
@@ -67,6 +64,8 @@ message OfflineMessage {
     int64 messageId = 5;
     string groupId = 6;
     int64 sequence = 7;
+    string crc = 8;
+    int32 platform = 9;
 }
 
 message C2GMessageRequest {
@@ -74,6 +73,8 @@ message C2GMessageRequest {
     string groupId = 2;
     int64 timestamp = 3;
     string content = 4;
+    string crc = 5;
+    int32 platform = 6;
 }
 
 message C2GMessageResponse {
@@ -81,4 +82,7 @@ message C2GMessageResponse {
     string groupId = 2;
     int64 timestamp = 3;
     int32 status = 4;
+    string crc = 5;
+    int32 platform = 6;
+    int64 messageId = 7;
 }

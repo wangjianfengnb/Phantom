@@ -57,4 +57,14 @@ public class KafkaMessage {
      */
     private List<String> groupUId;
 
+    /**
+     * 客户端消息唯一标识
+     */
+    private String crc;
+
+    /**
+     * 平台
+     */
+    private Integer platform;
+
 }

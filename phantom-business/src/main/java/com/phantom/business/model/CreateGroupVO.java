@@ -22,20 +22,20 @@ public class CreateGroupVO {
     /**
      * 会话名称
      */
-    private String conversationName;
+    private String groupName;
     /**
      * 会话头像
      */
-    private String conversationAvatar;
+    private String groupAvatar;
     /**
      * 会话成员
      */
-    private List<Long> members;
+    private List<String> members;
 
     /**
      * 会话ID
      */
-    private Long conversationId;
+    private Long groupId;
 
 
 }

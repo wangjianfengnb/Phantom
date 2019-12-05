@@ -122,7 +122,6 @@ public class ZookeeperManager {
             interProcessMutex.acquire();
             log.info("更新客户端数量到zk ：{} -> {}", selfPath, clientCount.get());
             lastPeriodClientCount.set(clientCount.get());
-            clientCount.set(0);
             framework.setData().forPath(selfPath, String.valueOf(clientCount.get()).getBytes());
         } catch (Exception e) {
             e.printStackTrace();

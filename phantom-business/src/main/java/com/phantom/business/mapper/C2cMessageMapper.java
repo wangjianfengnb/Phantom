@@ -26,13 +26,17 @@ public interface C2cMessageMapper {
             "sender_id," +
             "receiver_id," +
             "content," +
-            "timestamp" +
+            "timestamp," +
+            "crc," +
+            "platform" +
             ") VALUES(" +
             "#{messageId}," +
             "#{senderId}," +
             "#{receiverId}," +
             "#{content}," +
-            "#{timestamp})")
+            "#{timestamp}," +
+            "#{crc}," +
+            "#{platform})")
     @Options(keyColumn = "message_id", keyProperty = "messageId", useGeneratedKeys = true)
     void saveMessage(KafkaMessage c2CMessage);
 

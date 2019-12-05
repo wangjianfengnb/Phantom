@@ -55,6 +55,16 @@ public class TimelineMessage implements Serializable {
      */
     private long sequence;
 
+    /**
+     * 客户端消息唯一标识
+     */
+    private String crc;
+
+    /**
+     * 平台
+     */
+    private Integer platform;
+
     public static TimelineMessage parseC2CMessage(KafkaMessage kafkaMessage) {
         return TimelineMessage.builder()
                 .senderId(kafkaMessage.getSenderId())
@@ -62,6 +72,8 @@ public class TimelineMessage implements Serializable {
                 .content(kafkaMessage.getContent())
                 .timestamp(kafkaMessage.getTimestamp())
                 .messageId(kafkaMessage.getMessageId())
+                .crc(kafkaMessage.getCrc())
+                .platform(kafkaMessage.getPlatform())
                 .build();
     }
 
@@ -76,6 +88,8 @@ public class TimelineMessage implements Serializable {
                     .timestamp(kafkaMessage.getTimestamp())
                     .groupId(kafkaMessage.getGroupId())
                     .messageId(kafkaMessage.getMessageId())
+                    .crc(kafkaMessage.getCrc())
+                    .platform(kafkaMessage.getPlatform())
                     .build();
             messages.add(message);
         }

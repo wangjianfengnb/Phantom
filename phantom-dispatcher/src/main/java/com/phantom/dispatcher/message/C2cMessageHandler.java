@@ -34,6 +34,9 @@ public class C2cMessageHandler extends SessionRequiredMessageHandler<C2cMessageR
                         .setReceiverId(msg.getReceiverId())
                         .setTimestamp(msg.getTimestamp())
                         .setStatus(Constants.RESPONSE_STATUS_OK)
+                        .setCrc(msg.getCrc())
+                        .setPlatform(msg.getPlatform())
+                        .setMessageId(msg.getMessageId())
                         .build();
                 Message resp = Message.buildC2cMessageResponse(response);
                 sendToAcceptor(msg.getSenderId(), resp);
@@ -52,6 +55,8 @@ public class C2cMessageHandler extends SessionRequiredMessageHandler<C2cMessageR
                     .receiverId(c2CMessageRequest.getReceiverId())
                     .content(c2CMessageRequest.getContent())
                     .timestamp(System.currentTimeMillis())
+                    .crc(c2CMessageRequest.getCrc())
+                    .platform(c2CMessageRequest.getPlatform())
                     .build();
             String value = JSONObject.toJSONString(msg);
             log.info("投递单聊消息到Kafka -> {}", value);
@@ -68,6 +73,8 @@ public class C2cMessageHandler extends SessionRequiredMessageHandler<C2cMessageR
                 .setReceiverId(c2CMessageRequest.getReceiverId())
                 .setStatus(Constants.RESPONSE_STATUS_ERROR)
                 .setTimestamp(System.currentTimeMillis())
+                .setCrc(c2CMessageRequest.getCrc())
+                .setPlatform(c2CMessageRequest.getPlatform())
                 .build();
         return Message.buildC2cMessageResponse(response);
     }

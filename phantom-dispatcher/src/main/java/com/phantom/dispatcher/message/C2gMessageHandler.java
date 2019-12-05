@@ -34,6 +34,9 @@ public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageR
                         .setGroupId(msg.getGroupId())
                         .setTimestamp(msg.getTimestamp())
                         .setStatus(Constants.RESPONSE_STATUS_OK)
+                        .setCrc(msg.getCrc())
+                        .setPlatform(msg.getPlatform())
+                        .setMessageId(msg.getMessageId())
                         .build();
                 Message resp = Message.buildC2gMessageResponse(response);
                 sendToAcceptor(msg.getSenderId(), resp);
@@ -50,6 +53,8 @@ public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageR
                     .groupId(c2GMessageRequest.getGroupId())
                     .content(c2GMessageRequest.getContent())
                     .timestamp(System.currentTimeMillis())
+                    .crc(c2GMessageRequest.getCrc())
+                    .platform(c2GMessageRequest.getPlatform())
                     .build();
             String value = JSONObject.toJSONString(msg);
             log.info("投递群聊消息到Kafka -> {}", value);
@@ -65,6 +70,8 @@ public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageR
                 .setGroupId(c2GMessageRequest.getGroupId())
                 .setStatus(Constants.RESPONSE_STATUS_ERROR)
                 .setTimestamp(System.currentTimeMillis())
+                .setCrc(c2GMessageRequest.getCrc())
+                .setPlatform(c2GMessageRequest.getPlatform())
                 .build();
         return Message.buildC2gMessageResponse(response);
     }

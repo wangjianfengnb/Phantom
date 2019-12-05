@@ -1,14 +1,14 @@
 package com.phantom.business.controller;
 
-import com.phantom.business.mapper.ConversationMapper;
-import com.phantom.business.mapper.ConversationMembersMapper;
+import com.phantom.business.domain.GroupResponse;
+import com.phantom.business.domain.JoinGroupRequest;
+import com.phantom.business.mapper.GroupMapper;
+import com.phantom.business.mapper.GroupMembersMapper;
 import com.phantom.business.model.CreateGroupVO;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 群聊Controller
@@ -21,10 +21,10 @@ import javax.annotation.Resource;
 public class GroupController {
 
     @Resource
-    private ConversationMapper conversationMapper;
+    private GroupMapper groupMapper;
 
     @Resource
-    private ConversationMembersMapper conversationMembersMapper;
+    private GroupMembersMapper groupMembersMapper;
 
     /**
      * 创建会话
@@ -33,12 +33,40 @@ public class GroupController {
      */
     @PostMapping("/create")
     public Boolean createGroup(@RequestBody CreateGroupVO createGroupVO) {
-        conversationMapper.saveConversation(createGroupVO);
-        Long conversationId = createGroupVO.getConversationId();
-        for (Long uid : createGroupVO.getMembers()) {
-            conversationMembersMapper.saveMembers(conversationId, uid);
+        groupMapper.saveConversation(createGroupVO);
+        Long conversationId = createGroupVO.getGroupId();
+        for (String member : createGroupVO.getMembers()) {
+            groupMembersMapper.saveMembers(conversationId, member);
         }
         return true;
     }
+
+    /**
+     * 获取回话信息
+     *
+     * @param groupId 回话ID
+     * @return 回话信息
+     */
+    @GetMapping("/{groupId}")
+    public GroupResponse getGroupInfo(@PathVariable("groupId") Long groupId) {
+        GroupResponse groupResponse = groupMapper.getById(groupId);
+        List<String> members = groupMembersMapper.getMembersByConversationId(groupId);
+        groupResponse.setMembers(members);
+        return groupResponse;
+    }
+
+    /**
+     * 加入群组
+     */
+    @PostMapping("/joinGroup")
+    public Boolean joinGroup(@RequestBody JoinGroupRequest joinGroupRequest) {
+        JoinGroupRequest relationship = groupMembersMapper.getRelationship(joinGroupRequest.getGroupId(),
+                joinGroupRequest.getUserAccount());
+        if (relationship == null) {
+            groupMembersMapper.saveMembers(joinGroupRequest.getGroupId(), joinGroupRequest.getUserAccount());
+        }
+        return true;
+    }
+
 
 }

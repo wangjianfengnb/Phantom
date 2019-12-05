@@ -39,23 +39,25 @@ public class C2cMessageListener implements SingleMessageListener {
     @Override
     public void onMessage(String message, Acknowledgement acknowledgement) {
         log.info("收到消息：{}", message);
-        KafkaMessage c2CMessage = JSONObject.parseObject(message, KafkaMessage.class);
-        c2CMessage.setMessageId(snowflakeIdWorker.nextId());
-        c2CMessageMapper.saveMessage(c2CMessage);
+        KafkaMessage c2cMessage = JSONObject.parseObject(message, KafkaMessage.class);
+        c2cMessage.setMessageId(snowflakeIdWorker.nextId());
+        c2CMessageMapper.saveMessage(c2cMessage);
 
 
         // send response
-        String value = JSONObject.toJSONString(c2CMessage);
+        String value = JSONObject.toJSONString(c2cMessage);
         // 发送给发送者的响应，按照senderId做partition hash
-        producer.send(Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE, c2CMessage.getSenderId(), value);
+        producer.send(Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE, c2cMessage.getSenderId(), value);
 
         // push message, 按照receiverId做partition hash
         KafkaMessage kafkaMessage = KafkaMessage.builder()
-                .senderId(c2CMessage.getSenderId())
-                .receiverId(c2CMessage.getReceiverId())
-                .content(c2CMessage.getContent())
-                .timestamp(c2CMessage.getTimestamp())
-                .messageId(c2CMessage.getMessageId())
+                .senderId(c2cMessage.getSenderId())
+                .receiverId(c2cMessage.getReceiverId())
+                .content(c2cMessage.getContent())
+                .timestamp(c2cMessage.getTimestamp())
+                .messageId(c2cMessage.getMessageId())
+                .crc(c2cMessage.getCrc())
+                .platform(c2cMessage.getPlatform())
                 .build();
         producer.send(Constants.TOPIC_PUSH_MESSAGE, kafkaMessage.getReceiverId(), JSONObject.toJSONString(kafkaMessage));
 
