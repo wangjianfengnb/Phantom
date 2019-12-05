@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DispatcherManager {
 
     /**
-     * Sessoin管理
+     * Session管理
      */
     private SessionManagerFacade sessionManagerFacade;
 
@@ -66,7 +66,9 @@ public class DispatcherManager {
         this.acceptorInstanceId = StringUtils.getRandomString(16);
     }
 
-
+    /**
+     * 初始化zookeeper管理器
+     */
     public void initialize() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework framework = CuratorFrameworkFactory.newClient(config.getZookeeperServer(), retryPolicy);
@@ -161,7 +163,7 @@ public class DispatcherManager {
     /**
      * 对于ZK的数据而言，大概是这样的：
      * <p>
-     * /zhss-im/dispatcher/
+     * /phantom/dispatcher/
      * -----http://localhost:8019
      * -----http://localhost:8090
      * <p>

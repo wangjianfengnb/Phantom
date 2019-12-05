@@ -101,7 +101,7 @@ public class AcceptorListManager implements InitializingBean {
     /**
      * 对于ZK的数据而言，大概是这样的：
      * <p>
-     * /zhss-im/acceptor/
+     * /phantom/acceptor/
      * ------http://localhost:8019   10
      * ------http://localhost:8090   2
      * <p>

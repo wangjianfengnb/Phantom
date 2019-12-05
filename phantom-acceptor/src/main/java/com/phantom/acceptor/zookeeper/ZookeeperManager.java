@@ -113,7 +113,7 @@ public class ZookeeperManager {
      */
     private void maybeUpdateClientCount() {
         if (clientCount.get() == lastPeriodClientCount.get()) {
-            System.out.println("客户端数量没有变化，不更新到zk");
+            log.info("客户端数量没有变化，不更新到zk, count = {}",clientCount.get());
             return;
         }
         InterProcessMutex interProcessMutex = new InterProcessMutex(framework, Constants.ZK_ACCEPTOR_CLIENT_LOCK +
