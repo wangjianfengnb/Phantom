@@ -8,6 +8,7 @@ import com.phantom.business.model.CreateGroupVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,6 +67,21 @@ public class GroupController {
             groupMembersMapper.saveMembers(joinGroupRequest.getGroupId(), joinGroupRequest.getUserAccount());
         }
         return true;
+    }
+
+
+    /**
+     * 分页获取群组
+     *
+     * @return 群组
+     */
+    @GetMapping("/list")
+    public List<GroupResponse> listGroup(Integer page, Integer size) {
+        List<GroupResponse> groupResponses = groupMapper.listByPage(size, size * page);
+        if (groupResponses == null) {
+            return new ArrayList<>();
+        }
+        return groupResponses;
     }
 
 

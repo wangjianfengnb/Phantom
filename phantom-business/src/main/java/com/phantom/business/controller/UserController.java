@@ -1,12 +1,15 @@
 package com.phantom.business.controller;
 
 import com.phantom.business.domain.CreateUserRequest;
+import com.phantom.business.domain.GroupResponse;
 import com.phantom.business.domain.UserResponse;
 import com.phantom.business.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户管理
@@ -42,10 +45,25 @@ public class UserController {
     @GetMapping("/{userAccount}")
     public UserResponse getUser(@PathVariable("userAccount") String userAccount) {
         UserResponse user = userMapper.getUser(userAccount);
+        System.out.println(user);
         if (user == null) {
             return new UserResponse();
         }
         return user;
+    }
+
+    /**
+     * 分页获取用户
+     *
+     * @return 群组
+     */
+    @GetMapping("/list")
+    public List<UserResponse> listUser(String userAccount, Integer page, Integer size) {
+        List<UserResponse> userResponses = userMapper.listByPage(userAccount, size, size * page);
+        if (userResponses == null) {
+            return new ArrayList<>();
+        }
+        return userResponses;
     }
 
 }
