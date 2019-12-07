@@ -37,6 +37,11 @@ public class AcceptorConfig {
     private int port;
 
     /**
+     * 主机名
+     */
+    private String hostname;
+
+    /**
      * 线程数量
      */
     private int coreSize;
@@ -56,6 +61,7 @@ public class AcceptorConfig {
         String redisServer = properties.getProperty("redis.server");
         String zookeeperServer = properties.getProperty("zookeeper.server");
         int port = Integer.valueOf(properties.getProperty("acceptor.port"));
+        String hostname = properties.getProperty("acceptor.hostname");
         int thread = Integer.valueOf(properties.getProperty("io.thread"));
         String keyStore = properties.getProperty("ssl.keystore");
         String password = properties.getProperty("ssl.password");
@@ -67,6 +73,7 @@ public class AcceptorConfig {
                 .coreSize(thread)
                 .keyStore(keyStore)
                 .sslPassword(password)
+                .hostname(hostname)
                 .build();
 
     }

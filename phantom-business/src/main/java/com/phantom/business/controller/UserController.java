@@ -1,7 +1,6 @@
 package com.phantom.business.controller;
 
 import com.phantom.business.domain.CreateUserRequest;
-import com.phantom.business.domain.GroupResponse;
 import com.phantom.business.domain.UserResponse;
 import com.phantom.business.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,6 @@ public class UserController {
     @GetMapping("/{userAccount}")
     public UserResponse getUser(@PathVariable("userAccount") String userAccount) {
         UserResponse user = userMapper.getUser(userAccount);
-        System.out.println(user);
         if (user == null) {
             return new UserResponse();
         }

@@ -67,7 +67,7 @@ public class ZookeeperManager {
      */
     public void createNode() {
         try {
-            selfPath = Constants.ZK_ACCEPTOR_PATH + "/" + InetAddress.getLocalHost().getHostAddress() +
+            selfPath = Constants.ZK_ACCEPTOR_PATH + "/" + InetAddress.getByName(config.getHostname()).getHostAddress() +
                     ":" + config.getPort();
             log.info("往Zookeeper注册临时节点：{}", selfPath);
             if (framework.checkExists().forPath(selfPath) != null) {
@@ -113,7 +113,7 @@ public class ZookeeperManager {
      */
     private void maybeUpdateClientCount() {
         if (clientCount.get() == lastPeriodClientCount.get()) {
-            log.info("客户端数量没有变化，不更新到zk, count = {}",clientCount.get());
+            log.info("客户端数量没有变化，不更新到zk, count = {}", clientCount.get());
             return;
         }
         InterProcessMutex interProcessMutex = new InterProcessMutex(framework, Constants.ZK_ACCEPTOR_CLIENT_LOCK +

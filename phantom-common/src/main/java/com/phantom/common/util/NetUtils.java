@@ -17,6 +17,4 @@ public class NetUtils {
     public static String getChannelId(SocketChannel channel) {
         return channel.remoteAddress().getAddress() + ":" + channel.remoteAddress().getPort();
     }
-
-
 }

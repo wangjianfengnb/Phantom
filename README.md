@@ -17,22 +17,24 @@
 cd phantom-common && mvn protobuf:compile
 ```
 
-方便测试，配置hostname：
+配置hostname：
 
 ```
-193.112.18.149 mysql-server
-193.112.18.149 zk-0
-193.112.18.149 zk-1
-193.112.18.149 zk-2
-193.112.18.149 redis-0
-193.112.18.149 redis-1
-193.112.18.149 redis-2
-193.112.18.149 redis-3
-193.112.18.149 redis-4
-193.112.18.149 redis-5
-193.112.18.149 kafka-0
-193.112.18.149 kafka-1
-193.112.18.149 kafka-2
+localhost mysql-server
+localhost zk-0
+localhost zk-1
+localhost zk-2
+localhost redis-0
+localhost redis-1
+localhost redis-2
+localhost redis-3
+localhost redis-4
+localhost redis-5
+localhost kafka-0
+localhost kafka-1
+localhost kafka-2
+# 接入服务所在的公网ip
+127.0.0.1 acceptor-server
 ```
 
 测试方式：
@@ -42,6 +44,10 @@ cd phantom-common && mvn protobuf:compile
 - 启动phantom-acceptor的Bootstrap
 - 启动phantom-client测试包下面的ConsoleClient,启动多个实例
 - 试试幻影(Phantom)的威力
+
+## Android SDK
+
+[Phantom-Android](https://github.com/wangjianfengnb/Plantom-Android)
 
 
 | 功能 | 进度 | 特性 | 
