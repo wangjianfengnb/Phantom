@@ -212,12 +212,18 @@ public class DispatcherManager {
         dispatcherInstanceMap.remove(instanceId);
     }
 
+    /**
+     * 选择一个分发系统
+     *
+     * @param uid 用户ID
+     * @return 分发系统实例
+     */
     public DispatcherInstance chooseDispatcher(String uid) {
         ArrayList<DispatcherInstance> dispatcherInstances = new ArrayList<>(dispatcherInstanceMap.values());
         if (dispatcherInstances.isEmpty()) {
             return null;
         }
-        int hash = toPositive(murmur2(uid.getBytes())) % dispatcherInstances.size();
+        int hash = toPositive(murmur2(uid.getBytes()));
         int index = hash % dispatcherInstances.size();
         return dispatcherInstances.get(index);
     }
