@@ -3,7 +3,7 @@ package com.phantom.acceptor.server;
 import com.phantom.acceptor.config.AcceptorConfig;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
 import com.phantom.acceptor.server.ssl.SslEngineFactory;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import com.phantom.common.Constants;
 import com.phantom.common.util.StringUtils;
@@ -33,12 +33,12 @@ public class AcceptorServer {
 
     private DispatcherManager dispatcherManager;
     private AcceptorConfig config;
-    private SessionManagerFacade sessionManagerFacade;
+    private SessionManager sessionManager;
 
     public AcceptorServer(DispatcherManager dispatcherManager, AcceptorConfig config,
-                          SessionManagerFacade sessionManagerFacade) {
+                          SessionManager sessionManager) {
         this.config = config;
-        this.sessionManagerFacade = sessionManagerFacade;
+        this.sessionManager = sessionManager;
         this.dispatcherManager = dispatcherManager;
     }
 
@@ -68,7 +68,7 @@ public class AcceptorServer {
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(),
                                     Unpooled.copiedBuffer(Constants.DELIMITER)));
                             socketChannel.pipeline().addLast(new AcceptorHandler(dispatcherManager,
-                                    sessionManagerFacade, zookeeperManager));
+                                    sessionManager, zookeeperManager));
                         }
                     });
             log.info("接入服务初始化......监听端口：{}", config.getPort());

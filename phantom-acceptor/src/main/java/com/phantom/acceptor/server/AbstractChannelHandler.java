@@ -3,7 +3,7 @@ package com.phantom.acceptor.server;
 import com.phantom.acceptor.message.MessageHandler;
 import com.phantom.acceptor.message.MessageHandlerFactory;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.common.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,11 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapter {
 
     protected DispatcherManager dispatcherManager;
-    protected SessionManagerFacade sessionManagerFacade;
+    protected SessionManager sessionManager;
 
-    public AbstractChannelHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade) {
+    public AbstractChannelHandler(DispatcherManager dispatcherManager, SessionManager sessionManager) {
         this.dispatcherManager = dispatcherManager;
-        this.sessionManagerFacade = sessionManagerFacade;
+        this.sessionManager = sessionManager;
     }
 
     @Override

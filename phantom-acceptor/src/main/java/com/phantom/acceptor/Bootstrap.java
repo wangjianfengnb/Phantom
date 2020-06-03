@@ -4,7 +4,8 @@ import com.phantom.acceptor.config.AcceptorConfig;
 import com.phantom.acceptor.message.MessageHandlerFactory;
 import com.phantom.acceptor.server.AcceptorServer;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.RedisSessionManager;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,19 +23,19 @@ public class Bootstrap {
         AcceptorConfig config = AcceptorConfig.parse("server.properties");
 
         // 2. init session manager
-        SessionManagerFacade sessionManagerFacade = new SessionManagerFacade(config);
+        SessionManager sessionManager = new RedisSessionManager(config);
 
         // 3. init dispatcherManager
-        DispatcherManager dispatcherManager = new DispatcherManager(config, sessionManagerFacade);
+        DispatcherManager dispatcherManager = new DispatcherManager(config, sessionManager);
         dispatcherManager.initialize();
 
         // 4. init handlers
         ZookeeperManager zookeeperManager = new ZookeeperManager(config);
-        MessageHandlerFactory.initialize(dispatcherManager, sessionManagerFacade, zookeeperManager);
+        MessageHandlerFactory.initialize(dispatcherManager, sessionManager, zookeeperManager, config);
 
 
         // 5. init acceptor server
-        AcceptorServer server = new AcceptorServer(dispatcherManager, config, sessionManagerFacade);
+        AcceptorServer server = new AcceptorServer(dispatcherManager, config, sessionManager);
         server.initialize(zookeeperManager);
     }
 }

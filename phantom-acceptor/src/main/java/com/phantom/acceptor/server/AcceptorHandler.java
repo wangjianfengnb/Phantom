@@ -1,7 +1,7 @@
 package com.phantom.acceptor.server;
 
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
@@ -18,9 +18,9 @@ public class AcceptorHandler extends AbstractChannelHandler {
 
     private ZookeeperManager zookeeperManager;
 
-    public AcceptorHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+    public AcceptorHandler(DispatcherManager dispatcherManager, SessionManager sessionManager,
                            ZookeeperManager zookeeperManager) {
-        super(dispatcherManager, sessionManagerFacade);
+        super(dispatcherManager, sessionManager);
         this.zookeeperManager = zookeeperManager;
     }
 
@@ -32,7 +32,7 @@ public class AcceptorHandler extends AbstractChannelHandler {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端断开连接：{}", ctx.channel());
-        if (sessionManagerFacade.removeChannel((SocketChannel) ctx.channel())) {
+        if (sessionManager.removeSession((SocketChannel) ctx.channel())) {
             zookeeperManager.decrementClient();
         }
     }

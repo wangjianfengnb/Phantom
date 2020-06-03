@@ -174,8 +174,8 @@ public class ConnectionManager {
             }
         } else if (Constants.REQUEST_TYPE_C2C_SEND == requestType) {
             byte[] body = message.getBody();
-            C2CMessageResponse c2CMessageResponse =
-                    C2CMessageResponse.parseFrom(body);
+            C2cMessageResponse c2CMessageResponse =
+                    C2cMessageResponse.parseFrom(body);
             if (c2CMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
                 log.info("发送单聊消息成功...");
             } else {
@@ -212,8 +212,8 @@ public class ConnectionManager {
             }
         } else if (Constants.REQUEST_TYPE_C2G_SEND == requestType) {
             byte[] body = message.getBody();
-            C2GMessageResponse c2GMessageResponse =
-                    C2GMessageResponse.parseFrom(body);
+            C2gMessageResponse c2GMessageResponse =
+                    C2gMessageResponse.parseFrom(body);
             if (c2GMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
                 log.info("发送群聊消息成功...");
             } else {

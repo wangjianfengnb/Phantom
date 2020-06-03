@@ -78,7 +78,7 @@ public class Message {
                 .build();
     }
 
-    public static Message buildC2CMessageRequest(C2CMessageRequest request) {
+    public static Message buildC2CMessageRequest(C2cMessageRequest request) {
         byte[] body = request.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)
@@ -89,7 +89,7 @@ public class Message {
                 .build();
     }
 
-    public static Message buildC2cMessageResponse(C2CMessageResponse response) {
+    public static Message buildC2cMessageResponse(C2cMessageResponse response) {
         byte[] body = response.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)
@@ -133,7 +133,7 @@ public class Message {
                 .build();
     }
 
-    public static Message buildC2gMessageRequest(C2GMessageRequest request) {
+    public static Message buildC2gMessageRequest(C2gMessageRequest request) {
         byte[] body = request.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)
@@ -144,7 +144,7 @@ public class Message {
                 .build();
     }
 
-    public static Message buildC2gMessageResponse(C2GMessageResponse response) {
+    public static Message buildC2gMessageResponse(C2gMessageResponse response) {
         byte[] body = response.toByteArray();
         return Message.builder()
                 .appSdkVersion(Constants.APP_SDK_VERSION_1)

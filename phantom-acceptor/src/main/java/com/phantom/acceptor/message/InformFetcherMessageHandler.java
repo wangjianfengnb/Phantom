@@ -2,7 +2,7 @@ package com.phantom.acceptor.message;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.common.InformFetchMessageResponse;
 import com.phantom.common.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +16,20 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since 2019/11/18 14:58
  */
 @Slf4j
-public class InformFetcherMessageHandler extends AbstractMessageHandler {
+public class InformFetcherMessageHandler extends AbstractMessageHandler<Void> {
 
-    InformFetcherMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+    InformFetcherMessageHandler(DispatcherManager dispatcherManager, SessionManager sessionManager,
                                 ThreadPoolExecutor threadPoolExecutor) {
-        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
+        super(dispatcherManager, sessionManager, threadPoolExecutor);
     }
 
     @Override
-    protected String getReceiverId(Message message) throws InvalidProtocolBufferException {
+    protected Void parseMessage(Message message) throws InvalidProtocolBufferException {
+        return null;
+    }
+
+    @Override
+    protected String getReceiverId(Void message) {
         throw new IllegalArgumentException("通知消息不能由客户端主动发送");
     }
 
@@ -35,7 +40,8 @@ public class InformFetcherMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
-    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
+    protected Message getErrorResponse(Void message) {
         throw new IllegalArgumentException("通知消息不能由客户端主动发送");
     }
+
 }

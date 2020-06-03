@@ -2,11 +2,11 @@ package com.phantom.dispatcher.message;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.phantom.common.C2GMessageRequest;
-import com.phantom.common.C2GMessageResponse;
+import com.phantom.common.C2gMessageRequest;
+import com.phantom.common.C2gMessageResponse;
 import com.phantom.common.Constants;
 import com.phantom.common.Message;
-import com.phantom.dispatcher.message.wrapper.C2gMessageRequestWrapper;
+import com.phantom.common.model.wrapper.C2gMessageRequestWrapper;
 import com.phantom.dispatcher.session.SessionManager;
 import com.phantom.common.model.KafkaMessage;
 import com.phantom.dispatcher.kafka.Consumer;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/11/19 17:09
  */
 @Slf4j
-public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageRequestWrapper> {
+public class C2gMessageHandler extends AbstractMessageHandler<C2gMessageRequestWrapper> {
 
     C2gMessageHandler(SessionManager sessionManager) {
         super(sessionManager);
@@ -29,7 +29,7 @@ public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageR
             log.info("分发系统收到发送单聊消息响应：{}", message);
             KafkaMessage msg = JSONObject.parseObject(message, KafkaMessage.class);
             execute(msg.getSenderId(), () -> {
-                C2GMessageResponse response = C2GMessageResponse.newBuilder()
+                C2gMessageResponse response = C2gMessageResponse.newBuilder()
                         .setSenderId(msg.getSenderId())
                         .setGroupId(msg.getGroupId())
                         .setTimestamp(msg.getTimestamp())
@@ -45,41 +45,41 @@ public class C2gMessageHandler extends SessionRequiredMessageHandler<C2gMessageR
     }
 
     @Override
+    protected C2gMessageRequestWrapper parseMessage(Message message) throws InvalidProtocolBufferException {
+        C2gMessageRequest c2gMessageRequest = C2gMessageRequest.parseFrom(message.getBody());
+        return C2gMessageRequestWrapper.create(c2gMessageRequest);
+    }
+
+    @Override
     protected void processMessage(C2gMessageRequestWrapper message, SocketChannel channel) {
-        C2GMessageRequest c2GMessageRequest = message.getC2GMessageRequest();
-        execute(c2GMessageRequest.getGroupId(), () -> {
+        C2gMessageRequest c2gMessageRequest = message.getC2gMessageRequest();
+        execute(c2gMessageRequest.getGroupId(), () -> {
             KafkaMessage msg = KafkaMessage.builder()
-                    .senderId(c2GMessageRequest.getSenderId())
-                    .groupId(c2GMessageRequest.getGroupId())
-                    .content(c2GMessageRequest.getContent())
+                    .senderId(c2gMessageRequest.getSenderId())
+                    .groupId(c2gMessageRequest.getGroupId())
+                    .content(c2gMessageRequest.getContent())
                     .timestamp(System.currentTimeMillis())
-                    .crc(c2GMessageRequest.getCrc())
-                    .platform(c2GMessageRequest.getPlatform())
+                    .crc(c2gMessageRequest.getCrc())
+                    .platform(c2gMessageRequest.getPlatform())
                     .build();
             String value = JSONObject.toJSONString(msg);
             log.info("投递群聊消息到Kafka -> {}", value);
-            producer.send(Constants.TOPIC_SEND_C2G_MESSAGE, c2GMessageRequest.getSenderId(), value);
+            producer.send(Constants.TOPIC_SEND_C2G_MESSAGE, c2gMessageRequest.getSenderId(), value);
         });
     }
 
-    @Override
-    protected Message getErrorMessage(C2gMessageRequestWrapper message, SocketChannel channel) {
-        C2GMessageRequest c2GMessageRequest = message.getC2GMessageRequest();
-        C2GMessageResponse response = C2GMessageResponse.newBuilder()
-                .setSenderId(c2GMessageRequest.getSenderId())
-                .setGroupId(c2GMessageRequest.getGroupId())
-                .setStatus(Constants.RESPONSE_STATUS_ERROR)
-                .setTimestamp(System.currentTimeMillis())
-                .setCrc(c2GMessageRequest.getCrc())
-                .setPlatform(c2GMessageRequest.getPlatform())
-                .build();
-        return Message.buildC2gMessageResponse(response);
-    }
-
-    @Override
-    protected C2gMessageRequestWrapper parseMessage(Message message) throws InvalidProtocolBufferException {
-        C2GMessageRequest c2GMessageRequest = C2GMessageRequest.parseFrom(message.getBody());
-        return C2gMessageRequestWrapper.create(c2GMessageRequest);
-    }
+//    @Override
+//    protected Message getErrorMessage(C2gMessageRequestWrapper message, SocketChannel channel) {
+//        C2GMessageRequest c2GMessageRequest = message.getC2GMessageRequest();
+//        C2GMessageResponse response = C2GMessageResponse.newBuilder()
+//                .setSenderId(c2GMessageRequest.getSenderId())
+//                .setGroupId(c2GMessageRequest.getGroupId())
+//                .setStatus(Constants.RESPONSE_STATUS_ERROR)
+//                .setTimestamp(System.currentTimeMillis())
+//                .setCrc(c2GMessageRequest.getCrc())
+//                .setPlatform(c2GMessageRequest.getPlatform())
+//                .build();
+//        return Message.buildC2gMessageResponse(response);
+//    }
 
 }

@@ -1,15 +1,18 @@
 package com.phantom.dispatcher.message;
 
-import com.phantom.dispatcher.acceptor.AcceptorInstance;
-import com.phantom.dispatcher.acceptor.AcceptorServerManager;
-import com.phantom.dispatcher.session.Session;
-import com.phantom.dispatcher.session.SessionManager;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.common.Constants;
 import com.phantom.common.Message;
+import com.phantom.dispatcher.acceptor.AcceptorInstance;
+import com.phantom.dispatcher.acceptor.AcceptorServerManager;
 import com.phantom.dispatcher.config.Configurable;
 import com.phantom.dispatcher.config.DispatcherConfig;
+import com.phantom.dispatcher.kafka.Producer;
 import com.phantom.dispatcher.server.ProcessorManager;
 import com.phantom.dispatcher.server.ProcessorTask;
+import com.phantom.dispatcher.session.Session;
+import com.phantom.dispatcher.session.SessionManager;
+import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,16 +22,17 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/11/11 15:53
  */
 @Slf4j
-public abstract class AbstractMessageHandler implements MessageHandler {
+public abstract class AbstractMessageHandler<T> implements MessageHandler {
 
     protected DispatcherConfig dispatcherConfig;
     protected ProcessorManager processorManager;
     protected SessionManager sessionManager;
-
+    protected Producer producer;
     AbstractMessageHandler(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         this.dispatcherConfig = getConfig(sessionManager);
         this.processorManager = new ProcessorManager(dispatcherConfig);
+        this.producer = Producer.getInstance(dispatcherConfig);
     }
 
     private DispatcherConfig getConfig(SessionManager sessionManager) {
@@ -41,6 +45,29 @@ public abstract class AbstractMessageHandler implements MessageHandler {
         }
         return config;
     }
+
+    @Override
+    public void handleMessage(Message message, SocketChannel channel) throws Exception {
+        T msg = parseMessage(message);
+        processMessage(msg, channel);
+    }
+
+    /**
+     * 解析消息
+     *
+     * @param message 消息
+     * @return 解析后的消息
+     * @throws InvalidProtocolBufferException 序列化失败
+     */
+    protected abstract T parseMessage(Message message) throws InvalidProtocolBufferException;
+
+    /**
+     * 处理消息
+     *
+     * @param message 消息
+     * @param channel 连接
+     */
+    protected abstract void processMessage(T message, SocketChannel channel);
 
     /**
      * 执行具体业务逻辑
@@ -72,7 +99,7 @@ public abstract class AbstractMessageHandler implements MessageHandler {
                     log.info("获取接入系统失败，阻塞一段时间后重新获取.uid = {}, acceptorId = {}", uid, acceptorChannelId);
                     Thread.sleep(100);
                     acceptorInstance = acceptorServerManager.getAcceptorInstance(acceptorChannelId);
-                    if(System.currentTimeMillis() - start > 5 * 1000 ){
+                    if (System.currentTimeMillis() - start > 5 * 1000) {
                         log.warn("获取接入服务器失败，超过5秒没有连接上");
                         break;
                     }

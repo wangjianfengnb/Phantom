@@ -21,5 +21,4 @@ public interface MessageHandler {
      */
     void handleMessage(Message message, SocketChannel channel) throws Exception;
 
-
 }

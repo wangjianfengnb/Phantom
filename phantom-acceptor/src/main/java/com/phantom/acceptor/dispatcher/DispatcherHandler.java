@@ -1,7 +1,7 @@
 package com.phantom.acceptor.dispatcher;
 
 import com.phantom.acceptor.server.AbstractChannelHandler;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.common.AcceptorRegisterRequest;
 import com.phantom.common.Message;
 import com.phantom.common.util.NetUtils;
@@ -20,9 +20,9 @@ public class DispatcherHandler extends AbstractChannelHandler {
 
     private String acceptorInstanceId;
 
-    DispatcherHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+    DispatcherHandler(DispatcherManager dispatcherManager, SessionManager sessionManager,
                       String acceptorInstanceId) {
-        super(dispatcherManager, sessionManagerFacade);
+        super(dispatcherManager, sessionManager);
         this.acceptorInstanceId = acceptorInstanceId;
     }
 

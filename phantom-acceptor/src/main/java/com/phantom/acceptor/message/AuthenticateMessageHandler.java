@@ -1,8 +1,10 @@
 package com.phantom.acceptor.message;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.Session;
+import com.phantom.acceptor.session.SessionManager;
+import com.phantom.acceptor.sso.Authenticator;
+import com.phantom.acceptor.sso.DefaultAuthenticator;
 import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import com.phantom.common.AuthenticateRequest;
 import com.phantom.common.AuthenticateResponse;
@@ -20,44 +22,55 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since 2019/11/8 10:54
  */
 @Slf4j
-public class AuthenticateMessageHandler extends AbstractMessageHandler {
+public class AuthenticateMessageHandler implements MessageHandler {
 
     private ZookeeperManager zookeeperManager;
+    private Authenticator authenticator;
+    protected DispatcherManager dispatcherManager;
+    protected SessionManager sessionManager;
+    protected ThreadPoolExecutor threadPoolExecutor;
 
-    AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+    AuthenticateMessageHandler(DispatcherManager dispatcherManager, SessionManager sessionManager,
                                ThreadPoolExecutor threadPoolExecutor, ZookeeperManager zookeeperManager) {
-        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
+        this.dispatcherManager = dispatcherManager;
+        this.sessionManager = sessionManager;
+        this.threadPoolExecutor = threadPoolExecutor;
         this.zookeeperManager = zookeeperManager;
+        this.authenticator = new DefaultAuthenticator();
     }
 
     @Override
-    protected String getReceiverId(Message message) throws InvalidProtocolBufferException {
-        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(message.getBody());
-        return authenticateRequest.getUid();
-    }
-
-    @Override
-    protected String getResponseUid(Message message) throws InvalidProtocolBufferException {
-        AuthenticateResponse authenticateResponse = AuthenticateResponse.parseFrom(message.getBody());
-        return authenticateResponse.getUid();
-    }
-
-    @Override
-    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
-        AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(message.getBody());
-        AuthenticateResponse response = AuthenticateResponse.newBuilder()
-                .setToken(authenticateRequest.getToken())
-                .setUid(authenticateRequest.getUid())
-                .setTimestamp(System.currentTimeMillis())
-                .setStatus(Constants.RESPONSE_STATUS_ERROR)
-                .build();
-        return Message.buildAuthenticateResponse(response);
-    }
-
-    @Override
-    protected void beforeDispatchMessage(String uid, Message message, SocketChannel channel) {
-        // 认证的时候，在转发到分发系统前需要保存和客户端的连接
-        sessionManagerFacade.addChannel(uid, channel);
-        zookeeperManager.incrementClient();
+    public void handleMessage(Message message, SocketChannel channel) {
+        threadPoolExecutor.execute(() -> {
+            try {
+                byte[] body = message.getBody();
+                AuthenticateRequest authenticateRequest = AuthenticateRequest.parseFrom(body);
+                String uid = authenticateRequest.getUid();
+                String token = authenticateRequest.getToken();
+                // 认证发送响应
+                AuthenticateResponse.Builder responseBuilder = AuthenticateResponse.newBuilder()
+                        .setToken(authenticateRequest.getToken())
+                        .setUid(authenticateRequest.getUid())
+                        .setTimestamp(System.currentTimeMillis());
+                if (authenticator.authenticate(uid, token)) {
+                    responseBuilder.setStatus(Constants.RESPONSE_STATUS_OK);
+                    String acceptorInstanceId = dispatcherManager.getAcceptorInstanceId();
+                    Session session = Session.builder()
+                            .uid(uid)
+                            .token(token)
+                            .acceptorInstanceId(acceptorInstanceId)
+                            .timestamp(System.currentTimeMillis())
+                            .build();
+                    sessionManager.addSession(uid, session, channel);
+                    zookeeperManager.incrementClient();
+                } else {
+                    responseBuilder.setStatus(Constants.RESPONSE_STATUS_ERROR);
+                }
+                Message response = Message.buildAuthenticateResponse(responseBuilder.build());
+                channel.writeAndFlush(response.getBuffer());
+            } catch (Exception e) {
+                log.error("处理认证消息出错：", e);
+            }
+        });
     }
 }

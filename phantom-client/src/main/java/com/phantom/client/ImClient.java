@@ -1,8 +1,8 @@
 package com.phantom.client;
 
 import com.phantom.common.AuthenticateRequest;
-import com.phantom.common.C2CMessageRequest;
-import com.phantom.common.C2GMessageRequest;
+import com.phantom.common.C2cMessageRequest;
+import com.phantom.common.C2gMessageRequest;
 import com.phantom.common.Message;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,7 +57,7 @@ public class ImClient {
      */
     public void sendMessage(String senderId, String receiverId, String content) {
         ConnectionManager connectManager = ConnectionManager.getInstance();
-        C2CMessageRequest request = C2CMessageRequest.newBuilder()
+        C2cMessageRequest request = C2cMessageRequest.newBuilder()
                 .setContent(content)
                 .setSenderId(senderId)
                 .setReceiverId(receiverId)
@@ -75,7 +75,7 @@ public class ImClient {
      */
     public void sendGroupMessage(String senderId, String groupId, String content) {
         ConnectionManager connectManager = ConnectionManager.getInstance();
-        C2GMessageRequest request = C2GMessageRequest.newBuilder()
+        C2gMessageRequest request = C2gMessageRequest.newBuilder()
                 .setContent(content)
                 .setSenderId(senderId)
                 .setGroupId(groupId)

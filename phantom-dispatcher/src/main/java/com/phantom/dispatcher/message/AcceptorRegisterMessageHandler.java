@@ -1,5 +1,6 @@
 package com.phantom.dispatcher.message;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.common.AcceptorRegisterRequest;
 import com.phantom.common.Message;
 import com.phantom.common.util.NetUtils;
@@ -16,16 +17,20 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2019/11/22 16:27
  */
 @Slf4j
-public class AcceptorRegisterMessageHandler extends AbstractMessageHandler {
+public class AcceptorRegisterMessageHandler extends AbstractMessageHandler<AcceptorRegisterRequest> {
 
     AcceptorRegisterMessageHandler(SessionManager sessionManager) {
         super(sessionManager);
     }
 
     @Override
-    public void handleMessage(Message message, SocketChannel channel) throws Exception {
-        AcceptorRegisterRequest acceptorRegisterRequest = AcceptorRegisterRequest.parseFrom(message.getBody());
-        String acceptorInstanceId = acceptorRegisterRequest.getAcceptorInstanceId();
+    protected AcceptorRegisterRequest parseMessage(Message message) throws InvalidProtocolBufferException {
+        return AcceptorRegisterRequest.parseFrom(message.getBody());
+    }
+
+    @Override
+    protected void processMessage(AcceptorRegisterRequest message, SocketChannel channel) {
+        String acceptorInstanceId = message.getAcceptorInstanceId();
         String channelId = NetUtils.getChannelId(channel);
         AcceptorInstance acceptorInstance = AcceptorInstance.builder()
                 .channel(channel)

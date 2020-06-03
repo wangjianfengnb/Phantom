@@ -1,7 +1,7 @@
 package com.phantom.acceptor.dispatcher;
 
 import com.phantom.acceptor.config.AcceptorConfig;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.common.Constants;
 import com.phantom.common.util.StringUtils;
 import io.netty.bootstrap.Bootstrap;
@@ -37,7 +37,7 @@ public class DispatcherManager {
     /**
      * Session管理
      */
-    private SessionManagerFacade sessionManagerFacade;
+    private SessionManager sessionManager;
 
     /**
      * 代表当前系统的唯一ID
@@ -60,10 +60,14 @@ public class DispatcherManager {
     private Set<String> ipList = new HashSet<>();
 
 
-    public DispatcherManager(AcceptorConfig config, SessionManagerFacade sessionManagerFacade) {
+    public DispatcherManager(AcceptorConfig config, SessionManager sessionManager) {
         this.config = config;
-        this.sessionManagerFacade = sessionManagerFacade;
+        this.sessionManager = sessionManager;
         this.acceptorInstanceId = StringUtils.getRandomString(16);
+    }
+
+    public String getAcceptorInstanceId() {
+        return acceptorInstanceId;
     }
 
     /**
@@ -150,7 +154,7 @@ public class DispatcherManager {
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(config.getMaxMessageBytes(),
                                     Unpooled.copiedBuffer(Constants.DELIMITER)));
                             ch.pipeline().addLast(new DispatcherHandler(DispatcherManager.this,
-                                    sessionManagerFacade, acceptorInstanceId));
+                                    sessionManager, acceptorInstanceId));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect(address.getIp(), address.getPort()).sync();

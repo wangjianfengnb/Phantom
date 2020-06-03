@@ -2,7 +2,7 @@ package com.phantom.acceptor.message;
 
 import com.phantom.acceptor.config.AcceptorConfig;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.acceptor.zookeeper.ZookeeperManager;
 import com.phantom.common.Constants;
 
@@ -24,9 +24,8 @@ public class MessageHandlerFactory {
 
     private static Map<Integer, MessageHandler> handlers = new HashMap<>();
 
-    public static void initialize(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
-                                  ZookeeperManager zookeeperManager) {
-        AcceptorConfig acceptorConfig = sessionManagerFacade.getAcceptorConfig();
+    public static void initialize(DispatcherManager dispatcherManager, SessionManager sessionManager,
+                                  ZookeeperManager zookeeperManager,AcceptorConfig acceptorConfig) {
         AtomicInteger count = new AtomicInteger();
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(acceptorConfig.getCoreSize(),
                 acceptorConfig.getCoreSize(),
@@ -36,14 +35,14 @@ public class MessageHandlerFactory {
             return t;
         });
         handlers.put(Constants.REQUEST_TYPE_AUTHENTICATE, new AuthenticateMessageHandler(dispatcherManager,
-                sessionManagerFacade, threadPoolExecutor, zookeeperManager));
-        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManagerFacade,
+                sessionManager, threadPoolExecutor, zookeeperManager));
+        handlers.put(Constants.REQUEST_TYPE_C2C_SEND, new C2cMessageHandler(dispatcherManager, sessionManager,
                 threadPoolExecutor));
         handlers.put(Constants.REQUEST_TYPE_INFORM_FETCH, new InformFetcherMessageHandler(dispatcherManager,
-                sessionManagerFacade, threadPoolExecutor));
+                sessionManager, threadPoolExecutor));
         handlers.put(Constants.REQUEST_TYPE_MESSAGE_FETCH, new FetchMessageHandler(dispatcherManager,
-                sessionManagerFacade, threadPoolExecutor));
-        handlers.put(Constants.REQUEST_TYPE_C2G_SEND, new C2gMessageHandler(dispatcherManager, sessionManagerFacade,
+                sessionManager, threadPoolExecutor));
+        handlers.put(Constants.REQUEST_TYPE_C2G_SEND, new C2gMessageHandler(dispatcherManager, sessionManager,
                 threadPoolExecutor));
     }
 

@@ -1,6 +1,6 @@
-package com.phantom.dispatcher.message.wrapper;
+package com.phantom.common.model.wrapper;
 
-import com.phantom.common.C2CMessageRequest;
+import com.phantom.common.C2cMessageRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,16 +12,11 @@ import lombok.Getter;
  */
 @Builder
 @Getter
-public class C2cMessageRequestWrapper implements Identifyable {
+public class C2cMessageRequestWrapper {
 
-    private C2CMessageRequest c2cMessageRequest;
+    private C2cMessageRequest c2cMessageRequest;
 
-    @Override
-    public String getUid() {
-        return c2cMessageRequest.getSenderId();
-    }
-
-    public static C2cMessageRequestWrapper create(C2CMessageRequest request) {
+    public static C2cMessageRequestWrapper create(C2cMessageRequest request) {
         return C2cMessageRequestWrapper.builder()
                 .c2cMessageRequest(request)
                 .build();

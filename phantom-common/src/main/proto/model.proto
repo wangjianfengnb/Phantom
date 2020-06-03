@@ -21,7 +21,7 @@ message AcceptorRegisterRequest {
     string acceptorInstanceId = 1;
 }
 
-message C2CMessageRequest {
+message C2cMessageRequest {
     string senderId = 1;
     string receiverId = 2;
     string content = 3;
@@ -29,7 +29,7 @@ message C2CMessageRequest {
     int32 platform = 5;
 }
 
-message C2CMessageResponse {
+message C2cMessageResponse {
     string senderId = 1;
     string receiverId = 2;
     int64 timestamp = 3;
@@ -68,7 +68,7 @@ message OfflineMessage {
     int32 platform = 9;
 }
 
-message C2GMessageRequest {
+message C2gMessageRequest {
     string senderId = 1;
     string groupId = 2;
     int64 timestamp = 3;
@@ -77,7 +77,7 @@ message C2GMessageRequest {
     int32 platform = 6;
 }
 
-message C2GMessageResponse {
+message C2gMessageResponse {
     string senderId = 1;
     string groupId = 2;
     int64 timestamp = 3;

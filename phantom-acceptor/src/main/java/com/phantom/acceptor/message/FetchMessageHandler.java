@@ -2,7 +2,7 @@ package com.phantom.acceptor.message;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.acceptor.dispatcher.DispatcherManager;
-import com.phantom.acceptor.session.SessionManagerFacade;
+import com.phantom.acceptor.session.SessionManager;
 import com.phantom.common.FetchMessageRequest;
 import com.phantom.common.FetchMessageResponse;
 import com.phantom.common.Message;
@@ -17,17 +17,21 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since 2019/11/18 15:13
  */
 @Slf4j
-public class FetchMessageHandler extends AbstractMessageHandler {
+public class FetchMessageHandler extends AbstractMessageHandler<FetchMessageRequest> {
 
-    FetchMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
+    FetchMessageHandler(DispatcherManager dispatcherManager, SessionManager sessionManager,
                         ThreadPoolExecutor threadPoolExecutor) {
-        super(dispatcherManager, sessionManagerFacade, threadPoolExecutor);
+        super(dispatcherManager, sessionManager, threadPoolExecutor);
     }
 
     @Override
-    protected String getReceiverId(Message message) throws InvalidProtocolBufferException {
-        FetchMessageRequest request = FetchMessageRequest.parseFrom(message.getBody());
-        return request.getUid();
+    protected FetchMessageRequest parseMessage(Message message) throws InvalidProtocolBufferException {
+        return FetchMessageRequest.parseFrom(message.getBody());
+    }
+
+    @Override
+    protected String getReceiverId(FetchMessageRequest message) {
+        return message.getUid();
     }
 
     @Override
@@ -37,11 +41,10 @@ public class FetchMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
-    protected Message getErrorResponse(Message message) throws InvalidProtocolBufferException {
-        FetchMessageRequest request = FetchMessageRequest.parseFrom(message.getBody());
+    protected Message getErrorResponse(FetchMessageRequest message) {
         FetchMessageResponse response = FetchMessageResponse.newBuilder()
                 .setIsEmpty(true)
-                .setUid(request.getUid())
+                .setUid(message.getUid())
                 .build();
         return Message.buildFetcherMessageResponse(response);
     }

@@ -10,21 +10,6 @@ package com.phantom.dispatcher.session;
 public interface SessionManager {
 
     /**
-     * 添加一个回话
-     *
-     * @param uid     用户ID
-     * @param session 用户回话
-     */
-    void addSession(String uid, Session session);
-
-    /**
-     * 删除回话
-     *
-     * @param uid 用户ID
-     */
-    void removeSession(String uid);
-
-    /**
      * 获取回话
      *
      * @param uid 用户ID

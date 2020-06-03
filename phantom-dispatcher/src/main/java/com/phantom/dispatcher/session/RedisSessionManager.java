@@ -63,21 +63,6 @@ public class RedisSessionManager implements SessionManager, Configurable {
         this.redissonClient = Redisson.create(config);
     }
 
-
-    @Override
-    public void addSession(String uid, Session session) {
-        String key = SESSION_PREFIX + uid;
-        String value = JSONObject.toJSONString(session);
-        RBucket<Session> bucket = redissonClient.getBucket(key, codec);
-        bucket.set(session);
-        log.info("往redis中写入session ：{} -> {}", key, value);
-    }
-
-    @Override
-    public void removeSession(String uid) {
-
-    }
-
     @Override
     public Session getSession(String uid) {
         String key = SESSION_PREFIX + uid;

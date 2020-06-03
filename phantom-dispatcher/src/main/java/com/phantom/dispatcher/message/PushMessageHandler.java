@@ -1,6 +1,7 @@
 package com.phantom.dispatcher.message;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.phantom.common.*;
 import com.phantom.dispatcher.session.SessionManager;
 import com.phantom.dispatcher.timeline.FetchRequest;
@@ -26,7 +27,7 @@ import java.util.List;
  * @since 2019/11/13 11:50
  */
 @Slf4j
-public class PushMessageHandler extends AbstractMessageHandler {
+public class PushMessageHandler extends AbstractMessageHandler<FetchMessageRequest> {
 
     private Timeline timeline;
 
@@ -79,23 +80,26 @@ public class PushMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
-    public void handleMessage(Message message, SocketChannel channel) throws Exception {
-        // 这里处理抓取消息
-        FetchMessageRequest request = FetchMessageRequest.parseFrom(message.getBody());
-        log.info("收到抓取离线消息请求：{} -> {}", request.getUid(), request.getTimestamp());
-        execute(request.getUid(), () -> {
+    protected FetchMessageRequest parseMessage(Message message) throws InvalidProtocolBufferException {
+        return FetchMessageRequest.parseFrom(message.getBody());
+    }
+
+    @Override
+    protected void processMessage(FetchMessageRequest message, SocketChannel channel) {
+        log.info("收到抓取离线消息请求：{} -> {}", message.getUid(), message.getTimestamp());
+        execute(message.getUid(), () -> {
             FetchRequest fetchRequest = FetchRequest.builder()
-                    .platform(request.getPlatform())
-                    .size(request.getSize())
-                    .uid(request.getUid())
-                    .timestamp(request.getTimestamp())
+                    .platform(message.getPlatform())
+                    .size(message.getSize())
+                    .uid(message.getUid())
+                    .timestamp(message.getTimestamp())
                     .build();
             List<TimelineMessage> timelineMessages = timeline.fetchMessage(fetchRequest);
             FetchMessageResponse response;
             if (timelineMessages.isEmpty()) {
                 response = FetchMessageResponse.newBuilder()
                         .setIsEmpty(true)
-                        .setUid(request.getUid())
+                        .setUid(message.getUid())
                         .build();
             } else {
                 FetchMessageResponse.Builder builder = FetchMessageResponse.newBuilder()
@@ -119,7 +123,7 @@ public class PushMessageHandler extends AbstractMessageHandler {
                     }
                     builder.addMessages(offlineMessageBuilder.build());
                 }
-                builder.setUid(request.getUid());
+                builder.setUid(message.getUid());
                 response = builder.build();
                 if (!messageIds.isEmpty()) {
                     DeliveryMessage deliveryMessage = DeliveryMessage.builder()
@@ -129,7 +133,7 @@ public class PushMessageHandler extends AbstractMessageHandler {
                 }
             }
             log.info("抓取离线消息返回给客户端：{}", response);
-            sendToAcceptor(request.getUid(), Message.buildFetcherMessageResponse(response));
+            sendToAcceptor(message.getUid(), Message.buildFetcherMessageResponse(response));
         });
     }
 }
