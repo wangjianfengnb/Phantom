@@ -26,13 +26,11 @@ public abstract class AbstractMessageHandler implements MessageHandler {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-
     AbstractMessageHandler(DispatcherManager dispatcherManager, SessionManagerFacade sessionManagerFacade,
                            ThreadPoolExecutor threadPoolExecutor) {
         this.dispatcherManager = dispatcherManager;
         this.sessionManagerFacade = sessionManagerFacade;
         this.threadPoolExecutor = threadPoolExecutor;
-
     }
 
     @Override

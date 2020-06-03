@@ -77,12 +77,12 @@ public class RedisBaseTimeline implements Timeline {
     @Override
     public void saveMessage(TimelineMessage timelineMessage) {
         String uid = timelineMessage.getReceiverId();
-        log.info("保存消息到timeline：{} -> {}", uid, timelineMessage);
         long sequence = incrementSequence(uid);
         timelineMessage.setSequence(sequence);
         String receiverId = timelineMessage.getReceiverId();
         String key = generateKey(receiverId);
         RScoredSortedSet<TimelineMessage> timeline = redissonClient.getScoredSortedSet(key);
+        log.info("保存消息到timeline：{} -> {}", uid, timelineMessage);
         // 按时间顺序加入
         timeline.add(timelineMessage.getTimestamp(), timelineMessage);
     }

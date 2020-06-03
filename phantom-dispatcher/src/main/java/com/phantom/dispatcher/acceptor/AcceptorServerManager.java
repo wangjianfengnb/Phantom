@@ -1,7 +1,6 @@
 package com.phantom.dispatcher.acceptor;
 
 import com.phantom.common.util.NetUtils;
-import io.netty.channel.socket.SocketChannel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +38,7 @@ public class AcceptorServerManager {
      * @param acceptorInstanceId 接入系统ID
      * @param instance           接入系统实例
      */
-    public void addAcceptorInstance(String acceptorInstanceId, AcceptorInstance instance) {
+    public void OaddAcceptorInstance(String acceptorInstanceId, AcceptorInstance instance) {
         acceptorInstances.put(acceptorInstanceId, instance);
         channelId2AcceptorId.put(NetUtils.getChannelId(instance.getChannel()), acceptorInstanceId);
     }

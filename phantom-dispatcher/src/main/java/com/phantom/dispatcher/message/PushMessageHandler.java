@@ -130,10 +130,6 @@ public class PushMessageHandler extends AbstractMessageHandler {
             }
             log.info("抓取离线消息返回给客户端：{}", response);
             sendToAcceptor(request.getUid(), Message.buildFetcherMessageResponse(response));
-
-
         });
-
-
     }
 }

@@ -48,8 +48,7 @@ public class C2cMessageHandler extends SessionRequiredMessageHandler<C2cMessageR
     protected void processMessage(C2cMessageRequestWrapper message, SocketChannel channel) {
         C2CMessageRequest c2CMessageRequest = message.getC2cMessageRequest();
         execute(c2CMessageRequest.getReceiverId(), () -> {
-            // 2. 基于snowflake算法生成messageId
-            // 3. 投递到kafka
+            // 投递到kafka
             KafkaMessage msg = KafkaMessage.builder()
                     .senderId(c2CMessageRequest.getSenderId())
                     .receiverId(c2CMessageRequest.getReceiverId())

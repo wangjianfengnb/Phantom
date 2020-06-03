@@ -66,11 +66,16 @@ public abstract class AbstractMessageHandler implements MessageHandler {
                 String acceptorChannelId = session.getAcceptorInstanceId();
                 AcceptorServerManager acceptorServerManager = AcceptorServerManager.getInstance();
                 AcceptorInstance acceptorInstance = acceptorServerManager.getAcceptorInstance(acceptorChannelId);
+                long start = System.currentTimeMillis();
                 while (acceptorInstance == null) {
                     // 假设分发系统重启了，此时会等待接入系统发起连接，注册
                     log.info("获取接入系统失败，阻塞一段时间后重新获取.uid = {}, acceptorId = {}", uid, acceptorChannelId);
                     Thread.sleep(100);
                     acceptorInstance = acceptorServerManager.getAcceptorInstance(acceptorChannelId);
+                    if(System.currentTimeMillis() - start > 5 * 1000 ){
+                        log.warn("获取接入服务器失败，超过5秒没有连接上");
+                        break;
+                    }
                 }
                 log.info("将消息转发给接入系统：uid = {}, requestType = {}", uid,
                         Constants.requestTypeName(message.getRequestType()));
