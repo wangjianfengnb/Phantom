@@ -100,11 +100,11 @@ public class Consumer implements InitializingBean {
                     if (records == null || records.isEmpty()) {
                         continue;
                     }
+                    // default max poll 500 message
                     Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>(500);
                     if (messageListener instanceof BatchMessageListener) {
                         Iterator<ConsumerRecord<String, String>> iterator = records.iterator();
                         List<String> messages = new ArrayList<>();
-                        // default max poll 500 message
                         while (iterator.hasNext()) {
                             ConsumerRecord<String, String> record = iterator.next();
                             String value = record.value();

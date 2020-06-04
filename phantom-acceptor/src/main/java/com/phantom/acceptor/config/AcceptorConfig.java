@@ -57,12 +57,12 @@ public class AcceptorConfig {
         InputStream resourceAsStream = AcceptorConfig.class.getClassLoader().getResourceAsStream(configFileName);
         Properties properties = new Properties();
         properties.load(resourceAsStream);
-        int maxMessageBytes = Integer.valueOf(properties.getProperty("max.message.bytes"));
+        int maxMessageBytes = Integer.parseInt(properties.getProperty("max.message.bytes"));
         String redisServer = properties.getProperty("redis.server");
         String zookeeperServer = properties.getProperty("zookeeper.server");
-        int port = Integer.valueOf(properties.getProperty("acceptor.port"));
+        int port = Integer.parseInt(properties.getProperty("acceptor.port"));
         String hostname = properties.getProperty("acceptor.hostname");
-        int thread = Integer.valueOf(properties.getProperty("io.thread"));
+        int thread = Integer.parseInt(properties.getProperty("io.thread"));
         String keyStore = properties.getProperty("ssl.keystore");
         String password = properties.getProperty("ssl.password");
         return AcceptorConfig.builder()

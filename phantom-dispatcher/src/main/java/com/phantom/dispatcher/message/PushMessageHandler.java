@@ -42,8 +42,9 @@ public class PushMessageHandler extends AbstractMessageHandler<FetchMessageReque
                 Constants.TOPIC_PUSH_MESSAGE);
         consumer.setMessageListener(message -> {
             KafkaMessage msg = JSONObject.parseObject(message, KafkaMessage.class);
+            //TODO 如果在刚执行execute方法就宕机，可能导致消息丢失，异步转同步消费
             execute(getReceiverId(msg), () -> {
-                // 1. 将消息放入timeline模型
+                // 将消息放入timeline模型
                 log.info("分发系统收到消息推送请求：{}", msg);
                 if (msg.getGroupId() == null) {
                     TimelineMessage timelineMessage = TimelineMessage.parseC2CMessage(msg);
@@ -67,7 +68,7 @@ public class PushMessageHandler extends AbstractMessageHandler<FetchMessageReque
      */
     private void sendInformMessage(TimelineMessage timelineMessage) {
         log.info("下发通知给客户端，让客户端过来拉取消息...uid = {}", timelineMessage.getReceiverId());
-        // 2. 发送通知给对应的客户端，让他过来拉取最新的消息
+        // 发送通知给对应的客户端，让他过来拉取最新的消息
         InformFetchMessageResponse informFetchMessageResponse = InformFetchMessageResponse.newBuilder()
                 .setUid(timelineMessage.getReceiverId())
                 .build();

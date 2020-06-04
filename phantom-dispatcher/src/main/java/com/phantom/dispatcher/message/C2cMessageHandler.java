@@ -28,6 +28,7 @@ public class C2cMessageHandler extends AbstractMessageHandler<C2cMessageRequestW
         consumer.setMessageListener(message -> {
             log.info("分发系统收到发送单聊消息响应：{}", message);
             KafkaMessage msg = JSONObject.parseObject(message, KafkaMessage.class);
+            //TODO 如果在刚执行execute方法就宕机，可能导致消息丢失，异步转同步消费
             execute(msg.getSenderId(), () -> {
                 C2cMessageResponse response = C2cMessageResponse.newBuilder()
                         .setSenderId(msg.getSenderId())
@@ -69,20 +70,5 @@ public class C2cMessageHandler extends AbstractMessageHandler<C2cMessageRequestW
             producer.send(Constants.TOPIC_SEND_C2C_MESSAGE, c2cMessageRequest.getReceiverId(), value);
         });
     }
-
-//    @Override
-//    protected Message getErrorMessage(C2cMessageRequestWrapper message, SocketChannel channel) {
-//        C2CMessageRequest c2CMessageRequest = message.getC2cMessageRequest();
-//        C2CMessageResponse response = C2CMessageResponse.newBuilder()
-//                .setSenderId(c2CMessageRequest.getSenderId())
-//                .setReceiverId(c2CMessageRequest.getReceiverId())
-//                .setStatus(Constants.RESPONSE_STATUS_ERROR)
-//                .setTimestamp(System.currentTimeMillis())
-//                .setCrc(c2CMessageRequest.getCrc())
-//                .setPlatform(c2CMessageRequest.getPlatform())
-//                .build();
-//        return Message.buildC2cMessageResponse(response);
-//    }
-
 
 }

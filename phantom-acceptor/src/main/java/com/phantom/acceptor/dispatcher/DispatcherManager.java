@@ -132,7 +132,7 @@ public class DispatcherManager {
     private DispatcherInstanceAddress parseAddress(String child) {
         String[] split = child.split(":");
         String ip = split[0];
-        int port = Integer.valueOf(split[1]);
+        int port = Integer.parseInt(split[1]);
         return DispatcherInstanceAddress.builder()
                 .ip(ip)
                 .port(port)
