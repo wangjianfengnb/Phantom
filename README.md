@@ -68,7 +68,7 @@ localhost kafka-2
   
 
 ### 系统整体流程图
-![](http://assets.processon.com/chart_image/5db6cb2ce4b0335f1e4338ef.png)
+![](http://assets.processon.com/chart_image/5ed86ebb637689186215fa97.png)
 ### 认证流程图
 
 ![](http://assets.processon.com/chart_image/5dc53e6ce4b005b5778bd235.png)
@@ -103,7 +103,7 @@ localhost kafka-2
 
 群聊消息：根据grouid做分区key，同一个群聊的消息都路由到同一个数据库的同一个表中。
 
-4. messageId唯一ID生成
+### messageId唯一ID生成
 
 采用Snowflake算法生成唯一ID
 
