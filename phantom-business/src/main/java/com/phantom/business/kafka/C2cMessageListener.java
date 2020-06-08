@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 public class C2cMessageListener implements SingleMessageListener {
 
     @Resource
-    private C2cMessageMapper c2CMessageMapper;
+    private C2cMessageMapper c2cMessageMapper;
 
     @Resource
     private Producer producer;
@@ -41,7 +41,7 @@ public class C2cMessageListener implements SingleMessageListener {
         log.info("收到消息：{}", message);
         KafkaMessage c2cMessage = JSONObject.parseObject(message, KafkaMessage.class);
         c2cMessage.setMessageId(snowflakeIdWorker.nextId());
-        c2CMessageMapper.saveMessage(c2cMessage);
+        c2cMessageMapper.saveMessage(c2cMessage);
 
 
         // send response
@@ -60,7 +60,6 @@ public class C2cMessageListener implements SingleMessageListener {
                 .platform(c2cMessage.getPlatform())
                 .build();
         producer.send(Constants.TOPIC_PUSH_MESSAGE, kafkaMessage.getReceiverId(), JSONObject.toJSONString(kafkaMessage));
-
         // send kafka ack
         acknowledgement.ack();
     }

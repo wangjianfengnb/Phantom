@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -96,7 +97,7 @@ public class Consumer implements InitializingBean {
         public void run() {
             while (isRun()) {
                 try {
-                    ConsumerRecords<String, String> records = this.consumer.poll(1000);
+                    ConsumerRecords<String, String> records = this.consumer.poll(Duration.ofSeconds(1));
                     if (records == null || records.isEmpty()) {
                         continue;
                     }

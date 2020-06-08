@@ -174,12 +174,12 @@ public class ConnectionManager {
             }
         } else if (Constants.REQUEST_TYPE_C2C_SEND == requestType) {
             byte[] body = message.getBody();
-            C2cMessageResponse c2CMessageResponse =
+            C2cMessageResponse c2cMessageResponse =
                     C2cMessageResponse.parseFrom(body);
-            if (c2CMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
-                log.info("发送单聊消息成功...");
+            if (c2cMessageResponse.getStatus() == Constants.RESPONSE_STATUS_OK) {
+                log.info("发送单聊消息成功: messageId = {} ", c2cMessageResponse.getMessageId());
             } else {
-                log.info("发送单聊消息失败，重新发送...");
+                log.info("发送单聊消息失败，重新发送.");
             }
         } else if (Constants.REQUEST_TYPE_INFORM_FETCH == requestType) {
             log.info("收到抓取离线消息的通知...");

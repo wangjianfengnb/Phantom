@@ -1,12 +1,12 @@
 server:
-  port: 8090
+  port: 8080
 
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://mysql-server:3306/im?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull&&useSSL=false
     username: root
-    password: 9t13m3iuoN0xNbw2
+    password: root
     driverClassName: com.mysql.jdbc.Driver
     initialSize: 3
     minIdle: 3

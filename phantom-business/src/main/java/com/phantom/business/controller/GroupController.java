@@ -34,7 +34,7 @@ public class GroupController {
      */
     @PostMapping("/create")
     public Boolean createGroup(@RequestBody CreateGroupVO createGroupVO) {
-        groupMapper.saveConversation(createGroupVO);
+        groupMapper.saveGroupInfo(createGroupVO);
         Long conversationId = createGroupVO.getGroupId();
         for (String member : createGroupVO.getMembers()) {
             groupMembersMapper.saveMembers(conversationId, member);

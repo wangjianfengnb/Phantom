@@ -103,7 +103,7 @@ public class Constants {
     public static final String TOPIC_PUSH_MESSAGE = "push_message";
 
     /**
-     * 消息下发结果
+     * 消息下发结果-topic
      */
     public static final String TOPIC_DELIVERY_REPORT = "delivery_report";
 

@@ -119,7 +119,7 @@ public abstract class AbstractMessageHandler<T> implements MessageHandler {
         String uid = getResponseUid(message);
         SocketChannel session = sessionManager.getChannel(uid);
         if (session != null) {
-            log.info("将响应推送给客户端：uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
+            log.info("将响应【{}】推送给客户端：uid = {}", Constants.requestTypeName(message.getRequestType()), uid);
             session.writeAndFlush(message.getBuffer());
         } else {
             log.info("将响应推送给客户端失败，找不到session");
@@ -134,7 +134,7 @@ public abstract class AbstractMessageHandler<T> implements MessageHandler {
      * @param message 消息
      */
     private boolean sendMessage(String uid, Message message) {
-        log.info("将请求转发到分发系统, uid = {} , requestType = {}", uid, Constants.requestTypeName(message.getRequestType()));
+        log.info("将请求【{}】转发到分发系统, uid = {} ", Constants.requestTypeName(message.getRequestType()), uid);
         DispatcherInstance dispatcherInstance = dispatcherManager.chooseDispatcher(uid);
         if (dispatcherInstance == null) {
             log.error("无法找到接入系统，发送消息失败....");

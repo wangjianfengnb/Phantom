@@ -47,7 +47,6 @@ public class ConsoleClient {
         ImClient.getInstance().authenticate(uid, token);
 
         ImClient.getInstance().addMessageListener(msg -> {
-
             log.info("收到消息：{}", msg);
         });
 

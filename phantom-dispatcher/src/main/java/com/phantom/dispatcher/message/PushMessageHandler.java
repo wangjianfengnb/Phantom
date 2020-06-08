@@ -37,9 +37,7 @@ public class PushMessageHandler extends AbstractMessageHandler<FetchMessageReque
         super(sessionManager);
         this.timeline = new RedisBaseTimeline(dispatcherConfig);
         this.producer = Producer.getInstance(dispatcherConfig);
-        Consumer consumer = new Consumer(dispatcherConfig,
-                Constants.TOPIC_SEND_C2C_MESSAGE_RESPONSE,
-                Constants.TOPIC_PUSH_MESSAGE);
+        Consumer consumer = new Consumer(dispatcherConfig, Constants.TOPIC_PUSH_MESSAGE);
         consumer.setMessageListener(message -> {
             KafkaMessage msg = JSONObject.parseObject(message, KafkaMessage.class);
             //TODO 如果在刚执行execute方法就宕机，可能导致消息丢失，异步转同步消费

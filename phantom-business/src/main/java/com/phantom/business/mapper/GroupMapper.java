@@ -25,7 +25,7 @@ public interface GroupMapper {
             "#{groupName}," +
             "#{groupAvatar})")
     @Options(keyProperty = "groupId", keyColumn = "group_id", useGeneratedKeys = true)
-    void saveConversation(CreateGroupVO createGroupVO);
+    void saveGroupInfo(CreateGroupVO createGroupVO);
 
     /**
      * 获取群组

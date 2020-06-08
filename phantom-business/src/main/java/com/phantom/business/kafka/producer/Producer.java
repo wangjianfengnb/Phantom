@@ -37,7 +37,7 @@ public class Producer implements InitializingBean {
     public void send(String topic, String key, String value) {
         this.producer.send(new ProducerRecord<>(topic, key, value), (metadata, exception) -> {
             if (exception == null) {
-                log.info("发送到Kafka成功");
+                log.info("发送到Kafka成功,topic = {}, key = {}", topic, key);
             } else {
                 log.error("发送消息到Kafka失败：", exception);
             }

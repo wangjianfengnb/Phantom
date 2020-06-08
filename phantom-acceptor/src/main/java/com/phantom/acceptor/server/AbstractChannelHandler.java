@@ -38,6 +38,8 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
             if (messageHandler != null) {
                 SocketChannel channel = (SocketChannel) ctx.channel();
                 messageHandler.handleMessage(message, channel);
+            } else {
+                log.warn("Cann't find handler for request type : {}", message.getRequestType());
             }
         } finally {
             ReferenceCountUtil.release(msg);
